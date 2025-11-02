@@ -1,18 +1,8 @@
 import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
+import {MediaState} from '../models/mediaState';
+import {Comic} from '../models/comic';
 
 const baseUri = 'http://localhost:3001';
-
-interface Comic {
-  id: string;
-  [key: string]: string | number | boolean | undefined;
-}
-
-interface MediaState {
-  comics: Comic[];
-  loading: boolean;
-  error: string | null;
-  status: 'idle' | 'pending' | 'succeeded' | 'failed';
-}
 
 const initialState: MediaState = {
   comics: [],
