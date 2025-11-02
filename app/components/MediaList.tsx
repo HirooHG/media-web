@@ -73,13 +73,15 @@ export function MediaList() {
           {comics.map((comic, index) => (
             <li key={comic.id} className="h-fit flex flex-col items-center">
               {index !== 0 && (
-                <div className="w-10/12 my-4">
+                <div className="w-10/12 my-4 dark:bg-gray-100">
                   <Separator />
                 </div>
               )}
               <div className="flex-1 flex flex-col gap-2 items-center justify-between">
-                <Skeleton className="w-64 h-88" />
-                <p className="text-sm text-gray-600 text-center">{comic.comic_title}</p>
+                <Skeleton className="w-64 h-88 bg-gray-400" />
+                <p className="text-sm text-gray-600 dark:text-gray-300 text-center">
+                  {comic.comic_title}
+                </p>
               </div>
             </li>
           ))}
