@@ -13,6 +13,8 @@ import {
   EmptyTitle,
 } from '@/components/ui/empty';
 import {Brackets, Frown} from 'lucide-react';
+import {Skeleton} from '@/components/ui/skeleton';
+import {Separator} from '@/components/ui/separator';
 
 export function MediaList() {
   const dispatch = useAppDispatch();
@@ -67,10 +69,18 @@ export function MediaList() {
           </Empty>
         </div>
       ) : (
-        <ul className="space-y-2">
-          {comics.map((comic) => (
-            <li key={comic.id} className="h-fit p-3 bg-gray-100 rounded">
-              <p className="text-sm text-gray-600">ID: {comic.id}</p>
+        <ul>
+          {comics.map((comic, index) => (
+            <li key={comic.id} className="h-fit flex flex-col items-center">
+              {index !== 0 && (
+                <div className="w-10/12 my-4">
+                  <Separator />
+                </div>
+              )}
+              <div className="flex-1 flex flex-col gap-2 items-center justify-between">
+                <Skeleton className="w-64 h-88" />
+                <p className="text-sm text-gray-600 text-center">{comic.comic_title}</p>
+              </div>
             </li>
           ))}
         </ul>
