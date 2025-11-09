@@ -1,7 +1,11 @@
-import type { NextConfig } from "next";
+import type {NextConfig} from 'next';
+
+const API_URI = process.env.API_URI ?? 'http://localhost:3001';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [new URL(API_URI + '/images/**')],
+  },
 };
 
 export default nextConfig;
