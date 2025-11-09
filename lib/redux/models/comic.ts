@@ -9,4 +9,5 @@ export interface Comic {
   comic_status: 1;
   comic_last_chapter: string;
   chapter_hid: string;
+  image: string | undefined;
 }

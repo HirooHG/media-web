@@ -1,9 +1,8 @@
 import {Comic} from './comic';
 import {LoadingState} from './loadingState';
 
-export interface MediaState {
+export interface MediaListState {
   comics: Comic[];
-  loading: boolean;
-  error: string | null;
   status: LoadingState;
+  error: string | null;
 }
