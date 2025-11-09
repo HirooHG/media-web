@@ -37,23 +37,25 @@ export function MediaList() {
   }
 
   return (
-    <div className="p-4 w-full">
+    <div className="px-32 w-full h-full flex flex-col space-y-2">
       <h1 className="text-2xl font-bold mb-4">Medias</h1>
       {comics.length === 0 ? (
         <EmptyList />
       ) : (
-        <ul>
-          {comics.map((comic, index) => (
-            <li key={comic.id} className="h-fit flex flex-col items-center">
-              {index !== 0 && (
-                <div className="w-11/12 my-4 dark:bg-gray-100">
-                  <Separator />
-                </div>
-              )}
-              <MediaItem comic={comic} />
-            </li>
-          ))}
-        </ul>
+        <>
+          <ul className="flex-1 overflow-scroll">
+            {comics.map((comic, index) => (
+              <li key={comic.id} className="h-fit flex flex-col items-center">
+                {index !== 0 && (
+                  <div className="w-11/12 my-4 dark:bg-gray-100">
+                    <Separator />
+                  </div>
+                )}
+                <MediaItem comic={comic} />
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </div>
   );
