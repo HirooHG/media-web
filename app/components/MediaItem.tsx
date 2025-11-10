@@ -1,3 +1,5 @@
+'use client';
+
 import {ButtonGroup} from '@/components/ui/button-group';
 import {Button} from '@/components/ui/button';
 import {ExternalLink, FileImage, TriangleAlert} from 'lucide-react';
@@ -35,7 +37,11 @@ export const MediaItem = ({comic}: {comic: Comic}) => {
         <span className="text-sm text-gray-600 dark:text-gray-300">{comic.comic_title}</span>
         <ButtonGroup>
           {!comic.image && (
-            <Button onClick={() => dispatch(fetchMediaImage(comic.comic_id))} variant="outline">
+            <Button
+              onClick={() => dispatch(fetchMediaImage(comic.comic_id))}
+              variant="outline"
+              disabled={imageStatus === 'pending'}
+            >
               <FileImage /> Get Image
             </Button>
           )}

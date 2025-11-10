@@ -6,14 +6,19 @@ const initialState: MediaListState = {
   comics: [],
   status: 'idle',
   error: null,
+  page: 1,
+  per_page: 5,
 };
 
 // Async thunk for fetching media data
 export const fetchMedias = createAsyncThunk(
   'mediaList/fetchMedias',
-  async ({} = {}, {rejectWithValue}) => {
+  async (
+    {page, per_page}: {page: number; per_page: number} = {page: 1, per_page: 5},
+    {rejectWithValue},
+  ) => {
     try {
-      const response = await fetch(API_URI + '/media');
+      const response = await fetch(API_URI + '/media?page=' + page + '&per_page=' + per_page);
       const result = await response.json();
       if (result.error) throw Error('An error has occured: ' + result.error);
 
@@ -40,6 +45,22 @@ const mediaListSlice = createSlice({
       if (!comic) return;
       comic.image = action.payload.image ?? undefined;
     },
+    setPage: (state, action: PayloadAction<number>) => {
+      state.status = 'idle';
+      state.page = action.payload;
+    },
+    setPerPage: (state, action: PayloadAction<number>) => {
+      state.status = 'idle';
+      state.per_page = action.payload;
+    },
+    nextPage: (state) => {
+      state.status = 'idle';
+      state.page += 1;
+    },
+    previousPage: (state) => {
+      state.status = 'idle';
+      state.page -= 1;
+    },
   },
   extraReducers: (builder) => {
     // Fetch Medias
@@ -59,5 +80,6 @@ const mediaListSlice = createSlice({
   },
 });
 
-export const {clearListError, setComicImage} = mediaListSlice.actions;
+export const {clearListError, setComicImage, setPage, setPerPage, nextPage, previousPage} =
+  mediaListSlice.actions;
 export default mediaListSlice.reducer;

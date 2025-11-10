@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Media List',
-  description: 'My centralized platforme of lecture of media',
+  description: 'My centralized platform of lecture of media',
   icons: './favicon.ico',
 };
 
