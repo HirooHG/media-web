@@ -1,10 +1,21 @@
 import {API_URI} from '@/lib/redux/constants';
+import {ImageSize} from '../models/image-size';
 
-export const ComicImage = ({uri, slug}: {uri: string; slug: string}) => {
+export const ComicImage = ({
+  uri,
+  slug,
+  size = 'small',
+}: {
+  uri: string;
+  slug: string;
+  size?: ImageSize;
+}) => {
   return (
-    <div className="w-32 h-46">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className="" src={API_URI + '/images/' + uri} alt={slug}></img>
-    </div>
+    <>
+      <div className={size === 'small' ? 'w-32 h-46' : 'w-64 h-96'}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="" src={API_URI + '/images/' + uri} alt={slug}></img>
+      </div>
+    </>
   );
 };

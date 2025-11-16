@@ -5,11 +5,11 @@ import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
 import {fetchMedias, clearListError, setComicImage} from '@/lib/redux/slices/media-list.slice';
 import {clearState} from '@/lib/redux/slices/media-image.slice';
 import {Separator} from '@/components/ui/separator';
-import {Error} from './error';
 import {Pending} from './pending';
 import {EmptyList} from './empty-list';
 import {MediaItem} from './media-item';
 import {Paginator} from './paginator';
+import {ErrorComponent} from '@/components/shared/error';
 
 export function MediaList() {
   const dispatch = useAppDispatch();
@@ -31,7 +31,7 @@ export function MediaList() {
   }, [comic_id, dispatch, imageStatus, newImageName]);
 
   if (status === 'failed' && error) {
-    return <Error error={error} callback={() => dispatch(clearListError())} />;
+    return <ErrorComponent error={error} callback={() => dispatch(clearListError())} />;
   }
 
   return (
