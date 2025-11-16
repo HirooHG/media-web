@@ -18,7 +18,6 @@ export function MediaList() {
 
   useEffect(() => {
     if (status === 'idle') {
-      console.log(page);
       dispatch(fetchMedias({page, per_page}));
     }
   }, [dispatch, status, page, per_page]);

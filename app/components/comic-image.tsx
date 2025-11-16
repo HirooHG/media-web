@@ -12,7 +12,7 @@ export const ComicImage = ({
 }) => {
   return (
     <>
-      <div className={size === 'small' ? 'w-32 h-46' : 'w-64 h-96'}>
+      <div className={size === 'small' ? 'w-32 h-46' : 'w-68 h-96'}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="" src={API_URI + '/images/' + uri} alt={slug}></img>
       </div>

@@ -6,13 +6,14 @@ import {ExternalLink, FileImage} from 'lucide-react';
 import {Comic} from '@/lib/redux/models/comic';
 import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
 import {fetchMediaImage} from '@/lib/redux/slices/media-image.slice';
-import Link from 'next/link';
 import {ComicImage} from './comic-image';
 import {ComicImagePlaceholder} from './comic-image-placeholder';
+import {useRouter} from 'next/navigation';
 
 export const MediaItem = ({comic}: {comic: Comic}) => {
   const dispatch = useAppDispatch();
   const {comic_id, imageStatus, imageError} = useAppSelector((state) => state.mediaImage);
+  const router = useRouter();
 
   return (
     <div className="w-full flex space-x-2 md:space-x-4 items-start justify-center">
@@ -38,10 +39,12 @@ export const MediaItem = ({comic}: {comic: Comic}) => {
               <FileImage /> Get Image
             </Button>
           )}
-          <Button variant="outline">
-            <Link href={'/' + comic.comic_id} className="flex gap-2">
-              See more <ExternalLink />
-            </Link>
+          <Button
+            onClick={() => router.push('/' + comic.comic_id)}
+            className="flex gap-2"
+            variant="outline"
+          >
+            See more <ExternalLink />
           </Button>
         </ButtonGroup>
         {imageError && comic_id === comic.comic_id && (

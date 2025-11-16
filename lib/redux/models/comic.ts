@@ -15,4 +15,12 @@ export interface Comic {
   comic_slug: string;
   comic_status: ComicStatus;
   image: string | undefined;
+  desc: string | undefined;
+  hid: string;
+  country: string;
+  origination: string;
+  last_chapter: number;
+  chapter_count: number;
+  demographic_name: string;
+  content_rating: string;
 }
