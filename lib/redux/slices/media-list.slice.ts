@@ -1,5 +1,5 @@
 import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
-import {MediaListState} from '../models/mediaList.state';
+import {MediaListState} from '../models/media-list.state';
 import {API_URI} from '../constants';
 
 const initialState: MediaListState = {

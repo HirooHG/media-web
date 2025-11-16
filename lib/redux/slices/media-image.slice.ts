@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {API_URI} from '../constants';
-import {MediaImageState} from '../models/mediaImage.state';
+import {MediaImageState} from '../models/media-image.state';
 
 const initialState: MediaImageState = {
   comic_id: null,

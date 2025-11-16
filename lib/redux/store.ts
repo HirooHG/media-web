@@ -1,6 +1,6 @@
 import {configureStore} from '@reduxjs/toolkit';
-import mediaListReducer from './slices/mediaList.slice';
-import mediaImageReducer from './slices/mediaImage.slice';
+import mediaListReducer from './slices/media-list.slice';
+import mediaImageReducer from './slices/media-image.slice';
 
 export const store = configureStore({
   reducer: {

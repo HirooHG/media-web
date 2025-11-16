@@ -2,14 +2,14 @@
 
 import {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
-import {fetchMedias, clearListError, setComicImage} from '@/lib/redux/slices/mediaList.slice';
-import {clearState} from '@/lib/redux/slices/mediaImage.slice';
+import {fetchMedias, clearListError, setComicImage} from '@/lib/redux/slices/media-list.slice';
+import {clearState} from '@/lib/redux/slices/media-image.slice';
 import {Separator} from '@/components/ui/separator';
-import {Error} from './Error';
-import {Pending} from './Pending';
-import {EmptyList} from './EmptyList';
-import {MediaItem} from './MediaItem';
-import {Paginator} from './Paginator';
+import {Error} from './error';
+import {Pending} from './pending';
+import {EmptyList} from './empty-list';
+import {MediaItem} from './media-item';
+import {Paginator} from './paginator';
 
 export function MediaList() {
   const dispatch = useAppDispatch();
@@ -46,7 +46,7 @@ export function MediaList() {
           ) : (
             <ul className="flex-1 overflow-scroll">
               {comics.map((comic, index) => (
-                <li key={comic.id} className="h-fit flex flex-col items-center">
+                <li key={comic.comic_id} className="h-fit flex flex-col items-center">
                   {(index !== 0 || index !== comics.length - 1) && (
                     <div className="w-11/12 my-4 dark:bg-gray-100">
                       <Separator />

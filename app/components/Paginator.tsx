@@ -1,6 +1,6 @@
 'use client';
 
-import {setPage, nextPage, previousPage} from '@/lib/redux/slices/mediaList.slice';
+import {setPage, nextPage, previousPage} from '@/lib/redux/slices/media-list.slice';
 import {
   Pagination,
   PaginationContent,

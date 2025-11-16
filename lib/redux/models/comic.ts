@@ -1,13 +1,18 @@
+export enum ComicStatus {
+  ONGOING = 1,
+  COMPLETED = 2,
+  CANCELLED = 3,
+  HIATUS = 4,
+}
+
+export type ComicReadingState = 'reading' | 'completed' | 'on_hold' | 'dropped' | 'plan_to_read';
+
 export interface Comic {
   id: string;
-  user_id: number;
   comic_id: number;
-  default_thumbnail: string;
-  type: 'reading' | 'completed' | 'on_hold' | 'dropped' | 'plan_to_read';
+  type: ComicReadingState;
   comic_title: string;
   comic_slug: string;
-  comic_status: 1;
-  comic_last_chapter: string;
-  chapter_hid: string;
+  comic_status: ComicStatus;
   image: string | undefined;
 }

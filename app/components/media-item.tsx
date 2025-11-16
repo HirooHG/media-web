@@ -3,12 +3,13 @@
 import {ButtonGroup} from '@/components/ui/button-group';
 import {Button} from '@/components/ui/button';
 import {ExternalLink, FileImage, TriangleAlert} from 'lucide-react';
-import {API_URI} from '@/lib/redux/constants';
 import {Spinner} from '@/components/ui/spinner';
 import {Skeleton} from '@/components/ui/skeleton';
 import {Comic} from '@/lib/redux/models/comic';
 import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
-import {fetchMediaImage} from '@/lib/redux/slices/mediaImage.slice';
+import {fetchMediaImage} from '@/lib/redux/slices/media-image.slice';
+import Link from 'next/link';
+import {ComicImage} from './comic-image';
 
 export const MediaItem = ({comic}: {comic: Comic}) => {
   const dispatch = useAppDispatch();
@@ -17,10 +18,7 @@ export const MediaItem = ({comic}: {comic: Comic}) => {
   return (
     <div className="w-full flex space-x-2 md:space-x-4 items-start justify-center">
       {comic.image ? (
-        <div className="w-32 h-46">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="" src={API_URI + '/images/' + comic.image} alt={comic.comic_slug}></img>
-        </div>
+        <ComicImage uri={comic.image} slug={comic.comic_slug} />
       ) : (
         <div className="w-fit h-fit relative">
           <Skeleton className="w-32 h-46 bg-gray-400" />
@@ -46,7 +44,9 @@ export const MediaItem = ({comic}: {comic: Comic}) => {
             </Button>
           )}
           <Button variant="outline">
-            See more <ExternalLink />
+            <Link href={'/' + comic.comic_id} className="flex gap-2">
+              See more <ExternalLink />
+            </Link>
           </Button>
         </ButtonGroup>
         {imageError && comic_id === comic.comic_id && (
