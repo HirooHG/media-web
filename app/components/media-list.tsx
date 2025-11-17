@@ -10,6 +10,7 @@ import {EmptyList} from './empty-list';
 import {MediaItem} from './media-item';
 import {Paginator} from './paginator';
 import {ErrorComponent} from '@/components/shared/error';
+import {RefreshList} from './refresh-list';
 
 export function MediaList() {
   const dispatch = useAppDispatch();
@@ -30,18 +31,24 @@ export function MediaList() {
   }, [comic_id, dispatch, imageStatus, newImageName]);
 
   if (status === 'failed' && error) {
-    return <ErrorComponent error={error} callback={() => dispatch(clearListError())} />;
+    return (
+      <div className="h-6/12 w-full flex items-center justify-center">
+        <ErrorComponent error={error} callback={() => dispatch(clearListError())} />
+      </div>
+    );
   }
 
   return (
-    <div className="px-32 w-full h-full flex flex-col space-y-2">
+    <div className="px-32 w-full h-full flex flex-col space-y-2 relative">
       <h1 className="text-2xl font-bold mb-4">Medias</h1>
       {comics.length === 0 ? (
         <EmptyList />
       ) : (
         <>
           {status === 'pending' ? (
-            <Pending />
+            <div className="flex-1">
+              <Pending />
+            </div>
           ) : (
             <ul className="flex-1 overflow-scroll">
               {comics.map((comic, index) => (
@@ -57,6 +64,9 @@ export function MediaList() {
             </ul>
           )}
           <Paginator />
+          <div className="absolute bottom-5 right-5">
+            <RefreshList />
+          </div>
         </>
       )}
     </div>

@@ -47,7 +47,9 @@ export const ComicPage = ({id}: {id: string}) => {
   return (
     <>
       {comic === null ? (
-        <Pending />
+        <div className="w-full h-100">
+          <Pending />
+        </div>
       ) : (
         <div className="px-5">
           <div className="flex space-x-5">

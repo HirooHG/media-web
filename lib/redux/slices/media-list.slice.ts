@@ -29,6 +29,26 @@ export const fetchMedias = createAsyncThunk(
   },
 );
 
+export const refreshMedias = createAsyncThunk(
+  'mediaList/refreshMedias',
+  async (
+    {page, per_page}: {page: number; per_page: number} = {page: 1, per_page: 5},
+    {rejectWithValue},
+  ) => {
+    try {
+      const response = await fetch(
+        API_URI + '/media/refresh?page=' + page + '&per_page=' + per_page,
+      );
+      const result = await response.json();
+      if (result.error) throw Error('An error has occured: ' + result.error);
+
+      return result.data;
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Failed to fetch medias');
+    }
+  },
+);
+
 const mediaListSlice = createSlice({
   name: 'mediaList',
   initialState,
@@ -74,6 +94,20 @@ const mediaListSlice = createSlice({
         state.comics = action.payload;
       })
       .addCase(fetchMedias.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload as string;
+      });
+
+    builder
+      .addCase(refreshMedias.pending, (state) => {
+        state.status = 'pending';
+        state.error = null;
+      })
+      .addCase(refreshMedias.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.comics = action.payload;
+      })
+      .addCase(refreshMedias.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload as string;
       });
