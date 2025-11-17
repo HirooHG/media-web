@@ -25,17 +25,16 @@ export const ComicPage = ({id}: {id: string}) => {
       return;
     }
 
-    // * resets redux's state because it persists even if the page changes
-    // * if the actual comic isn't the one provided by the id
-    if (comic !== null && comic_id !== comic?.comic_id) {
-      dispatch(resetState());
-      return;
-    }
-
     if (status === 'idle') {
       dispatch(fetchComic({comic_id}));
     }
   }, [dispatch, status, id, comic]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetState());
+    };
+  }, [dispatch]);
 
   if (error !== null) {
     return (
@@ -57,7 +56,7 @@ export const ComicPage = ({id}: {id: string}) => {
             ) : (
               <ComicImagePlaceholder status={imageStatus} error={imageError} size="large" />
             )}
-            <div className="flex flex-col space-y-5">
+            <div className="flex-1 flex flex-col space-y-5">
               <span className="text-2xl font-semibold">{comic.comic_title}</span>
               <span>{comic.desc ?? <span className="italic">No description here...</span>}</span>
               {!comic.image && (
