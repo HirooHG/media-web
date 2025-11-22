@@ -20,7 +20,9 @@ export const fetchComic = createAsyncThunk(
 
       return result.data;
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Failed to fetch medias');
+      return rejectWithValue(
+        error instanceof Error ? error.message : 'Failed to fetch comic ' + comic_id,
+      );
     }
   },
 );

@@ -3,7 +3,7 @@
 import {ButtonGroup} from '@/components/ui/button-group';
 import {Button} from '@/components/ui/button';
 import {ExternalLink, FileImage} from 'lucide-react';
-import {Comic} from '@/lib/redux/models/comic';
+import {Comic} from '@/lib/shared/models/comic';
 import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
 import {fetchMediaImage} from '@/lib/redux/slices/media-image.slice';
 import {ComicImage} from './comic-image';

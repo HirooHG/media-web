@@ -1,6 +1,6 @@
 import {Skeleton} from '@/components/ui/skeleton';
 import {Spinner} from '@/components/ui/spinner';
-import {LoadingState} from '@/lib/redux/models/loadingState';
+import {LoadingState} from '@/lib/shared/models/loadingState';
 import {TriangleAlert} from 'lucide-react';
 import {ImageSize} from '../models/image-size';
 
