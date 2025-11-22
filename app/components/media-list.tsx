@@ -2,7 +2,7 @@
 
 import {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
-import {fetchMedias, clearListError, setComicImage} from '@/lib/redux/slices/media-list.slice';
+import {fetchMedias, setComicImage} from '@/lib/redux/slices/media-list.slice';
 import {clearState} from '@/lib/redux/slices/media-image.slice';
 import {Separator} from '@/components/ui/separator';
 import {Pending} from './pending';
@@ -33,7 +33,7 @@ export function MediaList() {
   if (status === 'failed' && error) {
     return (
       <div className="h-6/12 w-full flex items-center justify-center">
-        <ErrorComponent error={error} callback={() => dispatch(clearListError())} />
+        <ErrorComponent error={error} />
       </div>
     );
   }

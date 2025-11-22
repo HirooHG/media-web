@@ -4,7 +4,7 @@ import {useComicDispatch, useComicSelector} from '@/lib/redux/comic/comic-hooks'
 import {useEffect} from 'react';
 import {fetchComic, resetState} from '@/lib/redux/comic/slices/comic.slice';
 import {ErrorComponent} from '@/components/shared/error';
-import {clearComicError, setError} from '@/lib/redux/comic/slices/comic.slice';
+import {setError} from '@/lib/redux/comic/slices/comic.slice';
 import {ComicImage} from '@/app/components/comic-image';
 import {ComicImagePlaceholder} from '@/app/components/comic-image-placeholder';
 import {Pending} from '@/app/components/pending';
@@ -39,7 +39,7 @@ export const ComicPage = ({id}: {id: string}) => {
   if (error !== null) {
     return (
       <div className="w-full h-6/12 flex items-center justify-center">
-        <ErrorComponent error={error} callback={() => dispatch(clearComicError())} />
+        <ErrorComponent error={error} />
       </div>
     );
   }

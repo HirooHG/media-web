@@ -16,7 +16,7 @@ export const fetchComic = createAsyncThunk(
 
       const response = await fetch(API_URI + '/media/comic/' + comic_id);
       const result = await response.json();
-      if (result.error) throw Error('An error has occured: ' + result.error);
+      if (result.error) throw Error(result.error);
 
       return result.data;
     } catch (error) {
@@ -53,7 +53,7 @@ const comicSlice = createSlice({
       })
       .addCase(fetchComic.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error as string;
+        state.error = action.payload as string;
       });
   },
 });
