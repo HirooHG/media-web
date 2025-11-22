@@ -6,7 +6,7 @@ import {fetchMedias, setComicImage} from '@/lib/redux/slices/media-list.slice';
 import {clearState} from '@/lib/redux/slices/media-image.slice';
 import {Separator} from '@/components/ui/separator';
 import {Pending} from './pending';
-import {EmptyList} from './empty-list';
+import {EmptyList} from '../../components/shared/empty-list';
 import {MediaItem} from './media-item';
 import {Paginator} from './paginator';
 import {ErrorComponent} from '@/components/shared/error';
@@ -42,7 +42,7 @@ export function MediaList() {
     <div className="px-32 w-full h-full flex flex-col space-y-2 relative">
       <h1 className="text-2xl font-bold mb-4">Medias</h1>
       {comics.length === 0 ? (
-        <EmptyList />
+        <EmptyList title="No comic" description="No comic found" />
       ) : (
         <>
           {status === 'pending' ? (

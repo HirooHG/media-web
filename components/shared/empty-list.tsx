@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/empty';
 import {Brackets, Frown} from 'lucide-react';
 
-export const EmptyList = () => {
+export const EmptyList = ({title, description}: {title: string; description: string}) => {
   return (
     <div className="w-full flex items-center justify-center h-100">
       <Empty className="border border-dashed">
@@ -18,8 +18,8 @@ export const EmptyList = () => {
           <EmptyMedia variant="icon">
             <Brackets />
           </EmptyMedia>
-          <EmptyTitle>No comic</EmptyTitle>
-          <EmptyDescription>No comic found</EmptyDescription>
+          <EmptyTitle>{title}</EmptyTitle>
+          <EmptyDescription>{description}</EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
           <div className="flex gap-2 items-center">
