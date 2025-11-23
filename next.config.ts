@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [new URL(API_URI + '/images/**')],
   },
+  output: 'standalone',
 };
 
 export default nextConfig;
