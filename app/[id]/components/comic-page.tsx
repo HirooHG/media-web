@@ -11,6 +11,7 @@ import {Pending} from '@/app/components/pending';
 import {fetchMediaImage} from '@/lib/redux/slices/media-image.slice';
 import {Button} from '@/components/ui/button';
 import {FileImage} from 'lucide-react';
+import {Chapters} from './chapters';
 
 export const ComicPage = ({id}: {id: string}) => {
   const dispatch = useComicDispatch();
@@ -22,15 +23,15 @@ export const ComicPage = ({id}: {id: string}) => {
     const comic_id = Number(id);
     if (isNaN(comic_id)) {
       dispatch(setError('The id param must be a number'));
-      return;
     }
 
     if (status === 'idle') {
       dispatch(fetchComic({comic_id}));
     }
-  }, [dispatch, status, id, comic]);
+  }, [dispatch, status, id]);
 
   useEffect(() => {
+    // on comic page unmounted, reset state
     return () => {
       dispatch(resetState());
     };
@@ -51,7 +52,7 @@ export const ComicPage = ({id}: {id: string}) => {
           <Pending />
         </div>
       ) : (
-        <div className="px-5">
+        <div className="h-full flex flex-col px-5 gap-5">
           <div className="flex space-x-5">
             {comic.image ? (
               <ComicImage uri={comic.image} slug={comic.comic_slug} size="large" />
@@ -72,6 +73,7 @@ export const ComicPage = ({id}: {id: string}) => {
               )}
             </div>
           </div>
+          <Chapters comic_id={comic.comic_id} />
         </div>
       )}
     </>
