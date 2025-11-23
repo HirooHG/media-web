@@ -1,6 +1,6 @@
 import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 import {MediaListState} from '../models/media-list.state';
-import {API_URI} from '../constants';
+import {API_URI} from '../../shared/constants';
 
 const initialState: MediaListState = {
   comics: [],

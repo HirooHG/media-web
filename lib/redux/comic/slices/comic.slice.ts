@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {ComicState} from '../models/comic.state';
-import {API_URI} from '../../constants';
+import {API_URI} from '../../../shared/constants';
 
 const initialState: ComicState = {
   comic: null,

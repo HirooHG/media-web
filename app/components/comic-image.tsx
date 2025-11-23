@@ -1,4 +1,4 @@
-import {API_URI} from '@/lib/redux/constants';
+import {API_URI} from '@/lib/shared/constants';
 import {ImageSize} from '../models/image-size';
 
 export const ComicImage = ({

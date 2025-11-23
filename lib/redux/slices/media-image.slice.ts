@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {API_URI} from '../constants';
+import {API_URI} from '../../shared/constants';
 import {MediaImageState} from '../models/media-image.state';
 
 const initialState: MediaImageState = {

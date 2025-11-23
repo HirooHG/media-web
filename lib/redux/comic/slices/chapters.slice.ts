@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {ChaptersState} from '../models/chapters.state';
-import {API_URI} from '../../constants';
+import {API_URI} from '../../../shared/constants';
 
 export const initialState: ChaptersState = {
   chapters: [],
