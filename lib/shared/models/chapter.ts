@@ -4,4 +4,5 @@ export interface Chapter {
   chap: string;
   title: string | undefined;
   is_last_chapter: boolean;
+  images: string[] | undefined;
 }
