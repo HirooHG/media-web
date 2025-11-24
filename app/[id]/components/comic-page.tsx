@@ -10,8 +10,10 @@ import {ComicImagePlaceholder} from '@/app/components/comic-image-placeholder';
 import {Pending} from '@/app/components/pending';
 import {fetchMediaImage} from '@/lib/redux/slices/media-image.slice';
 import {Button} from '@/components/ui/button';
-import {FileImage} from 'lucide-react';
+import {FileImage, RefreshCcw} from 'lucide-react';
 import {Chapters} from './chapters';
+import {ButtonGroup} from '@/components/ui/button-group';
+import {refreshChapters} from '@/lib/redux/comic/slices/chapters.slice';
 
 export const ComicPage = ({id}: {id: string}) => {
   const dispatch = useComicDispatch();
@@ -62,15 +64,26 @@ export const ComicPage = ({id}: {id: string}) => {
             <div className="flex-1 flex flex-col space-y-5">
               <span className="text-2xl font-semibold">{comic.comic_title}</span>
               <span>{comic.desc ?? <span className="italic">No description here...</span>}</span>
-              {!comic.image && (
+              <ButtonGroup className="w-full">
+                {!comic.image && (
+                  <Button
+                    onClick={() => dispatch(fetchMediaImage(comic.comic_id))}
+                    variant="outline"
+                    className="flex-1"
+                    disabled={imageStatus === 'pending'}
+                  >
+                    <FileImage /> Get Image
+                  </Button>
+                )}
                 <Button
-                  onClick={() => dispatch(fetchMediaImage(comic.comic_id))}
+                  onClick={() => dispatch(refreshChapters({comic_id: comic.comic_id}))}
                   variant="outline"
+                  className="flex-1"
                   disabled={imageStatus === 'pending'}
                 >
-                  <FileImage /> Get Image
+                  <RefreshCcw /> Refresh chapters
                 </Button>
-              )}
+              </ButtonGroup>
             </div>
           </div>
           <Chapters comic_id={comic.comic_id} />

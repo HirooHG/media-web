@@ -27,6 +27,25 @@ export const fetchChapters = createAsyncThunk(
   },
 );
 
+export const refreshChapters = createAsyncThunk(
+  'chapters/refreshChapters',
+  async ({comic_id}: {comic_id: number}, {rejectWithValue}) => {
+    try {
+      if (!comic_id || comic_id < 1) throw Error('Need an id > 0');
+
+      const response = await fetch(API_URI + '/media/refresh/comic/' + comic_id + '/chapters');
+      const result = await response.json();
+      if (result.error) throw Error(result.error);
+
+      return result.data;
+    } catch (error) {
+      return rejectWithValue(
+        error instanceof Error ? error.message : 'Failed to fetch comic ' + comic_id + ' chapters',
+      );
+    }
+  },
+);
+
 export const chaptersSlice = createSlice({
   name: 'chapters',
   initialState,
@@ -38,7 +57,6 @@ export const chaptersSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    //
     builder
       .addCase(fetchChapters.pending, (state) => {
         state.chaptersError = null;
@@ -49,6 +67,19 @@ export const chaptersSlice = createSlice({
         state.chapters = action.payload;
       })
       .addCase(fetchChapters.rejected, (state, action) => {
+        state.chaptersError = action.payload as string;
+        state.chaptersStatus = 'failed';
+      });
+    builder
+      .addCase(refreshChapters.pending, (state) => {
+        state.chaptersError = null;
+        state.chaptersStatus = 'pending';
+      })
+      .addCase(refreshChapters.fulfilled, (state, action) => {
+        state.chaptersStatus = 'succeeded';
+        state.chapters = action.payload;
+      })
+      .addCase(refreshChapters.rejected, (state, action) => {
         state.chaptersError = action.payload as string;
         state.chaptersStatus = 'failed';
       });

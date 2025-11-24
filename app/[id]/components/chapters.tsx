@@ -49,7 +49,7 @@ export const Chapters = ({comic_id}: {comic_id: number}) => {
           <div className="w-6/12">
             <EmptyList
               title="No chapters found"
-              description="No chapters yet to be found for this comic"
+              description="Refresh the chapters to get the latest chapters"
             />
           </div>
         </div>
