@@ -1,9 +1,4 @@
-export enum ComicStatus {
-  ONGOING = 1,
-  COMPLETED = 2,
-  CANCELLED = 3,
-  HIATUS = 4,
-}
+import {ComicStatus} from './comic-status';
 
 export type ComicReadingState = 'reading' | 'completed' | 'on_hold' | 'dropped' | 'plan_to_read';
 

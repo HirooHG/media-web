@@ -18,13 +18,13 @@ export const ComicImagePlaceholder = ({
   return (
     <div className="w-fit h-fit relative">
       <Skeleton
-        className={'bg-gray-400 rounded-lg ' + (size === 'small' ? 'w-32 h-46' : 'w-64 h-96')}
+        className={'bg-gray-400 rounded-lg ' + (size === 'small' ? 'w-32 h-46' : 'w-56 h-84')}
       />
       {status === 'pending' && loadingEnabled && (
-        <Spinner className="absolute top-5/12 left-5/12 w-5 h-5" />
+        <Spinner className="absolute top-[50%] left-[47%] w-5 h-5" />
       )}
       {error && loadingEnabled && (
-        <TriangleAlert className="absolute top-5/12 left-5/12 text-red-700 dark:text-red-400 animate-bounce" />
+        <TriangleAlert className="absolute top-[50%] left-[47%] text-red-700 dark:text-red-400 animate-bounce" />
       )}
     </div>
   );

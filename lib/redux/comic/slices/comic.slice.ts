@@ -42,6 +42,11 @@ const comicSlice = createSlice({
       state.comic = null;
       state.status = 'idle';
     },
+    setImage: (state, action: PayloadAction<string>) => {
+      if (state.comic && action.payload !== '') {
+        state.comic.image = action.payload;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -60,5 +65,5 @@ const comicSlice = createSlice({
   },
 });
 
-export const {clearComicError, setError, resetState} = comicSlice.actions;
+export const {clearComicError, setError, resetState, setImage} = comicSlice.actions;
 export default comicSlice.reducer;
