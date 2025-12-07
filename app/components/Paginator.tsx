@@ -17,11 +17,12 @@ export const Paginator = () => {
   const {page} = useAppSelector((state) => state.mediaList);
 
   return (
-    <Pagination className="pb-8">
+    <Pagination>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            className="cursor-pointer"
+            aria-disabled={page <= 1}
+            className={page <= 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
             onClick={() => {
               dispatch(previousPage());
             }}

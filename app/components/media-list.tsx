@@ -11,17 +11,22 @@ import {MediaItem} from './media-item';
 import {Paginator} from './paginator';
 import {ErrorComponent} from '@/components/shared/error';
 import {RefreshList} from './refresh-list';
+import {SelectComicStatus} from './select-comic-status';
 
 export function MediaList() {
   const dispatch = useAppDispatch();
-  const {comics, error, status, page, per_page} = useAppSelector((state) => state.mediaList);
+  const {comics, error, status, page, per_page, selectedStatus} = useAppSelector(
+    (state) => state.mediaList,
+  );
   const {comic_id, imageStatus, newImageName} = useAppSelector((state) => state.mediaImage);
 
   useEffect(() => {
     if (status === 'idle') {
-      dispatch(fetchMedias({page, per_page}));
+      console.log('idling');
+
+      dispatch(fetchMedias({page, per_page, selectedStatus}));
     }
-  }, [dispatch, status, page, per_page]);
+  }, [dispatch, status, page, per_page, selectedStatus]);
 
   useEffect(() => {
     if (imageStatus === 'succeeded') {
@@ -39,7 +44,7 @@ export function MediaList() {
   }
 
   return (
-    <div className="px-32 w-full h-full flex flex-col space-y-2 relative">
+    <div className="px-15 w-full h-full flex flex-col space-y-2 relative">
       <h1 className="text-2xl font-bold mb-4">Medias</h1>
       {comics.length === 0 ? (
         <EmptyList title="No comic" description="No comic found" />
@@ -63,8 +68,11 @@ export function MediaList() {
               ))}
             </ul>
           )}
-          <Paginator />
-          <div className="absolute bottom-5 right-5">
+          <div className="flex justify-between items-center pb-8">
+            <SelectComicStatus />
+            <Paginator />
+          </div>
+          <div className="absolute bottom-9 right-5">
             <RefreshList />
           </div>
         </>

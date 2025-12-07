@@ -7,4 +7,5 @@ export interface MediaListState {
   error: string | null;
   page: number;
   per_page: number;
+  selectedStatus: number | null;
 }

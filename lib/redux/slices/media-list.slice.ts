@@ -8,17 +8,33 @@ const initialState: MediaListState = {
   error: null,
   page: 1,
   per_page: 5,
+  selectedStatus: null,
 };
 
 // Async thunk for fetching media data
 export const fetchMedias = createAsyncThunk(
   'mediaList/fetchMedias',
   async (
-    {page, per_page}: {page: number; per_page: number} = {page: 1, per_page: 5},
+    {
+      page,
+      per_page,
+      selectedStatus,
+    }: {page: number; per_page: number; selectedStatus: number | null} = {
+      page: 1,
+      per_page: 5,
+      selectedStatus: null,
+    },
     {rejectWithValue},
   ) => {
     try {
-      const response = await fetch(API_URI + '/media?page=' + page + '&per_page=' + per_page);
+      const response = await fetch(
+        API_URI +
+          '/media?page=' +
+          page +
+          '&per_page=' +
+          per_page +
+          (selectedStatus === null ? '' : '&status=' + selectedStatus),
+      );
       const result = await response.json();
       if (result.error) throw Error('An error has occured: ' + result.error);
 
@@ -81,6 +97,10 @@ const mediaListSlice = createSlice({
       state.status = 'idle';
       state.page -= 1;
     },
+    setSelectedStatus: (state, action: PayloadAction<number>) => {
+      state.status = 'idle';
+      state.selectedStatus = action.payload;
+    },
   },
   extraReducers: (builder) => {
     // Fetch Medias
@@ -114,6 +134,13 @@ const mediaListSlice = createSlice({
   },
 });
 
-export const {clearListError, setComicImage, setPage, setPerPage, nextPage, previousPage} =
-  mediaListSlice.actions;
+export const {
+  clearListError,
+  setComicImage,
+  setPage,
+  setPerPage,
+  nextPage,
+  previousPage,
+  setSelectedStatus,
+} = mediaListSlice.actions;
 export default mediaListSlice.reducer;
