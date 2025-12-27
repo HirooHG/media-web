@@ -97,7 +97,7 @@ const mediaListSlice = createSlice({
       state.status = 'idle';
       state.page -= 1;
     },
-    setSelectedStatus: (state, action: PayloadAction<number>) => {
+    setSelectedStatus: (state, action: PayloadAction<number | null>) => {
       state.status = 'idle';
       state.selectedStatus = action.payload;
     },
