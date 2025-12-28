@@ -82,23 +82,18 @@ const mediaListSlice = createSlice({
       comic.image = action.payload.image ?? undefined;
     },
     setPage: (state, action: PayloadAction<number>) => {
-      state.status = 'idle';
       state.page = action.payload;
     },
     setPerPage: (state, action: PayloadAction<number>) => {
-      state.status = 'idle';
       state.per_page = action.payload;
     },
     nextPage: (state) => {
-      state.status = 'idle';
       state.page += 1;
     },
     previousPage: (state) => {
-      state.status = 'idle';
       state.page -= 1;
     },
     setSelectedStatus: (state, action: PayloadAction<number | null>) => {
-      state.status = 'idle';
       state.selectedStatus = action.payload;
     },
   },

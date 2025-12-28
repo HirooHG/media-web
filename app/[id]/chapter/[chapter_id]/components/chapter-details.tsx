@@ -10,24 +10,27 @@ import {
   setChapterError,
 } from '@/lib/redux/chapter/slices/chapter.slice';
 import {API_URI} from '@/lib/shared/constants';
-import {useEffect} from 'react';
+import {useEffect, useRef} from 'react';
 
 export const ChapterDetails = ({comic_id, chapter_id}: {comic_id: number; chapter_id: number}) => {
   const dispatch = useChapterDispatch();
   const {status, error, chapter} = useChapterSelector((state) => state.chapterReducer);
+  const init = useRef(false);
 
   useEffect(() => {
+    if (init.current) return;
+    init.current = true;
+
     const parsedComicId = Number(comic_id);
     const parsedChapterId = Number(chapter_id);
 
     if (isNaN(parsedComicId) || isNaN(parsedChapterId)) {
       dispatch(setChapterError('The comic id or chapter id params must be a number'));
+      return;
     }
 
-    if (status === 'idle') {
-      dispatch(fetchChapter({comic_id: parsedComicId, chapter_id: parsedChapterId}));
-    }
-  }, [dispatch, status, comic_id, chapter_id]);
+    dispatch(fetchChapter({comic_id: parsedComicId, chapter_id: parsedChapterId}));
+  });
 
   useEffect(() => {
     // on comic page unmounted, reset state
@@ -36,7 +39,7 @@ export const ChapterDetails = ({comic_id, chapter_id}: {comic_id: number; chapte
     };
   }, [dispatch]);
 
-  if (error !== null) {
+  if (status === 'failed' && error !== null) {
     return (
       <div className="w-full h-6/12 flex items-center justify-center">
         <ErrorComponent error={error} />
@@ -46,7 +49,7 @@ export const ChapterDetails = ({comic_id, chapter_id}: {comic_id: number; chapte
 
   return (
     <>
-      {chapter === null ? (
+      {status === 'pending' || chapter === null ? (
         <div className="w-full h-6/12 flex items-center justify-center">
           <Pending />
         </div>
@@ -60,7 +63,7 @@ export const ChapterDetails = ({comic_id, chapter_id}: {comic_id: number; chapte
             {chapter.images && chapter.images.length !== 0 ? (
               chapter.images.map((ch, i) => {
                 return (
-                  <li className="my-5" key={i}>
+                  <li key={i}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       className="max-w-full"

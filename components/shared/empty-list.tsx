@@ -12,21 +12,19 @@ import {Brackets, Frown} from 'lucide-react';
 
 export const EmptyList = ({title, description}: {title: string; description: string}) => {
   return (
-    <div className="w-full flex items-center justify-center h-100">
-      <Empty className="border border-dashed">
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <Brackets />
-          </EmptyMedia>
-          <EmptyTitle>{title}</EmptyTitle>
-          <EmptyDescription>{description}</EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <div className="flex gap-2 items-center">
-            Nothing to see here <Frown />
-          </div>
-        </EmptyContent>
-      </Empty>
-    </div>
+    <Empty className="border border-dashed">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <Brackets />
+        </EmptyMedia>
+        <EmptyTitle>{title}</EmptyTitle>
+        <EmptyDescription>{description}</EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
+        <div className="flex gap-2 items-center">
+          Nothing to see here <Frown />
+        </div>
+      </EmptyContent>
+    </Empty>
   );
 };

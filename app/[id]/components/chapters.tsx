@@ -9,7 +9,7 @@ import {useComicDispatch, useComicSelector} from '@/lib/redux/comic/comic-hooks'
 import {fetchChapters, resetChaptersState} from '@/lib/redux/comic/slices/chapters.slice';
 import {ArrowRight} from 'lucide-react';
 import {useRouter} from 'next/navigation';
-import {useEffect} from 'react';
+import {useEffect, useRef} from 'react';
 
 export const Chapters = ({comic_id}: {comic_id: number}) => {
   const dispatch = useComicDispatch();
@@ -17,12 +17,14 @@ export const Chapters = ({comic_id}: {comic_id: number}) => {
     (state) => state.chaptersReducer,
   );
   const router = useRouter();
+  const init = useRef(false);
 
   useEffect(() => {
-    if (chaptersStatus === 'idle') {
-      dispatch(fetchChapters({comic_id}));
-    }
-  }, [dispatch, comic_id, chaptersStatus]);
+    if (init.current) return;
+
+    init.current = true;
+    dispatch(fetchChapters({comic_id}));
+  });
 
   useEffect(() => {
     return () => {
@@ -34,7 +36,7 @@ export const Chapters = ({comic_id}: {comic_id: number}) => {
     return <Pending />;
   }
 
-  if (chaptersError !== null) {
+  if (chaptersStatus === 'failed' && chaptersError !== null) {
     return (
       <div className="h-6/12 w-full flex items-center justify-center">
         <ErrorComponent error={chaptersError} />

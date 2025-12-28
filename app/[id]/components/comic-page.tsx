@@ -1,7 +1,7 @@
 'use client';
 
 import {useComicDispatch, useComicSelector} from '@/lib/redux/comic/comic-hooks';
-import {useEffect} from 'react';
+import {useEffect, useRef} from 'react';
 import {fetchComic, resetState, setImage} from '@/lib/redux/comic/slices/comic.slice';
 import {ErrorComponent} from '@/components/shared/error';
 import {setError} from '@/lib/redux/comic/slices/comic.slice';
@@ -23,30 +23,28 @@ export const ComicPage = ({id}: {id: string}) => {
   const {imageStatus, imageError, comic_id, newImageName} = useComicSelector(
     (state) => state.imageReducer,
   );
+  const init = useRef(false);
 
   useEffect(() => {
+    if (init.current) return;
+    init.current = true;
+
     // * error if route id isn't a number
     const comic_id = Number(id);
     if (isNaN(comic_id)) {
       dispatch(setError('The id param must be a number'));
+      return;
     }
 
-    if (status === 'idle') {
-      dispatch(fetchComic({comic_id}));
-    }
-  }, [dispatch, status, id]);
+    dispatch(fetchComic({comic_id}));
+  });
 
   useEffect(() => {
-    const comic_id = Number(id);
-    if (isNaN(comic_id)) {
-      dispatch(setError('The id param must be a number'));
-    }
-
-    if (imageStatus === 'succeeded') {
-      dispatch(setImage(newImageName ?? ''));
+    if (imageStatus === 'succeeded' && newImageName) {
+      dispatch(setImage(newImageName));
       dispatch(clearState());
     }
-  }, [comic_id, dispatch, imageStatus, newImageName, id]);
+  }, [dispatch, imageStatus, newImageName]);
 
   useEffect(() => {
     // on comic page unmounted, reset state
@@ -54,6 +52,14 @@ export const ComicPage = ({id}: {id: string}) => {
       dispatch(resetState());
     };
   }, [dispatch]);
+
+  if (status === 'failed' && error !== null) {
+    return (
+      <div className="w-full h-6/12 flex items-center justify-center">
+        <ErrorComponent error={error} />
+      </div>
+    );
+  }
 
   const getBadgeStatusSeverity = () => {
     switch (comic?.comic_status) {
@@ -67,17 +73,9 @@ export const ComicPage = ({id}: {id: string}) => {
     }
   };
 
-  if (error !== null) {
-    return (
-      <div className="w-full h-6/12 flex items-center justify-center">
-        <ErrorComponent error={error} />
-      </div>
-    );
-  }
-
   return (
     <>
-      {comic === null ? (
+      {status === 'pending' || comic === null ? (
         <div className="w-full h-6/12">
           <Pending />
         </div>

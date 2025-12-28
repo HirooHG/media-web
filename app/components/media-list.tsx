@@ -21,12 +21,10 @@ export function MediaList() {
   const {comic_id, imageStatus, newImageName} = useAppSelector((state) => state.mediaImage);
 
   useEffect(() => {
-    if (status === 'idle') {
-      console.log('idling');
-
-      dispatch(fetchMedias({page, per_page, selectedStatus}));
-    }
-  }, [dispatch, status, page, per_page, selectedStatus]);
+    // if any of page, per_page or selectedStatus changes
+    // it re triggers
+    dispatch(fetchMedias({page, per_page, selectedStatus}));
+  }, [dispatch, page, per_page, selectedStatus]);
 
   useEffect(() => {
     if (imageStatus === 'succeeded') {
@@ -43,18 +41,26 @@ export function MediaList() {
     );
   }
 
+  if (status === 'pending') {
+    return (
+      <div className="h-6/12 w-full flex items-center justify-center">
+        <Pending />
+      </div>
+    );
+  }
+
   return (
     <div className="px-15 w-full h-full flex flex-col space-y-2 relative">
       <h1 className="text-2xl font-bold mb-4">Medias</h1>
-      {comics.length === 0 ? (
-        <EmptyList title="No comic" description="No comic found" />
-      ) : (
-        <>
-          {status === 'pending' ? (
-            <div className="flex-1">
-              <Pending />
+      <>
+        {comics.length === 0 ? (
+          <div className="h-8/12 flex items-center justify-center">
+            <div className="w-fit">
+              <EmptyList title="No comic" description="No comic found" />
             </div>
-          ) : (
+          </div>
+        ) : (
+          <>
             <ul className="flex-1 overflow-scroll">
               {comics.map((comic, index) => (
                 <li key={comic.comic_id} className="h-fit flex flex-col items-center">
@@ -67,16 +73,16 @@ export function MediaList() {
                 </li>
               ))}
             </ul>
-          )}
-          <div className="flex justify-between items-center pb-8">
-            <SelectComicStatus />
-            <Paginator />
-          </div>
-          <div className="absolute bottom-9 right-5">
-            <RefreshList />
-          </div>
-        </>
-      )}
+            <div className="flex justify-between items-center pb-8">
+              <SelectComicStatus />
+              <Paginator />
+            </div>
+          </>
+        )}
+      </>
+      <div className="absolute bottom-9 right-5">
+        <RefreshList status={status} page={page} per_page={per_page} />
+      </div>
     </div>
   );
 }
