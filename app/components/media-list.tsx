@@ -53,8 +53,8 @@ export function MediaList() {
   }
 
   return (
-    <div className="px-15 w-full h-full flex flex-col space-y-2 relative">
-      <h1 className="text-2xl font-bold mb-4">Medias</h1>
+    <div className="w-full h-full flex flex-col space-y-2 relative">
+      <h1 className="px-15 text-2xl font-bold mb-4">Medias</h1>
       <>
         {comics.length === 0 ? (
           <div className="h-8/12 flex items-center justify-center">
@@ -72,11 +72,13 @@ export function MediaList() {
                       <Separator />
                     </div>
                   )}
-                  <MediaItem comic={comic} />
+                  <div className="w-full px-15">
+                    <MediaItem comic={comic} />
+                  </div>
                 </li>
               ))}
             </ul>
-            <div className="flex justify-between items-center pb-8">
+            <div className="px-15 flex justify-between items-center pb-8">
               <SelectComicStatus />
               <Paginator />
             </div>
