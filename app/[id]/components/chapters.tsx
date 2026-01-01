@@ -36,7 +36,7 @@ export const Chapters = ({comic_id}: {comic_id: number}) => {
     return <Pending />;
   }
 
-  if (chaptersStatus === 'failed' && chaptersError !== null) {
+  if (chaptersStatus === 'error' && chaptersError !== null) {
     return (
       <div className="h-6/12 w-full flex items-center justify-center">
         <ErrorComponent error={chaptersError} />
