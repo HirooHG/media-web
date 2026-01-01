@@ -53,7 +53,7 @@ export const ComicPage = ({id}: {id: string}) => {
     };
   }, [dispatch]);
 
-  if (status === 'failed' && error !== null) {
+  if (status === 'error' && error !== null) {
     return (
       <div className="w-full h-6/12 flex items-center justify-center">
         <ErrorComponent error={error} />

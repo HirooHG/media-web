@@ -68,7 +68,7 @@ export const chaptersSlice = createSlice({
       })
       .addCase(fetchChapters.rejected, (state, action) => {
         state.chaptersError = action.payload as string;
-        state.chaptersStatus = 'failed';
+        state.chaptersStatus = 'error';
       });
     builder
       .addCase(refreshChapters.pending, (state) => {
@@ -81,7 +81,7 @@ export const chaptersSlice = createSlice({
       })
       .addCase(refreshChapters.rejected, (state, action) => {
         state.chaptersError = action.payload as string;
-        state.chaptersStatus = 'failed';
+        state.chaptersStatus = 'error';
       });
   },
 });

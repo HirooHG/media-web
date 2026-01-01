@@ -9,45 +9,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {useAppDispatch} from '@/lib/redux/hooks';
+import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
 import {setSelectedStatus} from '@/lib/redux/slices/media-list.slice';
-import {ComicStatus} from '@/lib/shared/models/comic-status';
-import {useEffect} from 'react';
+import {ComicStatus, ComicStatusKeys} from '@/lib/shared/models/comic-status';
+
+const STATUSES = Object.keys(ComicStatus).filter((k) => isNaN(Number(k)));
 
 export const SelectComicStatus = () => {
   const dispatch = useAppDispatch();
-  const status: string | undefined = undefined;
-
-  const statuses = Object.keys(ComicStatus).filter((k) => isNaN(Number(k)));
-
-  const valueChange = (value: string | null) => {
-    let index: number | null = null;
-    if (value !== null) {
-      index = statuses.indexOf(value) + 1;
-    }
-    dispatch(setSelectedStatus(index));
-  };
-
-  useEffect(() => {
-    if (status === undefined) {
-      valueChange(null);
-    }
-  }, [status]);
+  const {selectedStatus} = useAppSelector((state) => state.mediaList);
 
   return (
     <Select
-      onValueChange={(v) => {
-        valueChange(v);
-      }}
-      value={status}
+      onValueChange={(v) => dispatch(setSelectedStatus(v as ComicStatusKeys))}
+      value={selectedStatus ?? undefined}
     >
       <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a status" />
+        <SelectValue placeholder={<span>Select a status</span>} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Statuses</SelectLabel>
-          {statuses.map((k) => {
+          {STATUSES.map((k) => {
             return (
               <SelectItem key={k} value={k}>
                 {k.toLowerCase()}

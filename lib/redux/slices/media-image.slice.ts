@@ -54,7 +54,7 @@ const mediaImageSlice = createSlice({
         state.newImageName = action.payload;
       })
       .addCase(fetchMediaImage.rejected, (state, action) => {
-        state.imageStatus = 'failed';
+        state.imageStatus = 'error';
         state.imageError = action.payload as string;
       });
   },

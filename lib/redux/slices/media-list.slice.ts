@@ -1,6 +1,7 @@
 import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 import {MediaListState} from '../models/media-list.state';
 import {API_URI} from '../../shared/constants';
+import {ComicStatusKeys} from '@/lib/shared/models/comic-status';
 
 const initialState: MediaListState = {
   comics: [],
@@ -48,12 +49,25 @@ export const fetchMedias = createAsyncThunk(
 export const refreshMedias = createAsyncThunk(
   'mediaList/refreshMedias',
   async (
-    {page, per_page}: {page: number; per_page: number} = {page: 1, per_page: 5},
+    {
+      page,
+      per_page,
+      selectedStatus,
+    }: {page: number; per_page: number; selectedStatus: number | null} = {
+      page: 1,
+      per_page: 5,
+      selectedStatus: null,
+    },
     {rejectWithValue},
   ) => {
     try {
       const response = await fetch(
-        API_URI + '/media/refresh?page=' + page + '&per_page=' + per_page,
+        API_URI +
+          '/media/refresh?page=' +
+          page +
+          '&per_page=' +
+          per_page +
+          (selectedStatus === null ? '' : '&status=' + selectedStatus),
       );
       const result = await response.json();
       if (result.error) throw Error('An error has occured: ' + result.error);
@@ -93,7 +107,7 @@ const mediaListSlice = createSlice({
     previousPage: (state) => {
       state.page -= 1;
     },
-    setSelectedStatus: (state, action: PayloadAction<number | null>) => {
+    setSelectedStatus: (state, action: PayloadAction<ComicStatusKeys | null>) => {
       state.selectedStatus = action.payload;
     },
   },
@@ -109,7 +123,7 @@ const mediaListSlice = createSlice({
         state.comics = action.payload;
       })
       .addCase(fetchMedias.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = 'error';
         state.error = action.payload as string;
       });
 
@@ -123,7 +137,7 @@ const mediaListSlice = createSlice({
         state.comics = action.payload;
       })
       .addCase(refreshMedias.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = 'error';
         state.error = action.payload as string;
       });
   },

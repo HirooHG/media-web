@@ -39,7 +39,7 @@ export const ChapterDetails = ({comic_id, chapter_id}: {comic_id: number; chapte
     };
   }, [dispatch]);
 
-  if (status === 'failed' && error !== null) {
+  if (status === 'error' && error !== null) {
     return (
       <div className="w-full h-6/12 flex items-center justify-center">
         <ErrorComponent error={error} />

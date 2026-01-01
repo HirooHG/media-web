@@ -1,3 +1,4 @@
+import {ComicStatusKeys} from '@/lib/shared/models/comic-status';
 import {Comic} from '../../shared/models/comic';
 import {LoadingState} from '../../shared/models/loadingState';
 
@@ -7,5 +8,5 @@ export interface MediaListState {
   error: string | null;
   page: number;
   per_page: number;
-  selectedStatus: number | null;
+  selectedStatus: ComicStatusKeys | null;
 }

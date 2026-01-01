@@ -51,7 +51,7 @@ const chapterSlice = createSlice({
         state.chapter = action.payload;
       })
       .addCase(fetchChapter.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = 'error';
         state.error = action.payload as string;
       });
   },

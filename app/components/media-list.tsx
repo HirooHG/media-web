@@ -12,6 +12,7 @@ import {Paginator} from './paginator';
 import {ErrorComponent} from '@/components/shared/error';
 import {RefreshList} from './refresh-list';
 import {SelectComicStatus} from './select-comic-status';
+import {ComicStatus} from '@/lib/shared/models/comic-status';
 
 export function MediaList() {
   const dispatch = useAppDispatch();
@@ -23,7 +24,9 @@ export function MediaList() {
   useEffect(() => {
     // if any of page, per_page or selectedStatus changes
     // it re triggers
-    dispatch(fetchMedias({page, per_page, selectedStatus}));
+    const status = selectedStatus === null ? null : ComicStatus[selectedStatus];
+
+    dispatch(fetchMedias({page, per_page, selectedStatus: status}));
   }, [dispatch, page, per_page, selectedStatus]);
 
   useEffect(() => {
@@ -33,7 +36,7 @@ export function MediaList() {
     }
   }, [comic_id, dispatch, imageStatus, newImageName]);
 
-  if (status === 'failed' && error) {
+  if (status === 'error' && error) {
     return (
       <div className="h-6/12 w-full flex items-center justify-center">
         <ErrorComponent error={error} />
@@ -81,7 +84,7 @@ export function MediaList() {
         )}
       </>
       <div className="absolute bottom-9 right-5">
-        <RefreshList status={status} page={page} per_page={per_page} />
+        <RefreshList />
       </div>
     </div>
   );

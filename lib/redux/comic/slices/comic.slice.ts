@@ -59,7 +59,7 @@ const comicSlice = createSlice({
         state.comic = action.payload;
       })
       .addCase(fetchComic.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = 'error';
         state.error = action.payload as string;
       });
   },
