@@ -63,10 +63,10 @@ export const ComicPage = ({id}: {id: string}) => {
 
   const getBadgeStatusSeverity = () => {
     switch (comic?.comic_status) {
-      case 0:
       case 1:
-        return 'outline';
       case 2:
+        return 'outline';
+      case 3:
         return 'destructive';
       default:
         return 'secondary';
@@ -92,9 +92,7 @@ export const ComicPage = ({id}: {id: string}) => {
               <span className="max-h-55 overflow-scroll">
                 {comic.desc ?? <span className="italic">No description here...</span>}
               </span>
-              <Badge variant={getBadgeStatusSeverity()}>
-                {ComicStatus[comic.comic_status - 1]}
-              </Badge>
+              <Badge variant={getBadgeStatusSeverity()}>{ComicStatus[comic.comic_status]}</Badge>
               <ButtonGroup className="w-full">
                 {!comic.image && (
                   <Button
