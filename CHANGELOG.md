@@ -7,11 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixed
+
+- Refresh comic list with status
+- Status filter disfunctional
+
 ## [1.0.0] - 2025-12-28
 
 ### Added
-
-#### Functionalities
 
 - Comick media followed only
 - A page list of media
@@ -19,9 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Filter by media status
 - A page of media details, chapters & image
 - A page Comick media chapter details with images
-
-#### Technical side
-
 - Nextjs integration
 - Shadcn UI components
 - Redux state management
