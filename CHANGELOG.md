@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [1.0.1] - 2026-01-03
+
 ### Fixed
 
 - Refresh comic list with status
@@ -14,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Migration from npm to bun
 - Comic page status doesn't display
 - UX : wider scroll for comics page
+- Sync media-api v1.1.1 changes: images with ids
 
 ## [1.0.0] - 2025-12-28
 
