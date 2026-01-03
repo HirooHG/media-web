@@ -67,9 +67,9 @@ export const ChapterDetails = ({comic_id, chapter_id}: {comic_id: number; chapte
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       className="max-w-full"
-                      src={API_URI + '/images/' + comic_id + '/' + chapter_id + '/' + ch}
+                      src={API_URI + '/images/medias/' + comic_id + '/' + chapter_id + '/' + ch.url}
                       loading="lazy"
-                      alt={ch}
+                      alt={ch.id}
                     ></img>
                   </li>
                 );

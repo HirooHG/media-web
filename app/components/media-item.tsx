@@ -18,7 +18,7 @@ export const MediaItem = ({comic}: {comic: Comic}) => {
   return (
     <div className="w-full flex space-x-2 md:space-x-4 items-start justify-center">
       {comic.image ? (
-        <ComicImage uri={comic.image} slug={comic.comic_slug} />
+        <ComicImage uri={comic.image.url} slug={comic.comic_slug} />
       ) : (
         <ComicImagePlaceholder
           status={imageStatus}

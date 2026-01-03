@@ -83,7 +83,7 @@ export const ComicPage = ({id}: {id: string}) => {
         <div className="w-full h-full flex flex-col px-5 gap-5">
           <div className="flex space-x-5">
             {comic.image ? (
-              <ComicImage uri={comic.image} slug={comic.comic_slug} size="large" />
+              <ComicImage uri={comic.image.url} slug={comic.comic_slug} size="large" />
             ) : (
               <ComicImagePlaceholder status={imageStatus} error={imageError} size="large" />
             )}
