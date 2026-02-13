@@ -16,7 +16,7 @@ export const fetchChapters = createAsyncThunk(
 
       const response = await fetch(API_URI + '/media/comic/' + comic_id + '/chapters');
       const result = await response.json();
-      if (result.error) throw Error(result.error);
+      if (!response.ok || result.error) throw Error(result.error);
 
       return result.data;
     } catch (error) {
@@ -35,7 +35,7 @@ export const refreshChapters = createAsyncThunk(
 
       const response = await fetch(API_URI + '/media/refresh/comic/' + comic_id + '/chapters');
       const result = await response.json();
-      if (result.error) throw Error(result.error);
+      if (!response.ok || result.error) throw Error(result.error);
 
       return result.data;
     } catch (error) {

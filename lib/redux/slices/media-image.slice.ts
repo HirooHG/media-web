@@ -18,7 +18,7 @@ export const fetchMediaImage = createAsyncThunk(
       const response = await fetch(API_URI + '/media/comic/image/' + comic_id, {method: 'POST'});
 
       const result = await response.json();
-      if (result.error) throw Error('An error has occured: ' + result.error);
+      if (!response.ok || result.error) throw Error('An error has occured: ' + result.error);
 
       return result.data;
     } catch (error) {

@@ -2,6 +2,7 @@ import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 import {MediaListState} from '../models/media-list.state';
 import {API_URI} from '../../shared/constants';
 import {ComicStatusKeys} from '@/lib/shared/models/comic-status';
+import {MediaImage} from '@/lib/shared/models/media-image';
 
 const initialState: MediaListState = {
   comics: [],
@@ -37,7 +38,7 @@ export const fetchMedias = createAsyncThunk(
           (selectedStatus === null ? '' : '&status=' + selectedStatus),
       );
       const result = await response.json();
-      if (result.error) throw Error('An error has occured: ' + result.error);
+      if (!response.ok || result.error) throw Error('An error has occured: ' + result.error);
 
       return result.data;
     } catch (error) {
@@ -70,7 +71,8 @@ export const refreshMedias = createAsyncThunk(
           (selectedStatus === null ? '' : '&status=' + selectedStatus),
       );
       const result = await response.json();
-      if (result.error) throw Error('An error has occured: ' + result.error);
+      console.log(response.ok);
+      if (!response.ok || result.error) throw Error('An error has occured: ' + result.error);
 
       return result.data;
     } catch (error) {
@@ -87,13 +89,10 @@ const mediaListSlice = createSlice({
     clearListError: (state) => {
       state.error = null;
     },
-    setComicImage: (
-      state,
-      action: PayloadAction<{comic_id: number | null; image: string | null}>,
-    ) => {
+    setComicImage: (state, action: PayloadAction<MediaImage>) => {
       const comic = state.comics.find((c) => c.comic_id === action.payload.comic_id);
       if (!comic) return;
-      comic.image = action.payload.image ?? undefined;
+      comic.image = action.payload ?? undefined;
     },
     setPage: (state, action: PayloadAction<number>) => {
       state.page = action.payload;

@@ -16,7 +16,7 @@ export const fetchComic = createAsyncThunk(
 
       const response = await fetch(API_URI + '/media/comic/' + comic_id);
       const result = await response.json();
-      if (result.error) throw Error(result.error);
+      if (!response.ok || result.error) throw Error(result.error);
 
       return result.data;
     } catch (error) {
@@ -44,7 +44,10 @@ const comicSlice = createSlice({
     },
     setImage: (state, action: PayloadAction<string>) => {
       if (state.comic && action.payload !== '') {
-        state.comic.image = action.payload;
+        state.comic.image = {
+          comic_id: state.comic.comic_id,
+          url: action.payload,
+        };
       }
     },
   },

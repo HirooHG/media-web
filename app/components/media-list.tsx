@@ -30,13 +30,13 @@ export function MediaList() {
   }, [dispatch, page, per_page, selectedStatus]);
 
   useEffect(() => {
-    if (imageStatus === 'succeeded') {
-      dispatch(setComicImage({comic_id, image: newImageName}));
+    if (imageStatus === 'succeeded' && comic_id !== null && newImageName !== null) {
+      dispatch(setComicImage({comic_id, url: newImageName}));
       dispatch(clearState());
     }
   }, [comic_id, dispatch, imageStatus, newImageName]);
 
-  if (status === 'error' && error) {
+  if (status === 'error' || error) {
     return (
       <div className="h-6/12 w-full flex items-center justify-center">
         <ErrorComponent error={error} />
