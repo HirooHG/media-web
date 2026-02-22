@@ -1,6 +1,6 @@
+import {Comic} from '@/lib/shared/models/comic';
 import {ComicStatusKeys} from '@/lib/shared/models/comic-status';
-import {Comic} from '../../shared/models/comic';
-import {LoadingState} from '../../shared/models/loadingState';
+import {LoadingState} from '@/lib/shared/models/loadingState';
 
 export interface MediaListState {
   comics: Comic[];

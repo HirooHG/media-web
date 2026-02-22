@@ -1,5 +1,5 @@
 import {API_URI} from '@/lib/shared/constants';
-import {ImageSize} from '../models/image-size';
+import {ImageSize} from '@/app/models/image-size';
 
 export const ComicImage = ({
   uri,

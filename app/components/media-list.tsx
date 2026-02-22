@@ -1,9 +1,9 @@
 'use client';
 
 import {useEffect} from 'react';
-import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
-import {fetchMedias, setComicImage} from '@/lib/redux/slices/media-list.slice';
-import {clearState} from '@/lib/redux/slices/media-image.slice';
+import {useAppDispatch, useAppSelector} from '@/lib/redux/comics/hooks';
+import {setComicImage} from '@/lib/redux/comics/slices/media-list.slice';
+import {clearState} from '@/lib/redux/comics/slices/media-image.slice';
 import {Separator} from '@/components/ui/separator';
 import {Pending} from './pending';
 import {EmptyList} from '../../components/shared/empty-list';
@@ -13,6 +13,7 @@ import {ErrorComponent} from '@/components/shared/error';
 import {RefreshList} from './refresh-list';
 import {SelectComicStatus} from './select-comic-status';
 import {ComicStatus} from '@/lib/shared/models/comic-status';
+import {fetchMedias} from '@/lib/redux/comics/thunks/fetch-medias';
 
 export function MediaList() {
   const dispatch = useAppDispatch();

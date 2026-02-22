@@ -1,6 +1,6 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {API_URI} from '../../shared/constants';
-import {MediaImageState} from '../models/media-image.state';
+import {createSlice} from '@reduxjs/toolkit';
+import {MediaImageState} from '@/lib/redux/comics/states/media-image.state';
+import {fetchMediaImage} from '../thunks/fetch-media-image';
 
 const initialState: MediaImageState = {
   comic_id: null,
@@ -8,26 +8,6 @@ const initialState: MediaImageState = {
   imageStatus: 'idle',
   imageError: null,
 };
-
-export const fetchMediaImage = createAsyncThunk(
-  'mediaImage/fetchMediaImage',
-  async (comic_id: number | null, {rejectWithValue}) => {
-    try {
-      if (!comic_id || comic_id === 0) throw Error('Comic id is missing');
-
-      const response = await fetch(API_URI + '/media/comic/image/' + comic_id, {method: 'POST'});
-
-      const result = await response.json();
-      if (!response.ok || result.error) throw Error('An error has occured: ' + result.error);
-
-      return result.data;
-    } catch (error) {
-      return rejectWithValue(
-        error instanceof Error ? error.message : 'Failed to fetch media image',
-      );
-    }
-  },
-);
 
 const mediaImageSlice = createSlice({
   name: 'mediaImage',

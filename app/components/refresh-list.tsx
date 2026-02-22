@@ -1,8 +1,8 @@
 'use client';
 
 import {Tooltip, TooltipContent, TooltipTrigger} from '@/components/ui/tooltip';
-import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
-import {refreshMedias} from '@/lib/redux/slices/media-list.slice';
+import {useAppDispatch, useAppSelector} from '@/lib/redux/comics/hooks';
+import {refreshMedias} from '@/lib/redux/comics/thunks/refresh-medias';
 import {ComicStatus} from '@/lib/shared/models/comic-status';
 import {RefreshCw} from 'lucide-react';
 

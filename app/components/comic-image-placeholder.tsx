@@ -2,7 +2,7 @@ import {Skeleton} from '@/components/ui/skeleton';
 import {Spinner} from '@/components/ui/spinner';
 import {LoadingState} from '@/lib/shared/models/loadingState';
 import {TriangleAlert} from 'lucide-react';
-import {ImageSize} from '../models/image-size';
+import {ImageSize} from '@/app/models/image-size';
 
 export const ComicImagePlaceholder = ({
   status,

@@ -1,31 +1,12 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {ComicState} from '../models/comic.state';
-import {API_URI} from '../../../shared/constants';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {ComicState} from '../states/comic.state';
+import {fetchComic} from '../thunks/fetch-comic';
 
 const initialState: ComicState = {
   comic: null,
   status: 'idle',
   error: null,
 };
-
-export const fetchComic = createAsyncThunk(
-  'comic/fetchComic',
-  async ({comic_id}: {comic_id: number}, {rejectWithValue}) => {
-    try {
-      if (!comic_id || comic_id < 1) throw Error('Need an id > 0');
-
-      const response = await fetch(API_URI + '/media/comic/' + comic_id);
-      const result = await response.json();
-      if (!response.ok || result.error) throw Error(result.error);
-
-      return result.data;
-    } catch (error) {
-      return rejectWithValue(
-        error instanceof Error ? error.message : 'Failed to fetch comic ' + comic_id,
-      );
-    }
-  },
-);
 
 const comicSlice = createSlice({
   name: 'comic',

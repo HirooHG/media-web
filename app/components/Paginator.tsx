@@ -1,6 +1,6 @@
 'use client';
 
-import {setPage, nextPage, previousPage} from '@/lib/redux/slices/media-list.slice';
+import {setPage, nextPage, previousPage} from '@/lib/redux/comics/slices/media-list.slice';
 import {
   Pagination,
   PaginationContent,
@@ -10,7 +10,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
+import {useAppDispatch, useAppSelector} from '@/lib/redux/comics/hooks';
 
 export const Paginator = () => {
   const dispatch = useAppDispatch();

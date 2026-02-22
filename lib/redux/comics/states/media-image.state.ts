@@ -1,4 +1,4 @@
-import {LoadingState} from '../../shared/models/loadingState';
+import {LoadingState} from '@/lib/shared/models/loadingState';
 
 export interface MediaImageState {
   comic_id: number | null;

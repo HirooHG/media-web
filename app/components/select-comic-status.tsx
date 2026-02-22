@@ -9,8 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
-import {setSelectedStatus} from '@/lib/redux/slices/media-list.slice';
+import {useAppDispatch, useAppSelector} from '@/lib/redux/comics/hooks';
+import {setSelectedStatus} from '@/lib/redux/comics/slices/media-list.slice';
 import {ComicStatus, ComicStatusKeys} from '@/lib/shared/models/comic-status';
 
 const STATUSES = Object.keys(ComicStatus).filter((k) => isNaN(Number(k)));

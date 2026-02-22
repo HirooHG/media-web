@@ -2,20 +2,22 @@
 
 import {useComicDispatch, useComicSelector} from '@/lib/redux/comic/comic-hooks';
 import {useEffect, useRef} from 'react';
-import {fetchComic, resetState, setImage} from '@/lib/redux/comic/slices/comic.slice';
+import {resetState, setImage} from '@/lib/redux/comic/slices/comic.slice';
 import {ErrorComponent} from '@/components/shared/error';
 import {setError} from '@/lib/redux/comic/slices/comic.slice';
 import {ComicImage} from '@/app/components/comic-image';
 import {ComicImagePlaceholder} from '@/app/components/comic-image-placeholder';
 import {Pending} from '@/app/components/pending';
-import {clearState, fetchMediaImage} from '@/lib/redux/slices/media-image.slice';
 import {Button} from '@/components/ui/button';
 import {FileImage, RefreshCcw} from 'lucide-react';
 import {Chapters} from './chapters';
 import {ButtonGroup} from '@/components/ui/button-group';
-import {refreshChapters} from '@/lib/redux/comic/slices/chapters.slice';
 import {Badge} from '@/components/ui/badge';
 import {ComicStatus} from '@/lib/shared/models/comic-status';
+import {clearState} from '@/lib/redux/comics/slices/media-image.slice';
+import {fetchMediaImage} from '@/lib/redux/comics/thunks/fetch-media-image';
+import {refreshChapters} from '@/lib/redux/comic/thunks/refresh-chapters';
+import {fetchComic} from '@/lib/redux/comic/thunks/fetch-comic';
 
 export const ComicPage = ({id}: {id: string}) => {
   const dispatch = useComicDispatch();

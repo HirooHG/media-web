@@ -1,9 +1,15 @@
 'use client';
 
-import {comicStore} from '@/lib/redux/comic/comic-store';
-import {ReactNode} from 'react';
+import {ComicStore, comicStore} from '@/lib/redux/comic/comic-store';
+import {ReactNode, useRef} from 'react';
 import {Provider} from 'react-redux';
 
 export function ReduxComicProvider({children}: {children: ReactNode}) {
-  return <Provider store={comicStore}>{children}</Provider>;
+  const storeRef = useRef<ComicStore | null>(null);
+
+  if (!storeRef.current) {
+    storeRef.current = comicStore();
+  }
+
+  return <Provider store={storeRef.current}>{children}</Provider>;
 }

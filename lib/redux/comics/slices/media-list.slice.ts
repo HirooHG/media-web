@@ -1,8 +1,10 @@
-import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
-import {MediaListState} from '../models/media-list.state';
-import {API_URI} from '../../shared/constants';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {MediaListState} from '@/lib/redux/comics/states/media-list.state';
 import {ComicStatusKeys} from '@/lib/shared/models/comic-status';
 import {MediaImage} from '@/lib/shared/models/media-image';
+import {Comic} from '@/lib/shared/models/comic';
+import {fetchMedias} from '../thunks/fetch-medias';
+import {refreshMedias} from '../thunks/refresh-medias';
 
 const initialState: MediaListState = {
   comics: [],
@@ -14,72 +16,6 @@ const initialState: MediaListState = {
 };
 
 // Async thunk for fetching media data
-export const fetchMedias = createAsyncThunk(
-  'mediaList/fetchMedias',
-  async (
-    {
-      page,
-      per_page,
-      selectedStatus,
-    }: {page: number; per_page: number; selectedStatus: number | null} = {
-      page: 1,
-      per_page: 5,
-      selectedStatus: null,
-    },
-    {rejectWithValue},
-  ) => {
-    try {
-      const response = await fetch(
-        API_URI +
-          '/media?page=' +
-          page +
-          '&per_page=' +
-          per_page +
-          (selectedStatus === null ? '' : '&status=' + selectedStatus),
-      );
-      const result = await response.json();
-      if (!response.ok || result.error) throw Error('An error has occured: ' + result.error);
-
-      return result.data;
-    } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Failed to fetch medias');
-    }
-  },
-);
-
-export const refreshMedias = createAsyncThunk(
-  'mediaList/refreshMedias',
-  async (
-    {
-      page,
-      per_page,
-      selectedStatus,
-    }: {page: number; per_page: number; selectedStatus: number | null} = {
-      page: 1,
-      per_page: 5,
-      selectedStatus: null,
-    },
-    {rejectWithValue},
-  ) => {
-    try {
-      const response = await fetch(
-        API_URI +
-          '/media/refresh?page=' +
-          page +
-          '&per_page=' +
-          per_page +
-          (selectedStatus === null ? '' : '&status=' + selectedStatus),
-      );
-      const result = await response.json();
-      console.log(response.ok);
-      if (!response.ok || result.error) throw Error('An error has occured: ' + result.error);
-
-      return result.data;
-    } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Failed to fetch medias');
-    }
-  },
-);
 
 const mediaListSlice = createSlice({
   name: 'mediaList',
@@ -90,7 +26,7 @@ const mediaListSlice = createSlice({
       state.error = null;
     },
     setComicImage: (state, action: PayloadAction<MediaImage>) => {
-      const comic = state.comics.find((c) => c.comic_id === action.payload.comic_id);
+      const comic = state.comics.find((c: Comic) => c.comic_id === action.payload.comic_id);
       if (!comic) return;
       comic.image = action.payload ?? undefined;
     },
