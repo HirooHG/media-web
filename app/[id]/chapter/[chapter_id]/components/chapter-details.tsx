@@ -4,39 +4,21 @@ import {Pending} from '@/app/components/pending';
 import {EmptyList} from '@/components/shared/empty-list';
 import {ErrorComponent} from '@/components/shared/error';
 import {Button} from '@/components/ui/button';
-import {useChapterDispatch, useChapterSelector} from '@/lib/redux/chapter/chapter-hooks';
-import {resetChapterState, setChapterError} from '@/lib/redux/chapter/slices/chapter.slice';
-import {fetchChapter} from '@/lib/redux/chapter/thunks/fetch-chapter';
-import {API_URI} from '@/lib/shared/constants';
+import {useChapterQuery} from '@/lib/redux/api';
+import {useAppSelector} from '@/lib/redux/hooks';
 import {ChevronLeft, ChevronRight, Home} from 'lucide-react';
-import {useEffect, useRef} from 'react';
+import {useSession} from 'next-auth/react';
+import {redirect} from 'next/navigation';
 
 export const ChapterDetails = ({comic_id, chapter_id}: {comic_id: number; chapter_id: number}) => {
-  const dispatch = useChapterDispatch();
-  const {status, error, chapter} = useChapterSelector((state) => state.chapterReducer);
-  const init = useRef(false);
+  const {status: session, data} = useSession();
 
-  useEffect(() => {
-    if (init.current) return;
-    init.current = true;
+  if (session === 'unauthenticated' || data?.tokensExpired) {
+    redirect('/');
+  }
 
-    const parsedComicId = Number(comic_id);
-    const parsedChapterId = Number(chapter_id);
-
-    if (isNaN(parsedComicId) || isNaN(parsedChapterId)) {
-      dispatch(setChapterError('The comic id or chapter id params must be a number'));
-      return;
-    }
-
-    dispatch(fetchChapter({comic_id: parsedComicId, chapter_id: parsedChapterId}));
-  });
-
-  useEffect(() => {
-    // on comic page unmounted, reset state
-    return () => {
-      dispatch(resetChapterState());
-    };
-  }, [dispatch]);
+  const {status, error, chapter} = useAppSelector((state) => state.chapter);
+  useChapterQuery({media_id: comic_id, chapter_id}, {refetchOnMountOrArgChange: true});
 
   if (status === 'error' && error !== null) {
     return (
@@ -62,17 +44,18 @@ export const ChapterDetails = ({comic_id, chapter_id}: {comic_id: number; chapte
             <ul>
               {chapter.images && chapter.images.length !== 0 ? (
                 chapter.images.map((ch, i) => {
+                  const url =
+                    process.env.NEXT_PUBLIC_API_URL +
+                    '/medias/' +
+                    comic_id +
+                    '/' +
+                    chapter_id +
+                    '/' +
+                    ch.url;
                   return (
                     <li key={i}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        className="max-w-full"
-                        src={
-                          API_URI + '/images/medias/' + comic_id + '/' + chapter_id + '/' + ch.url
-                        }
-                        loading="lazy"
-                        alt={ch.id}
-                      ></img>
+                      <img className="max-w-full" src={url} loading="lazy" alt={ch.id}></img>
                     </li>
                   );
                 })

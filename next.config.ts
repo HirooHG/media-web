@@ -1,10 +1,10 @@
 import type {NextConfig} from 'next';
 
-const API_URI = process.env.API_URI ?? 'http://localhost:3001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [new URL(API_URI + '/images/**')],
+    remotePatterns: [new URL(API_URL + '/images/**')],
   },
   output: 'standalone',
 };

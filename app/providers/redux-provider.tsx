@@ -1,8 +1,8 @@
 'use client';
 
+import {AppStore, store} from '@/lib/redux/store';
 import {ReactNode, useRef} from 'react';
 import {Provider} from 'react-redux';
-import {AppStore, store} from '@/lib/redux/comics/store';
 
 export function ReduxProvider({children}: {children: ReactNode}) {
   const storeRef = useRef<AppStore | null>(null);

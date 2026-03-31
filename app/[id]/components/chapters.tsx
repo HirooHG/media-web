@@ -5,33 +5,16 @@ import {EmptyList} from '@/components/shared/empty-list';
 import {ErrorComponent} from '@/components/shared/error';
 import {Button} from '@/components/ui/button';
 import {Item, ItemActions, ItemContent, ItemDescription, ItemTitle} from '@/components/ui/item';
-import {useComicDispatch, useComicSelector} from '@/lib/redux/comic/comic-hooks';
-import {resetChaptersState} from '@/lib/redux/comic/slices/chapters.slice';
-import {fetchChapters} from '@/lib/redux/comic/thunks/fetch-chapters';
+import {useChaptersQuery} from '@/lib/redux/api';
+import {useAppSelector} from '@/lib/redux/hooks';
 import {ArrowRight} from 'lucide-react';
 import {useRouter} from 'next/navigation';
-import {useEffect, useRef} from 'react';
 
 export const Chapters = ({comic_id}: {comic_id: number}) => {
-  const dispatch = useComicDispatch();
-  const {chaptersStatus, chapters, chaptersError} = useComicSelector(
-    (state) => state.chaptersReducer,
-  );
+  const {chaptersStatus, chapters, chaptersError} = useAppSelector((state) => state.chapters);
   const router = useRouter();
-  const init = useRef(false);
 
-  useEffect(() => {
-    if (init.current) return;
-
-    init.current = true;
-    dispatch(fetchChapters({comic_id}));
-  });
-
-  useEffect(() => {
-    return () => {
-      dispatch(resetChaptersState());
-    };
-  }, [dispatch]);
+  useChaptersQuery(comic_id, {refetchOnMountOrArgChange: true});
 
   if (chaptersStatus === 'pending') {
     return <Pending />;

@@ -3,6 +3,7 @@ import {Geist, Geist_Mono} from 'next/font/google';
 import './globals.css';
 import {ReduxProvider} from '@/app/providers/redux-provider';
 import {AuthProvider} from '@/app/providers/auth-provider';
+import {Toaster} from 'sonner';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -35,6 +36,7 @@ export default function RootLayout({
             </AuthProvider>
           </main>
         </div>
+        <Toaster />
       </body>
     </html>
   );

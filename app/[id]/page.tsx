@@ -1,7 +1,7 @@
-import {ComicPage} from './components/comic-page';
+import {MediaPage} from './components/media-page';
 
-export default async function HomeComic({params}: {params: Promise<{id: string}>}) {
+export default async function HomeMedia({params}: {params: Promise<{id: number}>}) {
   const {id} = await params;
 
-  return <ComicPage id={id} />;
+  return <MediaPage id={id} />;
 }
