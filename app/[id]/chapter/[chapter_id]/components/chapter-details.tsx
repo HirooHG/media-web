@@ -8,7 +8,7 @@ import {useChapterQuery} from '@/lib/redux/api';
 import {useAppSelector} from '@/lib/redux/hooks';
 import {ChevronLeft, ChevronRight, Home} from 'lucide-react';
 import {useSession} from 'next-auth/react';
-import {redirect} from 'next/navigation';
+import {redirect, useRouter} from 'next/navigation';
 
 export const ChapterDetails = ({comic_id, chapter_id}: {comic_id: number; chapter_id: number}) => {
   const {status: session, data} = useSession();
@@ -18,7 +18,12 @@ export const ChapterDetails = ({comic_id, chapter_id}: {comic_id: number; chapte
   }
 
   const {status, error, chapter} = useAppSelector((state) => state.chapter);
+  const router = useRouter();
   useChapterQuery({media_id: comic_id, chapter_id}, {refetchOnMountOrArgChange: true});
+
+  const home = () => {
+    router.push('/' + comic_id);
+  };
 
   if (status === 'error' && error !== null) {
     return (
@@ -40,7 +45,7 @@ export const ChapterDetails = ({comic_id, chapter_id}: {comic_id: number; chapte
             <h1 className="text-2xl font-bold">Chapter - {chapter.chap}</h1>
             <span>{chapter.title ?? <span className="italic">No title in there</span>}</span>
           </div>
-          <div className="flex-1 overflow-scroll">
+          <div className="flex-1 overflow-y-scroll">
             <ul>
               {chapter.images && chapter.images.length !== 0 ? (
                 chapter.images.map((ch, i) => {
@@ -76,15 +81,20 @@ export const ChapterDetails = ({comic_id, chapter_id}: {comic_id: number; chapte
                 <span>Prev</span>
               </Button>
               <div className="h-10/12 bg-zinc-200" style={{width: '1px'}}></div>
-              <Button className="bg-transparent text-inherit flex-1 h-full rounded-none hover:bg-zinc-200 flex items-center justiy-center">
+              <Button
+                onClick={home}
+                className="bg-transparent text-inherit flex-1 h-full rounded-none hover:bg-zinc-200 flex items-center justiy-center"
+              >
                 <Home />
                 <span>Home</span>
               </Button>
               <div className="h-10/12 bg-zinc-200" style={{width: '1px'}}></div>
-              <Button className="bg-transparent text-inherit relative flex-1 h-full rounded-none hover:bg-zinc-200 flex items-center justiy-center">
-                <span>Next</span>
-                <ChevronRight className="absolute right-5" />
-              </Button>
+              {!chapter.is_last_chapter && (
+                <Button className="bg-transparent text-inherit relative flex-1 h-full rounded-none hover:bg-zinc-200 flex items-center justiy-center">
+                  <span>Next</span>
+                  <ChevronRight className="absolute right-5" />
+                </Button>
+              )}
             </div>
           </div>
         </div>
