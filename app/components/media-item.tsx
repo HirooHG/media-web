@@ -20,7 +20,7 @@ export const MediaItem = ({media}: {media: Media}) => {
   return (
     <div className="w-full flex space-x-2 md:space-x-4 items-start justify-center">
       {media.image ? (
-        <MediaImage uri={media.image.url} slug={media.comic_slug} />
+        <MediaImage uri={media.image.uri} slug={media.comic_slug} />
       ) : (
         <MediaImagePlaceholder
           status={imageStatus}
@@ -39,8 +39,8 @@ export const MediaItem = ({media}: {media: Media}) => {
                 if (!image.data) return;
                 dispatch(
                   setImage({
-                    comic_id: media.comic_id,
-                    url: image.data.url,
+                    media_id: media.comic_id,
+                    uri: image.data.uri,
                   }),
                 );
               }}

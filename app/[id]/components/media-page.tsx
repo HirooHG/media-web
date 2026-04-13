@@ -60,10 +60,10 @@ export const MediaPage = ({id}: {id: number}) => {
           <Pending />
         </div>
       ) : (
-        <div className="w-full h-full flex flex-col px-5 gap-5">
+        <div className="w-full h-full flex flex-col px-5 gap-5 overflow-scroll">
           <div className="flex space-x-5">
             {media.image ? (
-              <MediaImage uri={media.image.url} slug={media.comic_slug} size="large" />
+              <MediaImage uri={media.image.uri} slug={media.comic_slug} size="large" />
             ) : (
               <MediaImagePlaceholder status={imageStatus} error={imageError} size="large" />
             )}
@@ -79,7 +79,7 @@ export const MediaPage = ({id}: {id: number}) => {
                     onClick={async () => {
                       const image = await getImageMedia(media.comic_id);
                       if (!image.data) return;
-                      dispatch(setMediaImage(image.data.url));
+                      dispatch(setMediaImage(image.data.uri));
                     }}
                     variant="outline"
                     className="flex-1"

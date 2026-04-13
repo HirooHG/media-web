@@ -32,7 +32,7 @@ const mediaImageSlice = createSlice({
       })
       .addMatcher(api.endpoints.mediaImage.matchFulfilled, (state, action) => {
         state.imageStatus = 'succeeded';
-        state.newImageName = action.payload.url;
+        state.newImageName = action.payload.uri;
         state.comic_id = null;
       })
       .addMatcher(api.endpoints.mediaImage.matchRejected, (state, action) => {

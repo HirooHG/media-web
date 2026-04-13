@@ -1,4 +1,4 @@
 export interface MediaImage {
-  comic_id: number;
-  url: string;
+  media_id: number;
+  uri: string;
 }

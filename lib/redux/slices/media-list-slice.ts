@@ -25,7 +25,7 @@ const mediaListSlice = createSlice({
       state.error = null;
     },
     setImage: (state, action: PayloadAction<MediaImage>) => {
-      const media = state.medias.find((c: Media) => c.comic_id === action.payload.comic_id);
+      const media = state.medias.find((c: Media) => c.comic_id === action.payload.media_id);
       if (!media) return;
       media.image = action.payload ?? undefined;
     },
