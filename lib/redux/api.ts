@@ -31,7 +31,7 @@ export const api = createApi({
       ...defaultTransforms<Media[]>(),
     }),
     mediaImage: builder.mutation<MediaImage, number>({
-      query: (comic_id: number) => `/comic/image/${comic_id}`,
+      query: (media_id: number) => `/comic/image/${media_id}`,
       ...defaultTransforms<MediaImage>(),
     }),
     refresh: builder.mutation<Media[], Pagination & {status: MediaStatus | null}>({

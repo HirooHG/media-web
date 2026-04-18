@@ -5,6 +5,8 @@ export interface Chapter {
   hid: string;
   chap: string;
   title: string | undefined;
-  is_last_chapter: boolean;
   images: ChapterImage[];
+  translator?: string;
+  prev_chap?: number;
+  next_chap?: number;
 }

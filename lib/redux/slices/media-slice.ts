@@ -26,7 +26,7 @@ const mediaSlice = createSlice({
     setMediaImage: (state, action: PayloadAction<string>) => {
       if (state.media && action.payload !== '') {
         state.media.image = {
-          media_id: state.media.comic_id,
+          media_id: state.media.id,
           uri: action.payload,
         };
       }

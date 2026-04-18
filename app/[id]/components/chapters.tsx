@@ -10,11 +10,11 @@ import {useAppSelector} from '@/lib/redux/hooks';
 import {ArrowRight} from 'lucide-react';
 import {useRouter} from 'next/navigation';
 
-export const Chapters = ({comic_id}: {comic_id: number}) => {
+export const Chapters = ({media_id}: {media_id: number}) => {
   const {chaptersStatus, chapters, chaptersError} = useAppSelector((state) => state.chapters);
   const router = useRouter();
 
-  useChaptersQuery(comic_id, {refetchOnMountOrArgChange: true});
+  useChaptersQuery(media_id, {refetchOnMountOrArgChange: true});
 
   if (chaptersStatus === 'pending') {
     return <Pending />;
@@ -46,14 +46,14 @@ export const Chapters = ({comic_id}: {comic_id: number}) => {
               <Item variant="outline">
                 <ItemContent>
                   <ItemTitle>
-                    {ch.chap} {ch.title && '- ' + ch.title}
+                    {ch.chap} {ch.title && '- ' + ch.title}{' '}
                   </ItemTitle>
-                  <ItemDescription>{ch.hid}</ItemDescription>
+                  <ItemDescription>{ch.translator && ch.translator}</ItemDescription>
                 </ItemContent>
                 <ItemActions>
                   <Button
                     variant="ghost"
-                    onClick={() => router.push('/' + comic_id + '/chapter/' + ch.id)}
+                    onClick={() => router.push('/' + media_id + '/chapter/' + ch.id)}
                   >
                     <ArrowRight />
                   </Button>

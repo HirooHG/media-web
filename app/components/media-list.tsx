@@ -56,7 +56,7 @@ export function MediaList() {
           <>
             <ul className="flex-1 overflow-scroll">
               {medias.map((media, index) => (
-                <li key={media.comic_id} className="h-fit flex flex-col items-center">
+                <li key={media.id} className="h-fit flex flex-col items-center">
                   {(index !== 0 || index !== medias.length - 1) && (
                     <div className="w-11/12 my-4 dark:bg-gray-100">
                       <Separator />

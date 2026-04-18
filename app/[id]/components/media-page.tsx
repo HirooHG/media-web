@@ -26,23 +26,23 @@ export const MediaPage = ({id}: {id: number}) => {
 
   const dispatch = useAppDispatch();
   const {media, error, status} = useAppSelector((state) => state.media);
-  const {imageStatus, imageError, comic_id} = useAppSelector((state) => state.mediaImage);
+  const {imageStatus, imageError, media_id} = useAppSelector((state) => state.mediaImage);
   const [getImageMedia] = useMediaImageMutation();
   const [refreshChapters] = useRefreshChaptersMutation();
 
-  const media_id = z.coerce.number().int().safeParse(id);
-  useMediaQuery(media_id.data ?? 0, {skip: !media_id.success, refetchOnMountOrArgChange: true});
+  const parsedId = z.coerce.number().int().safeParse(id);
+  useMediaQuery(parsedId.data ?? 0, {skip: !parsedId.success, refetchOnMountOrArgChange: true});
 
-  if (status === 'error' || (!media_id.success && media_id.error)) {
+  if (status === 'error' || (!parsedId.success && parsedId.error)) {
     return (
       <div className="w-full h-6/12 flex items-center justify-center">
-        <ErrorComponent error={error ?? media_id.error?.message ?? ''} />
+        <ErrorComponent error={error ?? parsedId.error?.message ?? ''} />
       </div>
     );
   }
 
   const getBadgeStatusSeverity = () => {
-    switch (media?.comic_status) {
+    switch (media?.status) {
       case 1:
       case 2:
         return 'outline';
@@ -63,21 +63,21 @@ export const MediaPage = ({id}: {id: number}) => {
         <div className="w-full h-full flex flex-col px-5 gap-5 overflow-scroll">
           <div className="flex space-x-5">
             {media.image ? (
-              <MediaImage uri={media.image.uri} slug={media.comic_slug} size="large" />
+              <MediaImage uri={media.image.uri} slug={media.slug} size="large" />
             ) : (
               <MediaImagePlaceholder status={imageStatus} error={imageError} size="large" />
             )}
             <div className="flex-1 flex flex-col space-y-3">
-              <span className="text-2xl font-semibold">{media.comic_title}</span>
+              <span className="text-2xl font-semibold">{media.title}</span>
               <span className="h-50 overflow-scroll">
-                {media.desc ?? <span className="italic">No description here...</span>}
+                {media.description ?? <span className="italic">No description here...</span>}
               </span>
-              <Badge variant={getBadgeStatusSeverity()}>{MediaStatus[media.comic_status]}</Badge>
+              <Badge variant={getBadgeStatusSeverity()}>{MediaStatus[media.status]}</Badge>
               <ButtonGroup className="w-full">
                 {!media.image && (
                   <Button
                     onClick={async () => {
-                      const image = await getImageMedia(media.comic_id);
+                      const image = await getImageMedia(media.id);
                       if (!image.data) return;
                       dispatch(setMediaImage(image.data.uri));
                     }}
@@ -89,7 +89,7 @@ export const MediaPage = ({id}: {id: number}) => {
                   </Button>
                 )}
                 <Button
-                  onClick={() => refreshChapters(media.comic_id)}
+                  onClick={() => refreshChapters(media.id)}
                   variant="outline"
                   className="flex-1"
                   disabled={imageStatus === 'pending'}
@@ -97,12 +97,12 @@ export const MediaPage = ({id}: {id: number}) => {
                   <RefreshCcw /> Refresh chapters
                 </Button>
               </ButtonGroup>
-              {imageError && comic_id === media.comic_id && (
+              {imageError && media_id === media.id && (
                 <span className="text-red-700 dark:text-red-400">{imageError}</span>
               )}
             </div>
           </div>
-          <Chapters comic_id={media.comic_id} />
+          <Chapters media_id={media.id} />
         </div>
       )}
     </>

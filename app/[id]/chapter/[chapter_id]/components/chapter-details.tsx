@@ -5,35 +5,38 @@ import {EmptyList} from '@/components/shared/empty-list';
 import {ErrorComponent} from '@/components/shared/error';
 import {Button} from '@/components/ui/button';
 import {useChapterQuery} from '@/lib/redux/api';
-import {useAppSelector} from '@/lib/redux/hooks';
 import {ChevronLeft, ChevronRight, Home} from 'lucide-react';
 import {useSession} from 'next-auth/react';
-import {redirect, useRouter} from 'next/navigation';
+import {redirect} from 'next/navigation';
 import {ChapterImage} from './chapter-image';
+import {useRouter} from 'next/navigation';
 
-export const ChapterDetails = ({comic_id, chapter_id}: {comic_id: number; chapter_id: number}) => {
-  const {status: session, data} = useSession();
+export const ChapterDetails = ({media_id, chapter_id}: {media_id: number; chapter_id: number}) => {
+  const {status: session, data: sessionData} = useSession();
 
-  if (session === 'unauthenticated' || data?.tokensExpired) {
+  if (session === 'unauthenticated' || sessionData?.tokensExpired) {
     redirect('/');
   }
 
-  const {status, error, chapter} = useAppSelector((state) => state.chapter);
   const {push} = useRouter();
+  const {
+    data: chapter,
+    isLoading,
+    isError,
+    error,
+  } = useChapterQuery({media_id, chapter_id}, {refetchOnMountOrArgChange: true});
 
-  useChapterQuery({media_id: comic_id, chapter_id}, {refetchOnMountOrArgChange: true});
-
-  if (status === 'error' && error !== null) {
+  if (isError) {
     return (
       <div className="w-full h-6/12 flex items-center justify-center">
-        <ErrorComponent error={error} />
+        <ErrorComponent error={error as string} />
       </div>
     );
   }
 
   return (
     <>
-      {status === 'pending' || chapter === null ? (
+      {isLoading || !chapter ? (
         <div className="w-full h-6/12 flex items-center justify-center">
           <Pending />
         </div>
@@ -49,7 +52,7 @@ export const ChapterDetails = ({comic_id, chapter_id}: {comic_id: number; chapte
                 {chapter.images.map((ch, i) => {
                   return (
                     <li key={i}>
-                      <ChapterImage uri={ch.uri} name={ch.name} />
+                      <ChapterImage im={ch} />
                     </li>
                   );
                 })}
@@ -66,21 +69,29 @@ export const ChapterDetails = ({comic_id, chapter_id}: {comic_id: number; chapte
             </div>
           )}
           <div className="w-full h-30 flex items-center text-zinc-600 bg-zinc-50">
-            <Button className="bg-transparent text-inherit relative flex-1 h-full rounded-none hover:bg-zinc-200 flex items-center justiy-center">
-              <ChevronLeft className="absolute left-5" />
-              <span>Prev</span>
-            </Button>
+            {chapter.prev_chap && (
+              <Button
+                onClick={() => push('/' + media_id + '/chapter/' + chapter.prev_chap)}
+                className="bg-transparent text-inherit relative flex-1 h-full rounded-none hover:bg-zinc-200 flex items-center justiy-center"
+              >
+                <ChevronLeft className="absolute left-5" />
+                <span>Prev</span>
+              </Button>
+            )}
             <div className="h-10/12 bg-zinc-200" style={{width: '1px'}}></div>
             <Button
-              onClick={() => push('/' + comic_id)}
+              onClick={() => push('/' + media_id)}
               className="bg-transparent text-inherit flex-1 h-full rounded-none hover:bg-zinc-200 flex items-center justiy-center"
             >
               <Home />
               <span>Home</span>
             </Button>
             <div className="h-10/12 bg-zinc-200" style={{width: '1px'}}></div>
-            {!chapter.is_last_chapter && (
-              <Button className="bg-transparent text-inherit relative flex-1 h-full rounded-none hover:bg-zinc-200 flex items-center justiy-center">
+            {chapter.next_chap && (
+              <Button
+                onClick={() => push('/' + media_id + '/chapter/' + chapter.next_chap)}
+                className="bg-transparent text-inherit relative flex-1 h-full rounded-none hover:bg-zinc-200 flex items-center justiy-center"
+              >
                 <span>Next</span>
                 <ChevronRight className="absolute right-5" />
               </Button>

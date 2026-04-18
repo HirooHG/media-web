@@ -7,5 +7,5 @@ export default async function ChapterPage({
 }) {
   const {chapter_id, id} = await params;
 
-  return <ChapterDetails comic_id={id} chapter_id={chapter_id} />;
+  return <ChapterDetails media_id={id} chapter_id={chapter_id} />;
 }

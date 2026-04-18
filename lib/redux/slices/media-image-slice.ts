@@ -3,7 +3,7 @@ import {api} from '@/lib/redux/api';
 import {MediaImageState} from '../states/media-image.state';
 
 const initialState: MediaImageState = {
-  comic_id: null,
+  media_id: null,
   newImageName: null,
   imageStatus: 'idle',
   imageError: null,
@@ -14,7 +14,7 @@ const mediaImageSlice = createSlice({
   initialState,
   reducers: {
     clearImageState: (state) => {
-      state.comic_id = null;
+      state.media_id = null;
       state.newImageName = null;
       state.imageError = null;
     },
@@ -26,18 +26,18 @@ const mediaImageSlice = createSlice({
     builder
       .addMatcher(api.endpoints.mediaImage.matchPending, (state, action) => {
         state.imageStatus = 'pending';
-        state.comic_id = action.meta.arg.originalArgs;
+        state.media_id = action.meta.arg.originalArgs;
         state.imageError = null;
         state.newImageName = null;
       })
       .addMatcher(api.endpoints.mediaImage.matchFulfilled, (state, action) => {
         state.imageStatus = 'succeeded';
         state.newImageName = action.payload.uri;
-        state.comic_id = null;
+        state.media_id = null;
       })
       .addMatcher(api.endpoints.mediaImage.matchRejected, (state, action) => {
         state.imageStatus = 'error';
-        state.comic_id = null;
+        state.media_id = null;
         state.imageError = action.payload?.data as string;
       });
   },

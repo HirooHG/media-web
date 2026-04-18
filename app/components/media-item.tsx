@@ -13,33 +13,33 @@ import {setImage} from '@/lib/redux/slices/media-list-slice';
 
 export const MediaItem = ({media}: {media: Media}) => {
   const dispatch = useAppDispatch();
-  const {comic_id, imageStatus, imageError} = useAppSelector((state) => state.mediaImage);
+  const {media_id, imageStatus, imageError} = useAppSelector((state) => state.mediaImage);
   const router = useRouter();
   const [getImageMedia] = useMediaImageMutation();
 
   return (
     <div className="w-full flex space-x-2 md:space-x-4 items-start justify-center">
       {media.image ? (
-        <MediaImage uri={media.image.uri} slug={media.comic_slug} />
+        <MediaImage uri={media.image.uri} slug={media.slug} />
       ) : (
         <MediaImagePlaceholder
           status={imageStatus}
           error={imageError}
-          loadingEnabled={media.comic_id === comic_id}
+          loadingEnabled={media.id === media_id}
         />
       )}
 
       <div className="flex-1 flex flex-col space-y-2 md:space-y-4 items-start justify-start">
-        <span className="text-sm text-gray-600 dark:text-gray-300">{media.comic_title}</span>
+        <span className="text-sm text-gray-600 dark:text-gray-300">{media.title}</span>
         <ButtonGroup>
           {!media.image && (
             <Button
               onClick={async () => {
-                const image = await getImageMedia(media.comic_id);
+                const image = await getImageMedia(media.id);
                 if (!image.data) return;
                 dispatch(
                   setImage({
-                    media_id: media.comic_id,
+                    media_id: media.id,
                     uri: image.data.uri,
                   }),
                 );
@@ -51,14 +51,14 @@ export const MediaItem = ({media}: {media: Media}) => {
             </Button>
           )}
           <Button
-            onClick={() => router.push('/' + media.comic_id)}
+            onClick={() => router.push('/' + media.id)}
             className="flex gap-2"
             variant="outline"
           >
             See more <ExternalLink />
           </Button>
         </ButtonGroup>
-        {imageError && comic_id === media.comic_id && (
+        {imageError && media_id === media.id && (
           <span className="text-red-700 dark:text-red-400">{imageError}</span>
         )}
       </div>
