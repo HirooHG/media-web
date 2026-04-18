@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [1.1.0] - 2026-04-18
+
+### Added
+
+- Minio handling
+- Sign in form and account/session management
+- Added a toast
+- Home, previous and next button in the chapter page
+
+### Changed
+
+- Better code architecture
+- Migrated thunks to redux toolkit API
+
+### Fixed
+
+- Remove use effects to remove case of bug
+
 ## [1.0.1] - 2026-01-03
 
 ### Fixed
