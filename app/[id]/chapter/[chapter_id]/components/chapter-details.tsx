@@ -41,61 +41,66 @@ export const ChapterDetails = ({media_id, chapter_id}: {media_id: number; chapte
           <Pending />
         </div>
       ) : (
-        <div className="flex flex-col gap-2 w-full h-full">
-          <div className="flex flex-col gap-2 px-5">
-            <h1 className="text-2xl font-bold">Chapter - {chapter.chap}</h1>
-            <span>{chapter.title ?? <span className="italic">No title in there</span>}</span>
-          </div>
-          {chapter.images && chapter.images.length !== 0 ? (
-            <div className="flex-1 overflow-y-scroll">
-              <ul>
-                {chapter.images.map((ch, i) => {
-                  return (
-                    <li key={i}>
-                      <ChapterImage im={ch} />
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ) : (
-            <div className="flex-1 w-full flex items-center justify-center py-10">
-              <div className="w-6/12">
-                <EmptyList
-                  title="No images"
-                  description="There's no image for this chapter, maybe that's a problem"
-                />
+        <div className="flex gap-2 w-full h-full overflow-y-scroll relative">
+          <div className="max-w-3xl">
+            {chapter.images && chapter.images.length !== 0 ? (
+              <div className="flex-1">
+                <ul>
+                  {chapter.images.map((ch, i) => {
+                    return (
+                      <li key={i}>
+                        <ChapterImage im={ch} />
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
+            ) : (
+              <div className="flex-1 w-full flex items-center justify-center py-10">
+                <div className="w-6/12">
+                  <EmptyList
+                    title="No images"
+                    description="There's no image for this chapter, maybe that's a problem"
+                  />
+                </div>
+              </div>
+            )}
+            <div className="w-full h-30 flex items-center text-zinc-600 bg-zinc-50">
+              {chapter.prev_chap && (
+                <Button
+                  onClick={() => push('/' + media_id + '/chapter/' + chapter.prev_chap)}
+                  className="bg-transparent text-inherit relative flex-1 h-full rounded-none hover:bg-zinc-200 flex items-center justiy-center"
+                >
+                  <ChevronLeft className="absolute left-5" />
+                  <span>Prev</span>
+                </Button>
+              )}
+              <div className="h-10/12 bg-zinc-200" style={{width: '1px'}}></div>
+              <Button
+                onClick={() => push('/' + media_id)}
+                className="bg-transparent text-inherit flex-1 h-full rounded-none hover:bg-zinc-200 flex items-center justiy-center"
+              >
+                <Home />
+                <span>Home</span>
+              </Button>
+              <div className="h-10/12 bg-zinc-200" style={{width: '1px'}}></div>
+              {chapter.next_chap && (
+                <Button
+                  onClick={() => push('/' + media_id + '/chapter/' + chapter.next_chap)}
+                  className="bg-transparent text-inherit relative flex-1 h-full rounded-none hover:bg-zinc-200 flex items-center justiy-center"
+                >
+                  <span>Next</span>
+                  <ChevronRight className="absolute right-5" />
+                </Button>
+              )}
             </div>
-          )}
-          <div className="w-full h-30 flex items-center text-zinc-600 bg-zinc-50">
-            {chapter.prev_chap && (
-              <Button
-                onClick={() => push('/' + media_id + '/chapter/' + chapter.prev_chap)}
-                className="bg-transparent text-inherit relative flex-1 h-full rounded-none hover:bg-zinc-200 flex items-center justiy-center"
-              >
-                <ChevronLeft className="absolute left-5" />
-                <span>Prev</span>
-              </Button>
-            )}
-            <div className="h-10/12 bg-zinc-200" style={{width: '1px'}}></div>
-            <Button
-              onClick={() => push('/' + media_id)}
-              className="bg-transparent text-inherit flex-1 h-full rounded-none hover:bg-zinc-200 flex items-center justiy-center"
-            >
-              <Home />
-              <span>Home</span>
-            </Button>
-            <div className="h-10/12 bg-zinc-200" style={{width: '1px'}}></div>
-            {chapter.next_chap && (
-              <Button
-                onClick={() => push('/' + media_id + '/chapter/' + chapter.next_chap)}
-                className="bg-transparent text-inherit relative flex-1 h-full rounded-none hover:bg-zinc-200 flex items-center justiy-center"
-              >
-                <span>Next</span>
-                <ChevronRight className="absolute right-5" />
-              </Button>
-            )}
+          </div>
+          <div className="space-y-2 fixed right-6 top-4 w-5/12">
+            <h1 className="text-2xl font-bold">Chapter - {chapter.chap}</h1>
+            <span>
+              {chapter.translator}{' '}
+              {chapter.title ?? <span className="italic">No title in there</span>}
+            </span>
           </div>
         </div>
       )}

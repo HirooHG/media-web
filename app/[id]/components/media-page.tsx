@@ -54,7 +54,7 @@ export const MediaPage = ({id}: {id: number}) => {
   };
 
   return (
-    <>
+    <div className="h-screen pt-16">
       {status === 'pending' || media === null ? (
         <div className="w-full h-6/12">
           <Pending />
@@ -105,6 +105,6 @@ export const MediaPage = ({id}: {id: number}) => {
           <Chapters media_id={media.id} />
         </div>
       )}
-    </>
+    </div>
   );
 };
