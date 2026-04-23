@@ -44,40 +44,39 @@ export function MediaList() {
   }
 
   return (
-    <>
-      <>
-        {medias.length === 0 ? (
-          <div className="h-8/12 flex items-center justify-center">
-            <div className="w-fit">
-              <EmptyList title="No media" description="No media found" />
-            </div>
+    <div className="h-full relative">
+      {medias.length === 0 ? (
+        <div className="h-10/12 flex items-center justify-center">
+          <div className="w-fit">
+            <EmptyList title="No media" description="No media found" />
           </div>
-        ) : (
-          <>
-            <ul className="flex-1 overflow-scroll">
-              {medias.map((media, index) => (
-                <li key={media.id} className="h-fit flex flex-col items-center">
-                  {(index !== 0 || index !== medias.length - 1) && (
-                    <div className="w-11/12 my-4 dark:bg-gray-100">
-                      <Separator />
-                    </div>
-                  )}
-                  <div className="w-full px-15">
-                    <MediaItem media={media} />
+        </div>
+      ) : (
+        <div className="flex flex-col h-full items-center bg-white pt-16">
+          <h1 className="text-2xl font-bold mb-4">Medias</h1>
+          <ul className="flex-1 overflow-scroll">
+            {medias.map((media, index) => (
+              <li key={media.id} className="h-fit flex flex-col items-center">
+                {(index !== 0 || index !== medias.length - 1) && (
+                  <div className="w-11/12 my-4 dark:bg-gray-100">
+                    <Separator />
                   </div>
-                </li>
-              ))}
-            </ul>
-            <div className="px-15 flex justify-between items-center pb-8">
-              <SelectMediaStatus />
-              <Paginator />
-            </div>
-          </>
-        )}
-      </>
+                )}
+                <div className="w-full px-15">
+                  <MediaItem media={media} />
+                </div>
+              </li>
+            ))}
+          </ul>
+          <div className="h-20 px-15 flex justify-between items-center relative">
+            <SelectMediaStatus />
+            <Paginator />
+          </div>
+        </div>
+      )}
       <div className="absolute bottom-9 right-5">
         <RefreshList />
       </div>
-    </>
+    </div>
   );
 }

@@ -1,16 +1,14 @@
 'use client';
 
-import {signOut, useSession} from 'next-auth/react';
+import {signIn, signOut, useSession} from 'next-auth/react';
 import {MediaList} from './components/media-list';
 import {BookOpen} from 'lucide-react';
 import {Button} from '@/components/ui/button';
-import {useRouter} from 'next/navigation';
 import {appToast} from '@/components/shared/app-toast';
 import {useEffect, useRef} from 'react';
 
 export default function Home() {
   const {status, data} = useSession();
-  const router = useRouter();
 
   const expired = useRef(false);
   const tokensExpired = data?.tokensExpired ?? false;
@@ -18,6 +16,7 @@ export default function Home() {
   useEffect(() => {
     if (tokensExpired && status !== 'loading' && !expired.current) {
       expired.current = true;
+      // signout keycloak
       signOut({redirect: false})
         .then(() => {
           appToast('Session expired', 'Consider to log in again');
@@ -29,19 +28,16 @@ export default function Home() {
   }, [tokensExpired, status]);
 
   return (
-    <div className="h-screen w-full flex flex-col items-center justify-center space-y-2 relative pt-16">
+    <div className="h-screen w-full flex flex-col items-center justify-center space-y-2 relative">
       {status === 'authenticated' && !data.tokensExpired ? (
-        <>
-          <h1 className="px-15 text-2xl font-bold mb-4">Medias</h1>
-          <MediaList />
-        </>
+        <MediaList />
       ) : (
         <div className="flex flex-col items-center justify-center h-8/12 gap-2 max-w-3xl">
           <span className="text-5xl font-bold w-fit flex gap-2 items-center">Welcome</span>
           <span className="flex gap-2">
             Here&apos;s presented my list of media <BookOpen />
           </span>
-          <Button onClick={() => router.push('/signin')}>Sign in</Button>
+          <Button onClick={() => signIn('keycloak', {redirect: false})}>Sign in</Button>
           {tokensExpired && <span className="text-red-500 text-sm">Session expired</span>}
         </div>
       )}

@@ -1,8 +1,8 @@
-import {authSchema} from '@/types/schemas/auth-schema';
+import KeycloakProvider from 'next-auth/providers/keycloak';
 import {NextAuthOptions} from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import {keycloakAccountPayload} from './shared/schemas/auth-schemas';
 import jwt, {JwtPayload} from 'jsonwebtoken';
-import {SignInForm} from '@/types/schemas/signin-schema';
+import {refreshAccessToken} from './refresh-token';
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -10,102 +10,75 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt' as const,
   },
   callbacks: {
-    async jwt({token: tk, user}) {
-      let token = {...tk, ...user};
-
-      const {accessToken, refreshToken} = token;
-
-      const {exp: accessExp} = jwt.decode(accessToken) as JwtPayload;
-      const {exp: refreshExp} = jwt.decode(refreshToken) as JwtPayload;
-
-      const interval = 3600 * 1000; // 1 hour interval with UTC (UTC+01)
-      const accessExpDate = new Date((accessExp ?? 0) * 1000 + interval); // x1000, second to milsecond
-
-      const now = new Date(Date.now() + interval);
-      if (accessExpDate < now) {
-        const refreshExpDate = new Date((refreshExp ?? 0) * 1000 + interval);
-
-        if (refreshExpDate < now) {
-          return {...token, tokensExpired: true};
-        }
-
-        const dto = {
-          username: token.name,
-          refreshToken,
-        };
-
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + '/auth/refresh', {
-          method: 'POST',
-          body: JSON.stringify(dto),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        const json = await res.json();
-        const {success, data, error} = authSchema.safeParse(json);
-
-        if (!res.ok || !success || !data || !data.data) {
-          return {...token, tokensExpired: true, error: data?.error ?? error?.message};
-        }
-
-        token = {
-          ...token,
-          accessToken: data.data.token,
-          refreshToken: data.data.refreshToken,
-        };
+    async jwt({token, trigger, account, session}) {
+      if (trigger === 'update') token.name = session.user.name;
+      if (account && account.provider === 'keycloak' && account.type === 'oauth') {
+        const acc = keycloakAccountPayload.parse(account);
+        token.accessToken = acc.access_token;
+        token.refreshToken = acc.refresh_token;
+        token.accessTokenExpires = acc.expires_at * 1000;
+        token.refreshTokenExpiresAt = Date.now() + acc.refresh_expires_in * 1000;
+        token.id_token = acc.id_token;
       }
 
-      return {...token, tokensExpired: false};
+      const BUFFER_TIME = 10 * 1000;
+      const expirationTime = token.accessTokenExpires ?? 0;
+      const isTokenExpired = Date.now() > expirationTime - BUFFER_TIME;
+
+      if (isTokenExpired) {
+        const expirationRefreshTime = token.refreshTokenExpiresAt ?? 0;
+        const isRefreshExpired = Date.now() > expirationRefreshTime - BUFFER_TIME;
+
+        if (isRefreshExpired) {
+          token.tokensExpired = true;
+          return token;
+        }
+
+        try {
+          const refreshedToken = await refreshAccessToken({
+            refreshToken: token.refreshToken ?? '',
+          });
+
+          token.id_token = refreshedToken.id_token;
+          token.accessToken = refreshedToken.access_token;
+          token.refreshToken = refreshedToken.refresh_token;
+          token.accessTokenExpires = Date.now() + refreshedToken.expires_in * 1000;
+        } catch (err) {
+          console.error(err);
+          token.tokensExpired = true;
+        }
+      }
+
+      return token;
     },
     async session({session, token}) {
-      session.user = {...token};
-      session.tokensExpired = token.tokensExpired;
-      session.error = token.error;
+      if (token) {
+        session.user = {
+          ...session.user,
+          email: token.email,
+          name: token.name,
+        };
+        session.tokensExpired = token.tokensExpired;
+
+        const {accessToken, refreshToken, id_token} = token;
+        if (accessToken && refreshToken && id_token) {
+          session.accessToken = accessToken;
+          session.refreshToken = refreshToken;
+          session.id_token = id_token;
+
+          const tokenParsed = jwt.decode(accessToken) as JwtPayload;
+          session.user.role = tokenParsed.realm_access.roles.join(',');
+          session.user._id = tokenParsed.sub ?? '';
+        }
+      }
       return session;
     },
   },
   providers: [
-    CredentialsProvider({
-      id: 'credentials',
-      name: 'Credentials',
-      credentials: {
-        username: {label: 'username', type: 'text'},
-        password: {label: 'password', type: 'password'},
-      },
-      async authorize(creds) {
-        try {
-          const dto: SignInForm = {
-            username: creds?.username.trim() ?? '',
-            password: creds?.password.trim() ?? '',
-          };
-          const res = await fetch(process.env.NEXT_PUBLIC_API_URL + '/auth', {
-            method: 'POST',
-            body: JSON.stringify(dto),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-
-          const json = await res.json();
-          const auth = authSchema.safeParse(json);
-
-          if (res.ok && auth.success && auth.data.data) {
-            const {username, token, refreshToken} = auth.data.data;
-            const parsed = jwt.decode(token);
-            return {
-              id: parsed!.sub as string,
-              name: username,
-              accessToken: token,
-              refreshToken,
-            };
-          }
-        } catch {
-          return null;
-        }
-
-        return null;
-      },
+    KeycloakProvider({
+      clientId: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENTID,
+      clientSecret: process.env.KEYCLOAK_SECRET!,
+      issuer: process.env.NEXT_PUBLIC_KEYCLOAK_URL,
     }),
   ],
 };

@@ -19,7 +19,7 @@ export const api = createApi({
     baseUrl: process.env.NEXT_PUBLIC_API_URL + '/media',
     prepareHeaders: async (headers) => {
       const session = await getSession();
-      const token = session?.user.accessToken;
+      const token = session?.accessToken;
       if (token) headers.set('authorization', `Bearer ${token}`);
       return headers;
     },
