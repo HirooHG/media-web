@@ -5,7 +5,7 @@ import {MediaImage} from '@/app/components/media-image';
 import {MediaImagePlaceholder} from '@/app/components/media-image-placeholder';
 import {Pending} from '@/app/components/pending';
 import {Button} from '@/components/ui/button';
-import {FileImage, RefreshCcw} from 'lucide-react';
+import {ChevronLeft, FileImage, RefreshCcw} from 'lucide-react';
 import {Chapters} from './chapters';
 import {ButtonGroup} from '@/components/ui/button-group';
 import {Badge} from '@/components/ui/badge';
@@ -16,6 +16,7 @@ import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
 import {useMediaImageMutation, useMediaQuery, useRefreshChaptersMutation} from '@/lib/redux/api';
 import {z} from 'zod';
 import {setMediaImage} from '@/lib/redux/slices/media-slice';
+import {useRouter} from 'next/navigation';
 
 export const MediaPage = ({id}: {id: number}) => {
   const {status: session, data} = useSession();
@@ -25,6 +26,7 @@ export const MediaPage = ({id}: {id: number}) => {
   }
 
   const dispatch = useAppDispatch();
+  const {back} = useRouter();
   const {media, error, status} = useAppSelector((state) => state.media);
   const {imageStatus, imageError, media_id} = useAppSelector((state) => state.mediaImage);
   const [getImageMedia] = useMediaImageMutation();
@@ -35,7 +37,7 @@ export const MediaPage = ({id}: {id: number}) => {
 
   if (status === 'error' || (!parsedId.success && parsedId.error)) {
     return (
-      <div className="w-full h-6/12 flex items-center justify-center">
+      <div className="w-full h-screen flex items-center justify-center">
         <ErrorComponent error={error ?? parsedId.error?.message ?? ''} />
       </div>
     );
@@ -62,6 +64,9 @@ export const MediaPage = ({id}: {id: number}) => {
       ) : (
         <div className="w-full h-full flex flex-col px-5 gap-5 overflow-scroll">
           <div className="flex space-x-5">
+            <Button className="h-full" variant="outline" onClick={() => back()}>
+              <ChevronLeft />
+            </Button>
             {media.image ? (
               <MediaImage uri={media.image.uri} slug={media.slug} size="large" />
             ) : (

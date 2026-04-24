@@ -14,7 +14,7 @@ export const MediaImage = ({
 }) => {
   const ref = useRef<string | null>(null);
   const [url, setUrl] = useState<string | null>(null);
-  const dims = size === 'small' ? 'w-32 h-46' : 'w-56 h-84';
+  const dims = size === 'small' ? 'w-32 h-46' : 'w-64 h-84';
 
   useEffect(() => {
     if (ref.current) return;

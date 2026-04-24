@@ -18,7 +18,7 @@ export const ChapterDetails = ({media_id, chapter_id}: {media_id: number; chapte
     redirect('/');
   }
 
-  const {push} = useRouter();
+  const {back, push} = useRouter();
   const {
     data: chapter,
     isLoading,
@@ -28,7 +28,7 @@ export const ChapterDetails = ({media_id, chapter_id}: {media_id: number; chapte
 
   if (isError) {
     return (
-      <div className="w-full h-6/12 flex items-center justify-center">
+      <div className="w-full h-screen flex items-center justify-center">
         <ErrorComponent error={error as string} />
       </div>
     );
@@ -37,7 +37,7 @@ export const ChapterDetails = ({media_id, chapter_id}: {media_id: number; chapte
   return (
     <>
       {isLoading || !chapter ? (
-        <div className="w-full h-6/12 flex items-center justify-center">
+        <div className=" w-full h-screen flex items-center justify-center">
           <Pending />
         </div>
       ) : (
@@ -95,12 +95,17 @@ export const ChapterDetails = ({media_id, chapter_id}: {media_id: number; chapte
               )}
             </div>
           </div>
-          <div className="space-y-2 fixed right-6 top-4 w-5/12">
-            <h1 className="text-2xl font-bold">Chapter - {chapter.chap}</h1>
-            <span>
-              {chapter.translator}{' '}
-              {chapter.title ?? <span className="italic">No title in there</span>}
-            </span>
+          <div className="fixed right-6 top-4 w-5/12 flex items-center gap-4">
+            <Button className="py-6" variant="outline" onClick={() => back()}>
+              <ChevronLeft />
+            </Button>
+            <div>
+              <h1 className="text-2xl font-bold">Chapter - {chapter.chap}</h1>
+              <span>
+                {chapter.translator}{' '}
+                {chapter.title ?? <span className="italic">No title in there</span>}
+              </span>
+            </div>
           </div>
         </div>
       )}
