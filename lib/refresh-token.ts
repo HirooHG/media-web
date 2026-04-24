@@ -9,8 +9,8 @@ export async function refreshAccessToken({
   const formData = new URLSearchParams();
 
   formData.append('grant_type', 'refresh_token');
-  formData.append('client_id', process.env.AUTH_KEYCLOAK_ID!);
-  formData.append('client_secret', process.env.AUTH_KEYCLOAK_SECRET!);
+  formData.append('client_id', process.env.NEXT_PUBLIC_KEYCLOAK_CLIENTID!);
+  formData.append('client_secret', process.env.KEYCLOAK_SECRET!);
   formData.append('refresh_token', refreshToken);
 
   const response = await fetch(url, {
