@@ -5,7 +5,7 @@ import {EmptyList} from '@/components/shared/empty-list';
 import {ErrorComponent} from '@/components/shared/error';
 import {Button} from '@/components/ui/button';
 import {useChapterQuery} from '@/lib/redux/api';
-import {ChevronLeft, ChevronRight, Home} from 'lucide-react';
+import {ChevronLeft, ChevronRight, ChevronUp, Home} from 'lucide-react';
 import {useSession} from 'next-auth/react';
 import {redirect} from 'next/navigation';
 import {ChapterImage} from './chapter-image';
@@ -42,7 +42,7 @@ export const ChapterDetails = ({media_id, chapter_id}: {media_id: number; chapte
         </div>
       ) : (
         <div className="flex gap-2 w-full h-full overflow-y-scroll relative">
-          <div className="max-w-3xl">
+          <div className="max-w-3xl ">
             {chapter.images && chapter.images.length !== 0 ? (
               <div className="flex-1">
                 <ul>
@@ -106,6 +106,11 @@ export const ChapterDetails = ({media_id, chapter_id}: {media_id: number; chapte
                 {chapter.title ?? <span className="italic">No title in there</span>}
               </span>
             </div>
+          </div>
+          <div className="fixed left-5/12 top-11/12">
+            <Button variant="outline" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
+              <ChevronUp />
+            </Button>
           </div>
         </div>
       )}

@@ -72,11 +72,13 @@ export const MediaPage = ({id}: {id: number}) => {
             ) : (
               <MediaImagePlaceholder status={imageStatus} error={imageError} size="large" />
             )}
-            <div className="flex-1 flex flex-col space-y-3">
-              <span className="text-2xl font-semibold">{media.title}</span>
-              <span className="h-50 overflow-scroll">
-                {media.description ?? <span className="italic">No description here...</span>}
-              </span>
+            <div className="flex-1 flex flex-col justify-between">
+              <div className="gap-2 flex flex-col">
+                <span className="text-2xl font-semibold">{media.title}</span>
+                <span className="h-50 overflow-scroll">
+                  {media.description ?? <span className="italic">No description here...</span>}
+                </span>
+              </div>
               <Badge variant={getBadgeStatusSeverity()}>{MediaStatus[media.status]}</Badge>
               <ButtonGroup className="w-full">
                 {!media.image && (
