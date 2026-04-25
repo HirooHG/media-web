@@ -32,7 +32,7 @@ export const SelectMediaStatus = () => {
           <SelectLabel>Statuses</SelectLabel>
           {STATUSES.map((k) => {
             return (
-              <SelectItem key={k} value={k}>
+              <SelectItem key={k} value={k} className="cursor-pointer">
                 {k.toLowerCase()}
               </SelectItem>
             );

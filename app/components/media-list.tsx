@@ -11,6 +11,7 @@ import {RefreshList} from './refresh-list';
 import {SelectMediaStatus} from './select-media-status';
 import {MediaStatus} from '@/lib/shared/models/media-status';
 import {useMediasQuery} from '@/lib/redux/api';
+import {SelectPerPage} from './select-per-page';
 
 export function MediaList() {
   const {medias, error, status, page, per_page, selectedStatus} = useAppSelector(
@@ -44,7 +45,7 @@ export function MediaList() {
   }
 
   return (
-    <div className="h-full relative">
+    <div className="h-full relative bg-white w-7/12">
       {medias.length === 0 ? (
         <div className="h-10/12 flex items-center justify-center">
           <div className="w-fit">
@@ -52,9 +53,9 @@ export function MediaList() {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col h-full items-center bg-white pt-16">
+        <div className="flex flex-col w-full h-full items-center pt-16">
           <h1 className="text-2xl font-bold mb-4">Medias</h1>
-          <ul className="flex-1 overflow-scroll">
+          <ul className="w-full flex-1 overflow-scroll">
             {medias.map((media, index) => (
               <li key={media.id} className="h-fit flex flex-col items-center">
                 {(index !== 0 || index !== medias.length - 1) && (
@@ -68,13 +69,14 @@ export function MediaList() {
               </li>
             ))}
           </ul>
-          <div className="h-20 px-15 flex justify-between items-center relative">
+          <div className="w-full h-20 px-4 flex justify-around gap-4 items-center relative">
+            <SelectPerPage />
             <SelectMediaStatus />
             <Paginator />
           </div>
         </div>
       )}
-      <div className="absolute bottom-9 right-5">
+      <div className="absolute bottom-5 right-5">
         <RefreshList />
       </div>
     </div>
