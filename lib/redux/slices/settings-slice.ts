@@ -11,7 +11,7 @@ const initialState: SettingsState = {
   theme: 'light',
 };
 
-export const settingsSlice = createSlice({
+const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
@@ -24,3 +24,4 @@ export const settingsSlice = createSlice({
 });
 
 export const {setTheme} = settingsSlice.actions;
+export default settingsSlice.reducer;
