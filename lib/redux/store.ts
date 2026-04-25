@@ -4,6 +4,7 @@ import mediaImageReducer from './slices/media-image-slice';
 import mediaReducer from './slices/media-slice';
 import {api} from './api';
 import listener from './effects';
+import {settingsSlice} from './slices/settings-slice';
 
 export const store = () => {
   return configureStore({
@@ -12,6 +13,7 @@ export const store = () => {
       mediaList: mediaListReducer,
       mediaImage: mediaImageReducer,
       media: mediaReducer,
+      [settingsSlice.reducerPath]: settingsSlice.reducer,
       // api
       [api.reducerPath]: api.reducer,
     },

@@ -62,10 +62,13 @@ export const MediaPage = (props: {id: string}) => {
           <Pending />
         </div>
       ) : (
-        <div className="w-full h-full flex flex-col px-5 gap-5 overflow-scroll">
+        <div className="w-full h-full flex flex-col px-5 gap-5">
           <div className="flex space-x-5">
-            <Button className="h-full" onClick={() => push('/')}>
-              <ChevronLeft />
+            <Button
+              className="h-full dark:bg-(--background2) hover:dark:bg-zinc-900"
+              onClick={() => push('/')}
+            >
+              <ChevronLeft className="dark:text-gray-100" />
             </Button>
             {media.image ? (
               <MediaImage uri={media.image.uri} slug={media.slug} size="large" />
@@ -75,7 +78,7 @@ export const MediaPage = (props: {id: string}) => {
             <div className="flex-1 flex flex-col justify-between">
               <div className="gap-2 flex flex-col">
                 <span className="text-2xl font-semibold">{media.title}</span>
-                <span className="h-50 overflow-scroll">
+                <span className="h-50 overflow-y-auto">
                   {media.description ?? <span className="italic">No description here...</span>}
                 </span>
               </div>

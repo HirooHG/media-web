@@ -45,7 +45,7 @@ export function MediaList() {
   }
 
   return (
-    <div className="h-full relative bg-white w-7/12">
+    <div className="h-full relative bg-white dark:bg-(--background2) w-7/12">
       {medias.length === 0 ? (
         <div className="h-10/12 flex items-center justify-center">
           <div className="w-fit">
@@ -55,7 +55,7 @@ export function MediaList() {
       ) : (
         <div className="flex flex-col w-full h-full items-center pt-16">
           <h1 className="text-2xl font-bold mb-4">Medias</h1>
-          <ul className="w-full flex-1 overflow-scroll">
+          <ul className="w-full flex-1 overflow-y-scroll">
             {medias.map((media, index) => (
               <li key={media.id} className="h-fit flex flex-col items-center">
                 {(index !== 0 || index !== medias.length - 1) && (
