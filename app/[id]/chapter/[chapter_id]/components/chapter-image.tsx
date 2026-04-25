@@ -11,7 +11,6 @@ export const ChapterImage = ({im}: {im: Image}) => {
     ref.current = 'loaded';
 
     getImageUrl(im.uri).then(setUrl);
-    console.log(im);
   }, [im]);
 
   if (!url) return null;

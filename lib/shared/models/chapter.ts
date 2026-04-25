@@ -1,9 +1,9 @@
 import {ChapterImage} from './chapter-image';
 
 export interface Chapter {
-  id: string;
+  id: number;
   hid: string;
-  chap: string;
+  chap: number;
   title: string | undefined;
   images: ChapterImage[];
   translator?: string;

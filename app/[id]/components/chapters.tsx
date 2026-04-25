@@ -6,31 +6,34 @@ import {ErrorComponent} from '@/components/shared/error';
 import {Button} from '@/components/ui/button';
 import {Item, ItemActions, ItemContent, ItemDescription, ItemTitle} from '@/components/ui/item';
 import {useChaptersQuery} from '@/lib/redux/api';
-import {useAppSelector} from '@/lib/redux/hooks';
 import {ArrowRight} from 'lucide-react';
 import {useRouter} from 'next/navigation';
 
 export const Chapters = ({media_id}: {media_id: number}) => {
-  const {chaptersStatus, chapters, chaptersError} = useAppSelector((state) => state.chapters);
   const router = useRouter();
 
-  useChaptersQuery(media_id, {refetchOnMountOrArgChange: true});
+  const {
+    data: chapters,
+    isError,
+    isLoading,
+    error,
+  } = useChaptersQuery(media_id, {refetchOnMountOrArgChange: true});
 
-  if (chaptersStatus === 'pending') {
+  if (isLoading) {
     return <Pending />;
   }
 
-  if (chaptersStatus === 'error' && chaptersError !== null) {
+  if (isError) {
     return (
       <div className="h-6/12 w-full flex items-center justify-center">
-        <ErrorComponent error={chaptersError} />
+        <ErrorComponent error={error as string} />
       </div>
     );
   }
 
   return (
     <>
-      {chapters.length === 0 ? (
+      {!chapters || chapters.length === 0 ? (
         <div className="flex items-center justify-center">
           <div className="w-6/12">
             <EmptyList
@@ -42,7 +45,7 @@ export const Chapters = ({media_id}: {media_id: number}) => {
       ) : (
         <ul className="space-y-4 w-full flex-1 overflow-scroll">
           {chapters.map((ch) => (
-            <li id={ch.id} key={ch.id}>
+            <li id={ch.id.toString()} key={ch.id}>
               <Item variant="outline">
                 <ItemContent>
                   <ItemTitle>

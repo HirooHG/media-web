@@ -14,11 +14,11 @@ import {useSession} from 'next-auth/react';
 import {redirect} from 'next/navigation';
 import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
 import {useMediaImageMutation, useMediaQuery, useRefreshChaptersMutation} from '@/lib/redux/api';
-import {z} from 'zod';
 import {setMediaImage} from '@/lib/redux/slices/media-slice';
 import {useRouter} from 'next/navigation';
+import {paramsMediaSchema} from '@/types/schemas/params-schema';
 
-export const MediaPage = ({id}: {id: number}) => {
+export const MediaPage = (props: {id: string}) => {
   const {status: session, data} = useSession();
 
   if (session === 'unauthenticated' || data?.tokensExpired) {
@@ -26,14 +26,14 @@ export const MediaPage = ({id}: {id: number}) => {
   }
 
   const dispatch = useAppDispatch();
-  const {back} = useRouter();
+  const {push} = useRouter();
   const {media, error, status} = useAppSelector((state) => state.media);
   const {imageStatus, imageError, media_id} = useAppSelector((state) => state.mediaImage);
   const [getImageMedia] = useMediaImageMutation();
   const [refreshChapters] = useRefreshChaptersMutation();
 
-  const parsedId = z.coerce.number().int().safeParse(id);
-  useMediaQuery(parsedId.data ?? 0, {skip: !parsedId.success, refetchOnMountOrArgChange: true});
+  const parsedId = paramsMediaSchema.safeParse(props);
+  useMediaQuery(parsedId.data?.id ?? 0, {skip: !parsedId.success, refetchOnMountOrArgChange: true});
 
   if (status === 'error' || (!parsedId.success && parsedId.error)) {
     return (
@@ -64,7 +64,7 @@ export const MediaPage = ({id}: {id: number}) => {
       ) : (
         <div className="w-full h-full flex flex-col px-5 gap-5 overflow-scroll">
           <div className="flex space-x-5">
-            <Button className="h-full" variant="outline" onClick={() => back()}>
+            <Button className="h-full" onClick={() => push('/')}>
               <ChevronLeft />
             </Button>
             {media.image ? (

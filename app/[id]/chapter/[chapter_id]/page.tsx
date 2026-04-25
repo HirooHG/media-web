@@ -3,9 +3,9 @@ import {ChapterDetails} from './components/chapter-details';
 export default async function ChapterPage({
   params,
 }: {
-  params: Promise<{id: number; chapter_id: number}>;
+  params: Promise<{id: string; chapter_id: string}>;
 }) {
   const {chapter_id, id} = await params;
 
-  return <ChapterDetails media_id={id} chapter_id={chapter_id} />;
+  return <ChapterDetails id={id} chapter_id={chapter_id} />;
 }
