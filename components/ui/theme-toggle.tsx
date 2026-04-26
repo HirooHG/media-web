@@ -1,11 +1,10 @@
 'use client';
 
-import React, {useSyncExternalStore} from 'react';
+import {useSyncExternalStore} from 'react';
 import {motion} from 'motion/react';
 import type {Transition, Variants} from 'motion/react';
 import {MoonIcon, SunIcon} from 'lucide-react';
 import {cn} from '@/lib/utils';
-import {Action} from 'redux';
 import {useAppSelector} from '@/lib/redux/hooks';
 import {useDispatch} from 'react-redux';
 import {setTheme} from '@/lib/redux/slices/settings-slice';
@@ -102,7 +101,7 @@ export default function ThemeToggle() {
   const selectedSize = toggleSizeMap[toggleSize];
 
   return (
-    <div className="z-10 absolute top-5 right-7 flex items-center justify-center">
+    <div className="z-10 flex items-center justify-center">
       <button
         type="button"
         aria-pressed={isDark}

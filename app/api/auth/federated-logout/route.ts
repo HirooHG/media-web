@@ -7,26 +7,44 @@ export async function GET(req: Request) {
   }
 
   try {
-    // Get token from the session
     const session = await getServerSession(authOptions);
-    const token = session?.id_token;
+    const token = session?.refreshToken;
 
     if (!token) {
       return Response.json({error: 'Authentication required'});
     }
 
-    // Build Keycloak logout URL with the right parameters
-    const logoutParams = {
-      id_token_hint: token,
-      post_logout_redirect_uri: `${process.env.NEXTAUTH_URL}`,
-      client_id: `${process.env.NEXT}`,
-    };
+    const revokeUrl = `${process.env.NEXT_PUBLIC_KEYCLOAK_URL}/protocol/openid-connect/revoke`;
 
-    const logoutUrl = `${
-      process.env.NEXT_PUBLIC_KEYCLOAK_URL
-    }/protocol/openid-connect/logout?${new URLSearchParams(logoutParams).toString()}`;
+    await fetch(revokeUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        client_id: `${process.env.NEXT_PUBLIC_KEYCLOAK_CLIENTID}`,
+        client_secret: `${process.env.KEYCLOAK_SECRET}`,
+        token: token,
+        token_type_hint: 'access_token',
+      }).toString(),
+    });
 
-    return Response.json({logoutUrl});
+    if (session?.refreshToken) {
+      await fetch(revokeUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          client_id: `${process.env.NEXT_PUBLIC_KEYCLOAK_CLIENTID}`,
+          client_secret: `${process.env.KEYCLOAK_SECRET}`,
+          token: session.refreshToken,
+          token_type_hint: 'refresh_token',
+        }).toString(),
+      });
+    }
+
+    return Response.json({success: true});
   } catch {
     return Response.json({error: 'Failed to generate logout URL'});
   }
