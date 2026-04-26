@@ -43,7 +43,7 @@ export const Paginator = () => {
         </PaginationItem>
         <PaginationItem>
           <PaginationLink
-            className="cursor-pointer active bg-blue-500 text-white hover:bg-blue-300"
+            className="cursor-pointer active text-secondary-background bg-secondary hover:bg-secondary3 dark:hover:bg-secondary5"
             onClick={() => {
               dispatch(setPage(page));
             }}

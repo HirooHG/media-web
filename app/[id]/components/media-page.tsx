@@ -64,11 +64,8 @@ export const MediaPage = (props: {id: string}) => {
       ) : (
         <div className="w-full h-full flex flex-col px-5 gap-5">
           <div className="flex space-x-5">
-            <Button
-              className="h-full dark:bg-(--background2) hover:dark:bg-zinc-900"
-              onClick={() => push('/')}
-            >
-              <ChevronLeft className="dark:text-gray-100" />
+            <Button className="h-full" onClick={() => push('/')}>
+              <ChevronLeft />
             </Button>
             {media.image ? (
               <MediaImage uri={media.image.uri} slug={media.slug} size="large" />
@@ -77,7 +74,7 @@ export const MediaPage = (props: {id: string}) => {
             )}
             <div className="flex-1 flex flex-col justify-between">
               <div className="gap-2 flex flex-col">
-                <span className="text-2xl font-semibold">{media.title}</span>
+                <span className="text-2xl font-semibold text-secondary">{media.title}</span>
                 <span className="h-50 overflow-y-auto">
                   {media.description ?? <span className="italic">No description here...</span>}
                 </span>
@@ -91,7 +88,6 @@ export const MediaPage = (props: {id: string}) => {
                       if (!image.data) return;
                       dispatch(setMediaImage(image.data.uri));
                     }}
-                    variant="outline"
                     className="flex-1"
                     disabled={imageStatus === 'pending'}
                   >

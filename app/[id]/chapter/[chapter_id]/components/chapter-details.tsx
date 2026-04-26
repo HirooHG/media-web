@@ -59,10 +59,7 @@ export const ChapterDetails = (props: {id: string; chapter_id: string}) => {
         <div className="flex gap-2 w-full h-full relative">
           <div className="fixed right-10 top-4 w-5/12 flex flex-col gap-2">
             <div className="h-15 flex items-center gap-4">
-              <Button
-                className="h-full dark:bg-(--background2) hover:dark:bg-zinc-900"
-                onClick={() => push('/' + id)}
-              >
+              <Button className="h-full" onClick={() => push('/' + id)}>
                 <ChevronLeft className="dark:text-gray-100" />
               </Button>
               <div>

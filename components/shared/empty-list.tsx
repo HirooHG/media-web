@@ -22,7 +22,7 @@ export const EmptyList = ({title, description}: {title: string; description: str
       </EmptyHeader>
       <EmptyContent>
         <div className="flex gap-2 items-center">
-          Nothing to see here <Frown />
+          Nothing to see here <Frown className="text-primary" />
         </div>
       </EmptyContent>
     </Empty>

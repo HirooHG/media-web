@@ -51,11 +51,12 @@ export const Chapters = ({media_id}: {media_id: number}) => {
                   <ItemTitle>
                     {ch.chap} {ch.title && '- ' + ch.title}{' '}
                   </ItemTitle>
-                  <ItemDescription>{ch.translator && ch.translator}</ItemDescription>
+                  <ItemDescription>{ch.translator}</ItemDescription>
                 </ItemContent>
                 <ItemActions>
                   <Button
                     variant="ghost"
+                    className="hover:bg-tertiary dark:hover:bg-tertiary"
                     onClick={() => router.push('/' + media_id + '/chapter/' + ch.id)}
                   >
                     <ArrowRight />

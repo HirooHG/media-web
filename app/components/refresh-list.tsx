@@ -21,7 +21,7 @@ export const RefreshList = () => {
           })
         }
         disabled={status !== 'succeeded'}
-        className="rounded-full p-2 w-10 h-10cursor-pointer"
+        className="bg-secondary rounded-full p-2 w-10 h-10 cursor-pointer"
       >
         <RefreshCw />
       </TooltipTrigger>
