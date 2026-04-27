@@ -8,6 +8,7 @@ import {cn} from '@/lib/utils';
 import {useAppSelector} from '@/lib/redux/hooks';
 import {useDispatch} from 'react-redux';
 import {setTheme} from '@/lib/redux/slices/settings-slice';
+import {appToast} from '../shared/app-toast';
 
 type ToggleSize = 'default' | 'lg' | 'xl';
 
@@ -89,6 +90,7 @@ export default function ThemeToggle() {
 
   const handleToggle = () => {
     const newState = theme === 'light' ? 'dark' : 'light';
+    appToast('Theme update', 'Theme switched to ' + newState);
     dispatch(setTheme(newState));
   };
 
