@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- media list pagination: added pagination last page and disabling next button on reaching last page
+- media list pagination: Added pagination last page and disabling next button on reaching last page
+- chapter: Added possibility to change the image width
 
 ## [1.4.0] - 2026-04-25
 
