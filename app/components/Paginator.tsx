@@ -12,9 +12,16 @@ import {
 } from '@/components/ui/pagination';
 import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
 
+const activeClassNames =
+  'text-secondary-background bg-secondary hover:bg-secondary3 dark:hover:bg-secondary5 active';
+
 export const Paginator = () => {
   const dispatch = useAppDispatch();
-  const {page} = useAppSelector((state) => state.mediaList);
+  const {page, lastPage} = useAppSelector((state) => state.mediaList);
+  // Pagination does not move on the right, only the active case move
+  // 1 -> 2, does not move, active case move
+  // 2 -> 3, move, active case does not move
+  const isStuck = page === 1;
 
   return (
     <Pagination>
@@ -30,7 +37,7 @@ export const Paginator = () => {
         </PaginationItem>
         <PaginationItem>
           <PaginationLink
-            className="cursor-pointer"
+            className={'cursor-pointer ' + (page !== 1 ? 'active' : '')}
             onClick={() => {
               dispatch(setPage(1));
             }}
@@ -43,37 +50,49 @@ export const Paginator = () => {
         </PaginationItem>
         <PaginationItem>
           <PaginationLink
-            className="cursor-pointer active text-secondary-background bg-secondary hover:bg-secondary3 dark:hover:bg-secondary5"
+            className={'cursor-pointer ' + (page === 1 ? activeClassNames : '')}
             onClick={() => {
-              dispatch(setPage(page));
+              dispatch(setPage(isStuck ? page : page - 1));
             }}
           >
-            {page}
+            {isStuck ? page : page - 1}
           </PaginationLink>
         </PaginationItem>
         <PaginationItem>
           <PaginationLink
-            className="cursor-pointer"
+            className={'cursor-pointer ' + (page !== 1 ? activeClassNames : '')}
             onClick={() => {
-              dispatch(setPage(page + 1));
+              dispatch(setPage(isStuck ? page + 1 : page));
             }}
           >
-            {page + 1}
+            {isStuck ? page + 1 : page}
           </PaginationLink>
         </PaginationItem>
         <PaginationItem>
           <PaginationLink
-            className="cursor-pointer"
+            aria-disabled={page >= (lastPage ?? 1)}
+            className={page < (lastPage ?? 1) ? 'cursor-pointer' : 'pointer-events-none opacity-50'}
             onClick={() => {
-              dispatch(setPage(page + 2));
+              dispatch(setPage(isStuck ? page + 2 : page + 1));
             }}
           >
-            {page + 2}
+            {isStuck ? page + 2 : page + 1}
+          </PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink
+            className={'cursor-pointer ' + (page !== 1 ? 'active' : '')}
+            onClick={() => {
+              dispatch(setPage(lastPage ?? 1));
+            }}
+          >
+            last
           </PaginationLink>
         </PaginationItem>
         <PaginationItem>
           <PaginationNext
-            className="cursor-pointer"
+            aria-disabled={page >= (lastPage ?? 1)}
+            className={page < (lastPage ?? 1) ? 'cursor-pointer' : 'pointer-events-none opacity-50'}
             onClick={() => {
               dispatch(nextPage());
             }}

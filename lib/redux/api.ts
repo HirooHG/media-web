@@ -6,6 +6,7 @@ import {Pagination} from '@/types/pagination';
 import {Result} from '@/types/result';
 import {Chapter} from '../shared/models/chapter';
 import {MediaImage} from '../shared/models/media-image';
+import {GetAllMediasResult} from '../shared/models/result/get-all-medias-result';
 
 const defaultTransforms = <T>() => ({
   transformResponse: (baseQueryReturnValue: unknown) => (baseQueryReturnValue as Result<T>).data!,
@@ -25,21 +26,21 @@ export const api = createApi({
     },
   }),
   endpoints: (builder) => ({
-    medias: builder.query<Media[], Pagination & {status: MediaStatus | null}>({
+    medias: builder.query<GetAllMediasResult, Pagination & {status: MediaStatus | null}>({
       query: ({page, per_page, status}) =>
         `?page=${page}&per_page=${per_page}${status === null ? '' : '&status=' + status}`,
-      ...defaultTransforms<Media[]>(),
+      ...defaultTransforms<GetAllMediasResult>(),
     }),
     mediaImage: builder.mutation<MediaImage, number>({
       query: (media_id: number) => `/comic/image/${media_id}`,
       ...defaultTransforms<MediaImage>(),
     }),
-    refresh: builder.mutation<Media[], Pagination & {status: MediaStatus | null}>({
+    refresh: builder.mutation<GetAllMediasResult, Pagination & {status: MediaStatus | null}>({
       query: ({page, per_page, status}) => ({
         url: `/refresh?page=${page}&per_page=${per_page}${status === null ? '' : '&status=' + status}`,
         method: 'POST',
       }),
-      ...defaultTransforms<Media[]>(),
+      ...defaultTransforms<GetAllMediasResult>(),
     }),
     media: builder.query<Media, number>({
       query: (media_id: number) => `/comic/${media_id}`,

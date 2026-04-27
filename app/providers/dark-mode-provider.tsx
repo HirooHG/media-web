@@ -19,8 +19,6 @@ export const DarkModeProvider = ({children}: {children: ReactNode}) => {
     dispatch(setTheme(mode as AppTheme));
   }, [dispatch]);
 
-  console.log(theme);
-
   return (
     <html lang="en" data-theme={theme}>
       {children}

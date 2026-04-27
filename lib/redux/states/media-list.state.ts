@@ -8,5 +8,6 @@ export interface MediaListState {
   error: string | null;
   page: number;
   per_page: number;
+  lastPage: number | null;
   selectedStatus: MediaStatusKeys | null;
 }

@@ -11,6 +11,7 @@ const initialState: MediaListState = {
   error: null,
   page: 1,
   per_page: 5,
+  lastPage: null,
   selectedStatus: null,
 };
 
@@ -53,8 +54,12 @@ const mediaListSlice = createSlice({
         state.error = null;
       })
       .addMatcher(api.endpoints.medias.matchFulfilled, (state, action) => {
+        const {pagination, medias} = action.payload;
         state.status = 'succeeded';
-        state.medias = action.payload;
+        state.medias = medias;
+        state.lastPage = pagination.lastPage;
+
+        state.page = state.page > pagination.lastPage ? pagination.lastPage : state.page;
       })
       .addMatcher(api.endpoints.medias.matchRejected, (state, action) => {
         state.status = 'error';
@@ -67,8 +72,11 @@ const mediaListSlice = createSlice({
         state.error = null;
       })
       .addMatcher(api.endpoints.refresh.matchFulfilled, (state, action) => {
+        const {pagination, medias} = action.payload;
         state.status = 'succeeded';
-        state.medias = action.payload;
+        state.medias = medias;
+        state.lastPage = pagination.lastPage;
+        state.page = state.page > pagination.lastPage ? pagination.lastPage : state.page;
       })
       .addMatcher(api.endpoints.refresh.matchRejected, (state, action) => {
         state.status = 'error';
