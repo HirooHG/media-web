@@ -13,10 +13,14 @@ import {useRouter} from 'next/navigation';
 import {ButtonGroup} from '@/components/ui/button-group';
 import {SelectMediaChapters} from './select-media-chapters';
 import {paramsChapterSchema} from '@/types/schemas/params-schema';
+import {Slider} from '@/components/ui/slider';
+import {useState} from 'react';
 
 export const ChapterDetails = (props: {id: string; chapter_id: string}) => {
   const {status: session, data: sessionData} = useSession();
   const {push} = useRouter();
+
+  const [imageWidth, setImageWidth] = useState(200);
 
   if (session === 'unauthenticated' || sessionData?.tokensExpired) {
     redirect('/');
@@ -83,6 +87,18 @@ export const ChapterDetails = (props: {id: string; chapter_id: string}) => {
                 </Button>
               )}
             </ButtonGroup>
+            <div className="flex gap-2">
+              <span className="flex gap-2 text-nowrap">
+                Images width: <pre className="text-secondary">{imageWidth}</pre>
+              </span>
+              <Slider
+                defaultValue={[200]}
+                min={50}
+                max={200}
+                onValueChange={(v) => setImageWidth(v[0])}
+                step={50}
+              />
+            </div>
           </div>
           {chapter.images && chapter.images.length !== 0 ? (
             <div className="flex flex-col items-center w-3xl">
@@ -95,7 +111,7 @@ export const ChapterDetails = (props: {id: string; chapter_id: string}) => {
                   <ChevronUp />
                 </Button>
               </div>
-              <ul className="w-full">
+              <ul className={'w-' + imageWidth}>
                 {chapter.images.map((ch, i) => {
                   return (
                     <li key={i}>
