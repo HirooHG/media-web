@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {api} from '@/lib/redux/api';
 import {MediaImageState} from '../states/media-image.state';
 
@@ -7,6 +7,10 @@ const initialState: MediaImageState = {
   newImageName: null,
   imageStatus: 'idle',
   imageError: null,
+  // load multiple images
+  images: null,
+  currentImage: null,
+  imagesStatus: 'idle',
 };
 
 const mediaImageSlice = createSlice({
@@ -20,6 +24,29 @@ const mediaImageSlice = createSlice({
     },
     clearImageError: (state) => {
       state.imageError = null;
+    },
+    initMultipleImageLoading: (state, action: PayloadAction<number[]>) => {
+      if (action.payload.length === 0) return;
+
+      state.images = action.payload;
+      state.currentImage = action.payload[0];
+      state.imagesStatus = 'processing';
+    },
+    nextImage: (state) => {
+      if (!state.currentImage || !state.images) return;
+
+      const index = state.images.indexOf(state.currentImage);
+
+      if (index === -1) return;
+      const next = index + 1;
+      if (next > state.images.length) {
+        state.images = null;
+        state.currentImage = null;
+        state.imagesStatus = 'idle';
+        return;
+      }
+
+      state.currentImage = state.images[next];
     },
   },
   extraReducers: (builder) => {
@@ -39,9 +66,14 @@ const mediaImageSlice = createSlice({
         state.imageStatus = 'error';
         state.media_id = null;
         state.imageError = action.payload?.data as string;
+
+        state.images = null;
+        state.currentImage = null;
+        state.imagesStatus = 'idle';
       });
   },
 });
 
-export const {clearImageError, clearImageState} = mediaImageSlice.actions;
+export const {clearImageError, clearImageState, initMultipleImageLoading, nextImage} =
+  mediaImageSlice.actions;
 export default mediaImageSlice.reducer;
