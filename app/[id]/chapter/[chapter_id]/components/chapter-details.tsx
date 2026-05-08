@@ -60,8 +60,8 @@ export const ChapterDetails = (props: {id: string; chapter_id: string}) => {
           <Pending />
         </div>
       ) : (
-        <div className="flex gap-2 w-full h-full relative">
-          <div className="fixed right-10 top-4 w-5/12 flex flex-col gap-2">
+        <div className="flex flex-col gap-2 w-full h-full relative">
+          <div className="xl:fixed xl:p-0 p-4 right-10 top-4 w-100 flex flex-col gap-2">
             <div className="h-15 flex items-center gap-4">
               <Button className="h-full" onClick={() => push('/' + id)}>
                 <ChevronLeft className="dark:text-gray-100" />
@@ -89,7 +89,7 @@ export const ChapterDetails = (props: {id: string; chapter_id: string}) => {
             </ButtonGroup>
             <div className="flex gap-2">
               <span className="flex gap-2 text-nowrap">
-                Images width: <pre className="text-secondary">{imageWidth}</pre>
+                Images width: <pre>{imageWidth}</pre>
               </span>
               <Slider
                 defaultValue={[200]}

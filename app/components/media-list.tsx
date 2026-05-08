@@ -12,8 +12,13 @@ import {SelectMediaStatus} from './select-media-status';
 import {MediaStatus} from '@/lib/shared/models/media-status';
 import {useMediasQuery} from '@/lib/redux/api';
 import {SelectPerPage} from './select-per-page';
+import {useState} from 'react';
+import {Collapsible, CollapsibleContent, CollapsibleTrigger} from '@/components/ui/collapsible';
+import {Button} from '@/components/ui/button';
+import {Filter} from 'lucide-react';
 
 export function MediaList() {
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const {medias, error, status, page, per_page, selectedStatus} = useAppSelector(
     (state) => state.mediaList,
   );
@@ -53,8 +58,26 @@ export function MediaList() {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col w-full h-full items-center pt-16">
+        <div className="flex flex-col w-full h-full items-center pt-8">
           <h1 className="text-2xl font-bold mb-4">Medias</h1>
+          <Collapsible
+            open={isFiltersOpen}
+            onOpenChange={(v) => setIsFiltersOpen(v)}
+            className="w-full flex flex-col px-10"
+          >
+            <CollapsibleTrigger asChild>
+              <Button variant="ghost" size="icon" className="size-8">
+                <Filter />
+                <span className="sr-only">Toggle details</span>
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <div className="flex gap-4 items-center py-2">
+                <SelectPerPage />
+                <SelectMediaStatus />
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
           <ul className="w-full flex-1 overflow-y-scroll">
             {medias.map((media, index) => (
               <li key={media.id} className="h-fit flex flex-col items-center">
@@ -69,9 +92,7 @@ export function MediaList() {
               </li>
             ))}
           </ul>
-          <div className="w-full h-20 px-4 flex justify-around gap-4 items-center relative">
-            <SelectPerPage />
-            <SelectMediaStatus />
+          <div className="w-full h-20 px-4 flex items-center">
             <Paginator />
           </div>
         </div>
