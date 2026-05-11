@@ -43,7 +43,7 @@ export const Chapters = ({media_id}: {media_id: number}) => {
           </div>
         </div>
       ) : (
-        <ul className="space-y-4 w-full flex-1 overflow-scroll">
+        <ul className="space-y-4 w-full flex-1 overflow-auto">
           {chapters.map((ch) => (
             <li id={ch.id.toString()} key={ch.id}>
               <Item variant="outline">

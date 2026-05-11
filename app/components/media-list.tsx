@@ -78,7 +78,7 @@ export function MediaList() {
               </div>
             </CollapsibleContent>
           </Collapsible>
-          <ul className="w-full flex-1 overflow-y-scroll">
+          <ul className="w-full flex-1 overflow-y-auto">
             {medias.map((media, index) => (
               <li key={media.id} className="h-fit flex flex-col items-center">
                 {(index !== 0 || index !== medias.length - 1) && (
