@@ -6,6 +6,9 @@ const initialState: MediaState = {
   media: null,
   status: 'idle',
   error: null,
+  chapters: null,
+  chaptersError: null,
+  chaptersStatus: 'idle',
 };
 
 const mediaSlice = createSlice({
@@ -45,6 +48,33 @@ const mediaSlice = createSlice({
       .addMatcher(api.endpoints.media.matchRejected, (state, action) => {
         state.status = 'error';
         state.error = action.payload?.data as string;
+      });
+
+    builder
+      .addMatcher(api.endpoints.chapters.matchPending, (state) => {
+        state.chaptersStatus = 'pending';
+        state.chaptersError = null;
+      })
+      .addMatcher(api.endpoints.chapters.matchFulfilled, (state, action) => {
+        state.chaptersStatus = 'succeeded';
+        state.chapters = action.payload;
+      })
+      .addMatcher(api.endpoints.chapters.matchRejected, (state, action) => {
+        state.chaptersStatus = 'error';
+        state.chaptersError = action.payload?.data as string;
+      });
+    builder
+      .addMatcher(api.endpoints.refreshChapters.matchPending, (state) => {
+        state.chaptersStatus = 'pending';
+        state.chaptersError = null;
+      })
+      .addMatcher(api.endpoints.refreshChapters.matchFulfilled, (state, action) => {
+        state.chaptersStatus = 'succeeded';
+        state.chapters = action.payload;
+      })
+      .addMatcher(api.endpoints.refreshChapters.matchRejected, (state, action) => {
+        state.chaptersStatus = 'error';
+        state.chaptersError = action.payload?.data as string;
       });
   },
 });

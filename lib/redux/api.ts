@@ -7,6 +7,7 @@ import {Result} from '@/types/result';
 import {Chapter} from '../shared/models/chapter';
 import {MediaImage} from '../shared/models/media-image';
 import {GetAllMediasResult} from '../shared/models/result/get-all-medias-result';
+import {Ticket} from '../shared/models/ticket';
 
 const defaultTransforms = <T>() => ({
   transformResponse: (baseQueryReturnValue: unknown) => (baseQueryReturnValue as Result<T>).data!,
@@ -17,7 +18,7 @@ const defaultTransforms = <T>() => ({
 export const api = createApi({
   reducerPath: 'mediaApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_URL + '/media',
+    baseUrl: process.env.NEXT_PUBLIC_API_URL,
     prepareHeaders: async (headers) => {
       const session = await getSession();
       const token = session?.accessToken;
@@ -28,38 +29,45 @@ export const api = createApi({
   endpoints: (builder) => ({
     medias: builder.query<GetAllMediasResult, Pagination & {status: MediaStatus | null}>({
       query: ({page, per_page, status}) =>
-        `?page=${page}&per_page=${per_page}${status === null ? '' : '&status=' + status}`,
+        `/media?page=${page}&per_page=${per_page}${status === null ? '' : '&status=' + status}`,
       ...defaultTransforms<GetAllMediasResult>(),
     }),
     mediaImage: builder.mutation<MediaImage, number>({
-      query: (media_id: number) => `/comic/image/${media_id}`,
+      query: (media_id: number) => `/media/comic/image/${media_id}`,
       ...defaultTransforms<MediaImage>(),
     }),
     refresh: builder.mutation<GetAllMediasResult, Pagination & {status: MediaStatus | null}>({
       query: ({page, per_page, status}) => ({
-        url: `/refresh?page=${page}&per_page=${per_page}${status === null ? '' : '&status=' + status}`,
+        url: `/media/refresh?page=${page}&per_page=${per_page}${status === null ? '' : '&status=' + status}`,
         method: 'POST',
       }),
       ...defaultTransforms<GetAllMediasResult>(),
     }),
     media: builder.query<Media, number>({
-      query: (media_id: number) => `/comic/${media_id}`,
+      query: (media_id: number) => `/media/comic/${media_id}`,
       ...defaultTransforms<Media>(),
     }),
     chapters: builder.query<Chapter[], number>({
-      query: (media_id: number) => `/comic/${media_id}/chapters`,
+      query: (media_id: number) => `/media/comic/${media_id}/chapters`,
       ...defaultTransforms<Chapter[]>(),
     }),
     refreshChapters: builder.mutation<Chapter[], number>({
       query: (media_id: number) => ({
-        url: `/refresh/comic/${media_id}/chapters`,
+        url: `/media/refresh/comic/${media_id}/chapters`,
         method: 'POST',
       }),
       ...defaultTransforms<Chapter[]>(),
     }),
     chapter: builder.query<Chapter, {media_id: number; chapter_id: number}>({
-      query: ({media_id, chapter_id}) => `/comic/${media_id}/chapter/${chapter_id}`,
+      query: ({media_id, chapter_id}) => `/media/comic/${media_id}/chapter/${chapter_id}`,
       ...defaultTransforms<Chapter>(),
+    }),
+    ticket: builder.query<string, void>({
+      query: () => ({
+        url: `/wss/ticket`,
+        method: 'POST',
+      }),
+      ...defaultTransforms<string>(),
     }),
   }),
 });
@@ -72,4 +80,5 @@ export const {
   useChaptersQuery,
   useRefreshChaptersMutation,
   useChapterQuery,
+  useTicketQuery,
 } = api;

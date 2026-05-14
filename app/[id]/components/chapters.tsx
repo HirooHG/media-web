@@ -6,24 +6,25 @@ import {ErrorComponent} from '@/components/shared/error';
 import {Button} from '@/components/ui/button';
 import {Item, ItemActions, ItemContent, ItemDescription, ItemTitle} from '@/components/ui/item';
 import {useChaptersQuery} from '@/lib/redux/api';
+import {useAppSelector} from '@/lib/redux/hooks';
 import {ArrowRight} from 'lucide-react';
 import {useRouter} from 'next/navigation';
 
 export const Chapters = ({media_id}: {media_id: number}) => {
   const router = useRouter();
-
   const {
-    data: chapters,
-    isError,
-    isLoading,
-    error,
-  } = useChaptersQuery(media_id, {refetchOnMountOrArgChange: true});
+    chapters,
+    chaptersStatus: status,
+    chaptersError: error,
+  } = useAppSelector((state) => state.media);
 
-  if (isLoading) {
+  useChaptersQuery(media_id, {refetchOnMountOrArgChange: true});
+
+  if (status === 'pending') {
     return <Pending />;
   }
 
-  if (isError) {
+  if (status === 'error' || error) {
     return (
       <div className="h-6/12 w-full flex items-center justify-center">
         <ErrorComponent error={error as string} />

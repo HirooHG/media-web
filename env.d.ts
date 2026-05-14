@@ -12,8 +12,8 @@ declare global {
       NEXT_PUBLIC_MINIO_ENDPOINT: string;
       NEXT_PUBLIC_MINIO_PORT: number;
       NEXT_PUBLIC_MINIO_USESSL: string;
-      NEXT_PUBLIC_MINIO_ROOT_USER: string;
-      NEXT_PUBLIC_MINIO_ROOT_PASSWORD: string;
+      // mqtt
+      NEXT_PUBLIC_WS_URL: string;
     }
   }
 }

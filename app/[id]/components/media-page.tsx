@@ -5,7 +5,7 @@ import {MediaImage} from '@/app/components/media-image';
 import {MediaImagePlaceholder} from '@/app/components/media-image-placeholder';
 import {Pending} from '@/app/components/pending';
 import {Button} from '@/components/ui/button';
-import {ChevronLeft, FileImage, RefreshCcw} from 'lucide-react';
+import {ChevronLeft, FileImage, ImagePlus, RefreshCcw} from 'lucide-react';
 import {Chapters} from './chapters';
 import {ButtonGroup} from '@/components/ui/button-group';
 import {Badge} from '@/components/ui/badge';
@@ -17,6 +17,8 @@ import {useMediaImageMutation, useMediaQuery, useRefreshChaptersMutation} from '
 import {setMediaImage} from '@/lib/redux/slices/media-slice';
 import {useRouter} from 'next/navigation';
 import {paramsMediaSchema} from '@/types/schemas/params-schema';
+import {useSocket} from '@/hooks/use-ws';
+import {appToast} from '@/components/shared/app-toast';
 
 export const MediaPage = (props: {id: string}) => {
   const {status: session, data} = useSession();
@@ -31,6 +33,7 @@ export const MediaPage = (props: {id: string}) => {
   const {imageStatus, imageError, media_id} = useAppSelector((state) => state.mediaImage);
   const [getImageMedia] = useMediaImageMutation();
   const [refreshChapters] = useRefreshChaptersMutation();
+  const {triggerAction} = useSocket();
 
   const parsedId = paramsMediaSchema.safeParse(props);
   useMediaQuery(parsedId.data?.id ?? 0, {skip: !parsedId.success, refetchOnMountOrArgChange: true});
@@ -94,6 +97,15 @@ export const MediaPage = (props: {id: string}) => {
                     <FileImage /> Get Image
                   </Button>
                 )}
+                <Button
+                  onClick={() => {
+                    triggerAction('images', 'mediaId', parsedId.data.id);
+                    appToast('Images', 'Loading this media chapters...');
+                  }}
+                  className="flex-1"
+                >
+                  <ImagePlus /> Load all chapters images
+                </Button>
                 <Button
                   onClick={() => refreshChapters(media.id)}
                   variant="outline"
