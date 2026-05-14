@@ -59,7 +59,7 @@ const mediaListSlice = createSlice({
         state.medias = medias;
         state.lastPage = pagination.lastPage;
 
-        state.page = state.page > pagination.lastPage ? pagination.lastPage : state.page;
+        if (state.page > pagination.lastPage) state.page = pagination.lastPage;
       })
       .addMatcher(api.endpoints.medias.matchRejected, (state, action) => {
         state.status = 'error';
@@ -76,7 +76,8 @@ const mediaListSlice = createSlice({
         state.status = 'succeeded';
         state.medias = medias;
         state.lastPage = pagination.lastPage;
-        state.page = state.page > pagination.lastPage ? pagination.lastPage : state.page;
+
+        if (state.page > pagination.lastPage) state.page = pagination.lastPage;
       })
       .addMatcher(api.endpoints.refresh.matchRejected, (state, action) => {
         state.status = 'error';
