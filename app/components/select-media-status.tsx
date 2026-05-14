@@ -1,11 +1,13 @@
 'use client';
 
+import {Button} from '@/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
@@ -38,6 +40,18 @@ export const SelectMediaStatus = () => {
             );
           })}
         </SelectGroup>
+        <SelectSeparator />
+        <Button
+          className="w-full px-2"
+          variant="secondary"
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            dispatch(setSelectedStatus(null));
+          }}
+        >
+          Clear
+        </Button>
       </SelectContent>
     </Select>
   );
