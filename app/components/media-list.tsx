@@ -51,54 +51,56 @@ export function MediaList() {
 
   return (
     <div className="h-full relative bg-white dark:bg-(--background2) w-7/12">
-      {medias.length === 0 ? (
-        <div className="h-10/12 flex items-center justify-center">
-          <div className="w-fit">
-            <EmptyList title="No media" description="No media found" />
+      <div className="flex flex-col w-full h-full items-center pt-8">
+        <h1 className="text-2xl font-bold mb-4">Medias</h1>
+        <Collapsible
+          open={isFiltersOpen}
+          onOpenChange={(v) => setIsFiltersOpen(v)}
+          className="w-full flex flex-col px-10"
+        >
+          <CollapsibleTrigger asChild>
+            <Button variant="ghost" size="icon" className="size-8">
+              <Filter />
+              <span className="sr-only">Toggle details</span>
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="flex gap-4 items-center py-2">
+              <SelectPerPage />
+              <SelectMediaStatus />
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+        {medias.length === 0 ? (
+          <div className="h-8/12 flex items-center justify-center">
+            <div className="w-fit">
+              <EmptyList title="No media" description="No media found" />
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="flex flex-col w-full h-full items-center pt-8">
-          <h1 className="text-2xl font-bold mb-4">Medias</h1>
-          <Collapsible
-            open={isFiltersOpen}
-            onOpenChange={(v) => setIsFiltersOpen(v)}
-            className="w-full flex flex-col px-10"
-          >
-            <CollapsibleTrigger asChild>
-              <Button variant="ghost" size="icon" className="size-8">
-                <Filter />
-                <span className="sr-only">Toggle details</span>
-              </Button>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <div className="flex gap-4 items-center py-2">
-                <SelectPerPage />
-                <SelectMediaStatus />
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
-          <ul className="w-full flex-1 overflow-y-auto">
-            {medias.map((media, index) => (
-              <li key={media.id} className="h-fit flex flex-col items-center">
-                {(index !== 0 || index !== medias.length - 1) && (
-                  <div className="w-11/12 my-4 dark:bg-gray-100">
-                    <Separator />
+        ) : (
+          <>
+            <ul className="w-full flex-1 overflow-y-auto">
+              {medias.map((media, index) => (
+                <li key={media.id} className="h-fit flex flex-col items-center">
+                  {(index !== 0 || index !== medias.length - 1) && (
+                    <div className="w-11/12 my-4 dark:bg-gray-100">
+                      <Separator />
+                    </div>
+                  )}
+                  <div className="w-full px-15">
+                    <MediaItem media={media} />
                   </div>
-                )}
-                <div className="w-full px-15">
-                  <MediaItem media={media} />
-                </div>
-              </li>
-            ))}
-          </ul>
-          <div className="w-full h-20 px-4 flex items-center">
-            <Paginator />
-          </div>
+                </li>
+              ))}
+            </ul>
+            <div className="w-full h-20 px-4 flex items-center">
+              <Paginator />
+            </div>
+          </>
+        )}
+        <div className="absolute bottom-5 right-5">
+          <RefreshList />
         </div>
-      )}
-      <div className="absolute bottom-5 right-5">
-        <RefreshList />
       </div>
     </div>
   );
