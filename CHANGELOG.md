@@ -5,12 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] -
+
+### Added
+
+- Load all current media list images
+- Filters under the media list title in a collapsible icon
+- Clear media status select option
+- Introduced Loading in background all media chapters images thanks to websockets
+
+### Fix
+
+- Overflow to auto, not showing the plain white scroll indicator
+
 ## [1.5.0] -
 
 ### Added
 
-- media list pagination: Added pagination last page and disabling next button on reaching last page
-- chapter: Added possibility to change the image width
+- Media list pagination: Added pagination last page and disabling next button on reaching last page
+- Chapter: Added possibility to change the image width
 - Added Logout from app and Keycloak
 
 ## [1.4.0] - 2026-04-25
