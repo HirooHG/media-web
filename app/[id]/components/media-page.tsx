@@ -77,8 +77,10 @@ export const MediaPage = (props: {id: string}) => {
             )}
             <div className="flex-1 flex flex-col justify-between">
               <div className="gap-2 flex flex-col">
-                <span className="text-2xl font-semibold text-secondary">{media.title}</span>
-                <span className="h-50 overflow-y-auto">
+                <span className="w-full line-clamp-2 h-15 text-2xl font-semibold text-secondary">
+                  {media.title}
+                </span>
+                <span className="h-45 overflow-y-auto">
                   {media.description ?? <span className="italic">No description here...</span>}
                 </span>
               </div>
