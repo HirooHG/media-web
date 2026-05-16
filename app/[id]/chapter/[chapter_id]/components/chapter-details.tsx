@@ -18,16 +18,14 @@ import {useState} from 'react';
 
 export const ChapterDetails = (props: {id: string; chapter_id: string}) => {
   const {status: session, data: sessionData} = useSession();
-  const {push} = useRouter();
-
-  const [imageWidth, setImageWidth] = useState(200);
 
   if (session === 'unauthenticated' || sessionData?.tokensExpired) {
     redirect('/');
   }
 
+  const {push} = useRouter();
+  const [imageWidth, setImageWidth] = useState(800);
   const parsedProps = paramsChapterSchema.safeParse(props);
-
   const {
     data: chapter,
     isLoading,
@@ -53,6 +51,7 @@ export const ChapterDetails = (props: {id: string; chapter_id: string}) => {
     if (chapter) push('/' + parsedProps.data.id + '/chapter/' + chapter[prop]);
   };
 
+  console.log(imageWidth);
   return (
     <>
       {isLoading || !chapter ? (
@@ -61,7 +60,7 @@ export const ChapterDetails = (props: {id: string; chapter_id: string}) => {
         </div>
       ) : (
         <div className="flex flex-col gap-2 w-full h-full relative">
-          <div className="xl:fixed xl:p-0 p-4 right-10 top-4 w-100 flex flex-col gap-2">
+          <div className="xl:fixed xl:p-0 p-4 right-10 top-4 w-115 flex flex-col gap-2">
             <div className="h-15 flex items-center gap-4">
               <Button className="h-full" onClick={() => push('/' + id)}>
                 <ChevronLeft className="dark:text-gray-100" />
@@ -88,13 +87,11 @@ export const ChapterDetails = (props: {id: string; chapter_id: string}) => {
               )}
             </ButtonGroup>
             <div className="flex gap-2">
-              <span className="flex gap-2 text-nowrap">
-                Images width: <pre>{imageWidth}</pre>
-              </span>
+              <span className="flex gap-2 text-nowrap">Images width</span>
               <Slider
-                defaultValue={[200]}
-                min={50}
-                max={200}
+                defaultValue={[800]}
+                min={400}
+                max={800}
                 onValueChange={(v) => setImageWidth(v[0])}
                 step={50}
               />
@@ -111,15 +108,17 @@ export const ChapterDetails = (props: {id: string; chapter_id: string}) => {
                   <ChevronUp />
                 </Button>
               </div>
-              <ul className={'w-' + imageWidth}>
-                {chapter.images.map((ch, i) => {
-                  return (
-                    <li key={i}>
-                      <ChapterImage im={ch} />
-                    </li>
-                  );
-                })}
-              </ul>
+              <div style={{width: imageWidth, height: '100%'}}>
+                <ul>
+                  {chapter.images.map((ch, i) => {
+                    return (
+                      <li key={i}>
+                        <ChapterImage im={ch} />
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             </div>
           ) : (
             <div className="h-screen w-3xl flex items-center justify-center">
