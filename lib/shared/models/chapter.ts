@@ -3,7 +3,7 @@ import {ChapterImage} from './chapter-image';
 export interface Chapter {
   id: number;
   hid: string;
-  chap: number;
+  chap: string;
   title: string | undefined;
   images: ChapterImage[];
   translator?: string;

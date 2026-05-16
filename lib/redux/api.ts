@@ -7,7 +7,6 @@ import {Result} from '@/types/result';
 import {Chapter} from '../shared/models/chapter';
 import {MediaImage} from '../shared/models/media-image';
 import {GetAllMediasResult} from '../shared/models/result/get-all-medias-result';
-import {Ticket} from '../shared/models/ticket';
 
 const defaultTransforms = <T>() => ({
   transformResponse: (baseQueryReturnValue: unknown) => (baseQueryReturnValue as Result<T>).data!,
