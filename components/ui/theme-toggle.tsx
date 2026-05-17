@@ -14,10 +14,10 @@ type ToggleSize = 'default' | 'lg' | 'xl';
 
 const toggleSizeMap = {
   default: {
-    container: 'w-12 h-6',
+    container: 'w-6 h-6',
     checkbox: 'w-6 h-6',
     icon: 'w-3 h-3',
-    offset: '24px',
+    offset: '0',
   },
   lg: {
     container: 'w-16 h-8',
@@ -103,7 +103,7 @@ export default function ThemeToggle() {
   const selectedSize = toggleSizeMap[toggleSize];
 
   return (
-    <div className="z-10 flex items-center justify-center">
+    <div className="flex items-center justify-center size-8 bg-sidebar-accent rounded-lg">
       <button
         type="button"
         aria-pressed={isDark}

@@ -50,7 +50,11 @@ export const MediaItem = ({media}: {media: Media}) => {
               <FileImage /> Get Image
             </Button>
           )}
-          <Button onClick={() => router.push('/' + media.id)} className="flex gap-2 bg-primary">
+          <Button
+            variant="secondary"
+            onClick={() => router.push('/' + media.id)}
+            className="flex gap-2"
+          >
             See more <ExternalLink />
           </Button>
         </ButtonGroup>

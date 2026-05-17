@@ -5,10 +5,12 @@ export const THEME_KEY = 'darkMode';
 
 export interface SettingsState {
   theme: AppTheme;
+  sidebarOpen: boolean;
 }
 
 const initialState: SettingsState = {
   theme: 'light',
+  sidebarOpen: false,
 };
 
 const settingsSlice = createSlice({
@@ -20,8 +22,11 @@ const settingsSlice = createSlice({
       localStorage.setItem(THEME_KEY, theme);
       state.theme = theme;
     },
+    setSidebarToggle: (state, action: PayloadAction<boolean>) => {
+      state.sidebarOpen = action.payload;
+    },
   },
 });
 
-export const {setTheme} = settingsSlice.actions;
+export const {setTheme, setSidebarToggle} = settingsSlice.actions;
 export default settingsSlice.reducer;

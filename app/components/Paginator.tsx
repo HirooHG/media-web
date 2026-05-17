@@ -13,7 +13,7 @@ import {
 import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
 
 const activeClassNames =
-  'text-secondary-background text-white hover:text-white bg-secondary hover:bg-secondary3 dark:hover:bg-secondary5 active';
+  'text-secondary-background text-white hover:text-white bg-tertiary hover:bg-secondary3 dark:hover:bg-secondary5 active';
 
 export const Paginator = () => {
   const dispatch = useAppDispatch();
