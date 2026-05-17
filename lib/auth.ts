@@ -17,21 +17,17 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = acc.access_token;
         token.refreshToken = acc.refresh_token;
         token.accessTokenExpires = acc.expires_at * 1000;
-        token.refreshTokenExpiresAt = token.accessTokenExpires + acc.refresh_expires_in * 1000;
+        token.refreshTokenExpiresAt = (acc.expires_at + acc.refresh_expires_in) * 1000;
         token.id_token = acc.id_token;
-        console.log(token);
       }
 
-      const BUFFER_TIME = 10 * 1000;
       const expirationTime = token.accessTokenExpires ?? 0;
-      const isTokenExpired = Date.now() > expirationTime - BUFFER_TIME;
+      const isTokenExpired = Date.now() > expirationTime;
 
       if (isTokenExpired) {
         const expirationRefreshTime = token.refreshTokenExpiresAt ?? 0;
-        const isRefreshExpired = Date.now() > expirationRefreshTime - BUFFER_TIME;
+        const isRefreshExpired = Date.now() > expirationRefreshTime;
 
-        console.log(expirationRefreshTime);
-        console.log(Date.now());
         if (isRefreshExpired) {
           token.tokensExpired = true;
           return token;
