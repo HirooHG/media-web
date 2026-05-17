@@ -4,6 +4,15 @@ import {Pending} from '@/app/components/pending';
 import {EmptyList} from '@/components/shared/empty-list';
 import {ErrorComponent} from '@/components/shared/error';
 import {Button} from '@/components/ui/button';
+import {
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+  DropdownMenu,
+} from '@/components/ui/dropdown-menu';
 import {Item, ItemActions, ItemContent, ItemDescription, ItemTitle} from '@/components/ui/item';
 import {useChaptersQuery} from '@/lib/redux/api';
 import {useAppSelector} from '@/lib/redux/hooks';
@@ -49,19 +58,36 @@ export const Chapters = ({media_id}: {media_id: number}) => {
             <li id={ch.id.toString()} key={ch.id}>
               <Item variant="outline">
                 <ItemContent>
-                  <ItemTitle>
-                    {ch.chap} {ch.title && '- ' + ch.title}{' '}
-                  </ItemTitle>
-                  <ItemDescription>{ch.translator}</ItemDescription>
+                  <ItemTitle>{ch.chap}</ItemTitle>
+                  <ItemDescription>
+                    {ch.versions.map((c) => c.translator).join(' - ')}
+                  </ItemDescription>
                 </ItemContent>
                 <ItemActions>
-                  <Button
-                    variant="ghost"
-                    className="hover:bg-tertiary dark:hover:bg-tertiary"
-                    onClick={() => router.push('/' + media_id + '/chapter/' + ch.id)}
-                  >
-                    <ArrowRight />
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="hover:bg-tertiary dark:hover:bg-tertiary">
+                        <ArrowRight />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuGroup>
+                        <DropdownMenuLabel>Chapter&apos;s versions</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        {ch.versions.map((v) => (
+                          <DropdownMenuItem
+                            key={v.hid}
+                            className="cursor-pointer"
+                            onClick={() => {
+                              router.push('/' + media_id + '/chapter/' + v.hid);
+                            }}
+                          >
+                            {v.translator}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </ItemActions>
               </Item>
             </li>

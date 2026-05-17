@@ -6,6 +6,6 @@ export const paramsMediaSchema = z.object({
 
 export const paramsChapterSchema = paramsMediaSchema.and(
   z.object({
-    chapter_id: z.coerce.number().int(),
+    chapterHid: z.string().nonempty(), // hid
   }),
 );

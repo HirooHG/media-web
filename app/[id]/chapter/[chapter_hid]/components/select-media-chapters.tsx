@@ -7,33 +7,31 @@ import {
   SelectTrigger,
 } from '@/components/ui/select';
 import {useChaptersQuery} from '@/lib/redux/api';
+import {Chapter, ChapterTranslatorVersion} from '@/lib/shared/models/chapter';
 import {useRouter} from 'next/navigation';
 
 export const SelectMediaChapters = ({
-  media_id,
-  chapter_id,
+  mediaId,
+  version,
+  chap,
 }: {
-  media_id: number;
-  chapter_id: number;
+  mediaId: number;
+  version: ChapterTranslatorVersion;
+  chap: Chapter;
 }) => {
   const {push} = useRouter();
-  const {data: chapters, isLoading, isError} = useChaptersQuery(media_id);
+  const {data: chapters, isLoading, isError} = useChaptersQuery(mediaId);
 
   if (isLoading || isError || !chapters) return null;
 
-  const chap = chapters.find((c) => c.id === chapter_id);
-
   return (
-    <Select
-      onValueChange={(v) => push('/' + media_id + '/chapter/' + v)}
-      value={chapter_id.toString()}
-    >
+    <Select onValueChange={(v) => push('/' + mediaId + '/chapter/' + v)} value={version.hid}>
       <SelectTrigger className="w-full bg-white">
         {!chap ? (
           <span>Chapter not found</span>
         ) : (
           <span>
-            {chap.chap} {chap.translator ? ' - ' + chap.translator : ''}
+            {chap.chap} {version.translator ? ' - ' + version.translator : ''}
           </span>
         )}
       </SelectTrigger>
@@ -41,9 +39,11 @@ export const SelectMediaChapters = ({
         <SelectGroup>
           <SelectLabel>Current media chapters</SelectLabel>
           {chapters.map((c) => {
+            const v =
+              c.versions.find((vs) => vs.translator === version.translator) ?? c.versions[0];
             return (
-              <SelectItem key={c.id} value={c.id.toString()} className="cursor-pointer">
-                {c.chap} {c.translator ? ' - ' + c.translator?.toLowerCase() : ''}
+              <SelectItem key={v.hid} value={v.hid} className="cursor-pointer">
+                {c.chap} {v.translator ? ' - ' + v.translator?.toLowerCase() : ''}
               </SelectItem>
             );
           })}

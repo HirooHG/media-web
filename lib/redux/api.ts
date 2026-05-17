@@ -57,8 +57,8 @@ export const api = createApi({
       }),
       ...defaultTransforms<Chapter[]>(),
     }),
-    chapter: builder.query<Chapter, {media_id: number; chapter_id: number}>({
-      query: ({media_id, chapter_id}) => `/media/comic/${media_id}/chapter/${chapter_id}`,
+    chapter: builder.query<Chapter, {media_id: number; chapter_hid: string}>({
+      query: ({media_id, chapter_hid}) => `/media/comic/${media_id}/chapter/${chapter_hid}`,
       ...defaultTransforms<Chapter>(),
     }),
     ticket: builder.query<string, void>({

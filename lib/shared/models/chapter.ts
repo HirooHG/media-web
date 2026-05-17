@@ -1,12 +1,17 @@
 import {ChapterImage} from './chapter-image';
 
-export interface Chapter {
-  id: number;
+export interface ChapterTranslatorVersion {
   hid: string;
-  chap: string;
-  title: string | undefined;
+  title: string | null;
   images: ChapterImage[];
   translator?: string;
-  prev_chap?: number;
-  next_chap?: number;
+  next_chap?: string; // hid
+  prev_chap?: string; // hid
+}
+
+export interface Chapter {
+  id: number;
+  comic_id: number;
+  chap: string;
+  versions: ChapterTranslatorVersion[];
 }
