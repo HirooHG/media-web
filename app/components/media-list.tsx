@@ -5,7 +5,7 @@ import {Separator} from '@/components/ui/separator';
 import {Pending} from './pending';
 import {EmptyList} from '../../components/shared/empty-list';
 import {MediaItem} from './media-item';
-import {Paginator} from './paginator';
+import {Paginator} from './Paginator';
 import {ErrorComponent} from '@/components/shared/error';
 import {RefreshList} from './refresh-list';
 import {SelectMediaStatus} from './select-media-status';
