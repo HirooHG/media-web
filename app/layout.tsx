@@ -4,7 +4,6 @@ import './globals.css';
 import {ReduxProvider} from '@/app/providers/redux-provider';
 import {AuthProvider} from '@/app/providers/auth-provider';
 import {Toaster} from 'sonner';
-import ThemeToggle from '@/components/ui/theme-toggle';
 import {DarkModeProvider} from './providers/dark-mode-provider';
 import {WebsocketProvider} from './providers/ws-provider';
 
