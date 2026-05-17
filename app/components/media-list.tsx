@@ -36,7 +36,7 @@ export function MediaList() {
   if (status === 'error' || error) {
     return (
       <div className="h-6/12 w-full flex items-center justify-center">
-        <ErrorComponent error={error} />
+        <ErrorComponent error={error} hasGoHomeAction={false} />
       </div>
     );
   }

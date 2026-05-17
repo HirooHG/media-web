@@ -5,7 +5,13 @@ import {Alert, AlertDescription, AlertTitle} from '../ui/alert';
 import {useRouter} from 'next/navigation';
 import {Button} from '../ui/button';
 
-export const ErrorComponent = ({error}: {error: string | null}) => {
+export const ErrorComponent = ({
+  error,
+  hasGoHomeAction = true,
+}: {
+  error: string | null;
+  hasGoHomeAction?: boolean;
+}) => {
   const {push} = useRouter();
 
   return (
@@ -16,9 +22,11 @@ export const ErrorComponent = ({error}: {error: string | null}) => {
         <AlertDescription>{error ?? 'There was an error but it is unknown'}</AlertDescription>
       </Alert>
 
-      <Button className="w-full" onClick={() => push('/')}>
-        Go Home
-      </Button>
+      {hasGoHomeAction && (
+        <Button className="w-full" onClick={() => push('/')}>
+          Go Home
+        </Button>
+      )}
     </div>
   );
 };
