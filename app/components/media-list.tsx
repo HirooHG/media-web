@@ -8,17 +8,11 @@ import {MediaItem} from './media-item';
 import {Paginator} from './Paginator';
 import {ErrorComponent} from '@/components/shared/error';
 import {RefreshList} from './refresh-list';
-import {SelectMediaStatus} from './select-media-status';
 import {MediaStatus} from '@/lib/shared/models/media-status';
 import {useMediasQuery} from '@/lib/redux/api';
-import {SelectPerPage} from './select-per-page';
-import {useState} from 'react';
-import {Collapsible, CollapsibleContent, CollapsibleTrigger} from '@/components/ui/collapsible';
-import {Button} from '@/components/ui/button';
-import {Filter} from 'lucide-react';
+import {MediaListFilters} from './media-list-filters';
 
 export function MediaList() {
-  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const {medias, error, status, page, per_page, selectedStatus} = useAppSelector(
     (state) => state.mediaList,
   );
@@ -53,24 +47,7 @@ export function MediaList() {
     <div className="h-full relative bg-white dark:bg-(--background2) w-7/12">
       <div className="flex flex-col w-full h-full items-center pt-8">
         <h1 className="text-2xl font-bold mb-4">Medias</h1>
-        <Collapsible
-          open={isFiltersOpen}
-          onOpenChange={(v) => setIsFiltersOpen(v)}
-          className="w-full flex flex-col px-10"
-        >
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" size="icon" className="size-8">
-              <Filter />
-              <span className="sr-only">Toggle details</span>
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            <div className="flex gap-4 items-center py-2">
-              <SelectPerPage />
-              <SelectMediaStatus />
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
+        <MediaListFilters />
         {medias.length === 0 ? (
           <div className="h-8/12 flex items-center justify-center">
             <div className="w-fit">
