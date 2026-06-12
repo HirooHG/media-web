@@ -1,1 +1,1 @@
-export type ImageSize = 'small' | 'large';
+export type ImageSize = 'small' | 'medium' | 'large';

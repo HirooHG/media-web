@@ -68,6 +68,14 @@ export const api = createApi({
       }),
       ...defaultTransforms<string>(),
     }),
+    search: builder.mutation<Media[], string>({
+      query: (filter) => ({
+        url: '/media/search',
+        method: 'POST',
+        body: {filter},
+      }),
+      ...defaultTransforms<Media[]>(),
+    }),
   }),
 });
 
@@ -80,4 +88,5 @@ export const {
   useRefreshChaptersMutation,
   useChapterQuery,
   useTicketQuery,
+  useSearchMutation,
 } = api;

@@ -3,10 +3,16 @@ import {ImageSize} from '@/types/image-size';
 import {useEffect, useRef, useState} from 'react';
 import {Skeleton} from '@/components/ui/skeleton';
 
+const Dimensions = {
+  'small': 'w-16 h-14',
+  'medium': 'w-32 h-48',
+  'large': 'w-64 h-84',
+};
+
 export const MediaImage = ({
   uri,
   slug,
-  size = 'small',
+  size = 'medium',
 }: {
   uri: string;
   slug: string;
@@ -14,7 +20,7 @@ export const MediaImage = ({
 }) => {
   const ref = useRef<string | null>(null);
   const [url, setUrl] = useState<string | null>(null);
-  const dims = size === 'small' ? 'w-32 h-46' : 'w-64 h-84';
+  const dims = Dimensions[size];
 
   useEffect(() => {
     if (ref.current) return;

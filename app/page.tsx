@@ -7,6 +7,7 @@ import {Button} from '@/components/ui/button';
 import {appToast} from '@/components/shared/app-toast';
 import {useEffect, useRef} from 'react';
 import {AppSidebarProvider} from '@/components/shared/app-sidebar-provider';
+import {SearchDialog} from '@/components/shared/search-dialog';
 
 export default function Home() {
   const {status, data} = useSession();
@@ -32,6 +33,7 @@ export default function Home() {
     <div className="h-screen w-full flex flex-col items-center justify-center space-y-2">
       {status === 'authenticated' && !data.tokensExpired ? (
         <AppSidebarProvider className="flex items-center justify-center">
+          <SearchDialog />
           <MediaList />
         </AppSidebarProvider>
       ) : (

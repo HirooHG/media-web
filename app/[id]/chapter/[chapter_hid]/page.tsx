@@ -1,3 +1,4 @@
+import {SearchDialog} from '@/components/shared/search-dialog';
 import {ChapterDetails} from './components/chapter-details';
 
 export default async function ChapterPage({
@@ -7,5 +8,10 @@ export default async function ChapterPage({
 }) {
   const {chapter_hid, id} = await params;
 
-  return <ChapterDetails id={id} chapterHid={chapter_hid} />;
+  return (
+    <>
+      <SearchDialog />
+      <ChapterDetails id={id} chapterHid={chapter_hid} />
+    </>
+  );
 }
