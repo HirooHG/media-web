@@ -11,8 +11,13 @@ import {RefreshList} from './refresh-list';
 import {MediaStatus} from '@/lib/shared/models/media-status';
 import {useMediasQuery} from '@/lib/redux/api';
 import {MediaListFilters} from './media-list-filters';
+import {Button} from '@/components/ui/button';
+import {Search} from 'lucide-react';
+import {useDispatch} from 'react-redux';
+import {setSearchDialogOpen} from '@/lib/redux/slices/ui-slice';
 
 export function MediaList() {
+  const dispatch = useDispatch();
   const {medias, error, status, page, per_page, selectedStatus} = useAppSelector(
     (state) => state.mediaList,
   );
@@ -47,7 +52,24 @@ export function MediaList() {
     <div className="h-full relative bg-white dark:bg-(--background2) w-7/12">
       <div className="flex flex-col w-full h-full items-center pt-8">
         <h1 className="text-2xl font-bold mb-4">Medias</h1>
-        <MediaListFilters />
+        <div className="w-full flex gap-4 justify-between pr-14">
+          <div>
+            <MediaListFilters />
+          </div>
+          <Button
+            onClick={() => dispatch(setSearchDialogOpen(true))}
+            className="hover:bg-zinc-700 border border-zinc-700 w-50 justify-between bg-zinc-900 rounded-xs"
+          >
+            <div className="flex items-center gap-2">
+              <Search />
+              <span>Search</span>
+            </div>
+            <div className="space-x-2">
+              <kbd>⌘</kbd>
+              <kbd>K</kbd>
+            </div>
+          </Button>
+        </div>
         {medias.length === 0 ? (
           <div className="h-8/12 flex items-center justify-center">
             <div className="w-fit">
