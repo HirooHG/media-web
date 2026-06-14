@@ -58,7 +58,7 @@ export function MediaList() {
           </div>
           <Button
             onClick={() => dispatch(setSearchDialogOpen(true))}
-            className="hover:bg-zinc-700 border border-zinc-700 w-50 justify-between bg-zinc-900 rounded-xs"
+            className="bg-zinc-600 hover:bg-zinc-500 dark:hover:bg-zinc-700 dark:bg-zinc-900 border border-zinc-700 w-50 justify-between rounded-xs"
           >
             <div className="flex items-center gap-2">
               <Search />
