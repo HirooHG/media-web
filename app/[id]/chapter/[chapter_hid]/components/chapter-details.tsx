@@ -4,7 +4,7 @@ import {Pending} from '@/app/components/pending';
 import {EmptyList} from '@/components/shared/empty-list';
 import {ErrorComponent} from '@/components/shared/error';
 import {Button} from '@/components/ui/button';
-import {useChapterQuery} from '@/lib/redux/api';
+import {useChapterQuery, useUpsertBookmarkByChapterHidQuery} from '@/lib/redux/api';
 import {ChevronLeft, ChevronRight, ChevronUp} from 'lucide-react';
 import {useSession} from 'next-auth/react';
 import {redirect} from 'next/navigation';
@@ -35,18 +35,29 @@ export const ChapterDetails = (props: {id: string; chapterHid: string}) => {
     {media_id: parsedProps.data?.id ?? 0, chapter_hid: parsedProps.data?.chapterHid ?? ''},
     {refetchOnMountOrArgChange: true, skip: !parsedProps.success},
   );
+  const {isLoading: isLoadingBookmark, isError: isErrorBookmark} =
+    useUpsertBookmarkByChapterHidQuery(
+      {mediaId: parsedProps.data?.id ?? 0, chapterHid: parsedProps.data?.chapterHid ?? ''},
+      {skip: !parsedProps.success},
+    );
 
-  if (isError || parsedProps.error) {
+  if (isError || parsedProps.error || isErrorBookmark) {
     return (
       <div className="w-full h-screen flex items-center justify-center">
-        <ErrorComponent error={parsedProps.error?.message ?? (error as string) ?? ''} />
+        <ErrorComponent
+          error={
+            (parsedProps.error?.message ?? (error as string) ?? isErrorBookmark)
+              ? 'Could not create bookmark'
+              : ''
+          }
+        />
       </div>
     );
   }
 
   const {id, chapterHid} = parsedProps.data;
 
-  if (isLoading || !chapter) {
+  if (isLoading || !chapter || isLoadingBookmark) {
     return (
       <div className=" w-full h-screen flex items-center justify-center">
         <Pending />
@@ -67,6 +78,8 @@ export const ChapterDetails = (props: {id: string; chapterHid: string}) => {
     const prop = action === 'prev' ? 'prev_chap' : 'next_chap';
     if (chapter) push('/' + parsedProps.data.id + '/chapter/' + version[prop]);
   };
+
+  console.log(chapter);
 
   return (
     <div className="flex flex-col gap-2 w-full h-full relative">

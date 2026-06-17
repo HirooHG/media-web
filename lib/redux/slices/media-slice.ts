@@ -21,6 +21,9 @@ const mediaSlice = createSlice({
     setMediaError: (state, action: PayloadAction<string>) => {
       state.error = action.payload;
     },
+    setChaptersError: (state, action: PayloadAction<string>) => {
+      state.chaptersError = action.payload;
+    },
     resetMediaState: (state) => {
       state.error = null;
       state.media = null;
@@ -79,5 +82,6 @@ const mediaSlice = createSlice({
   },
 });
 
-export const {clearMediaError, setMediaError, resetMediaState, setMediaImage} = mediaSlice.actions;
+export const {clearMediaError, setMediaError, setChaptersError, resetMediaState, setMediaImage} =
+  mediaSlice.actions;
 export default mediaSlice.reducer;

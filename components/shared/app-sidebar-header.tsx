@@ -15,7 +15,14 @@ export const AppSidebarHeader = () => {
             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             onClick={() => push('/')}
           >
-            <Image alt="app-icon" style={{borderRadius: 8}} width={32} height={32} src={AppIcon} />
+            <Image
+              loading="eager"
+              alt="app-icon"
+              style={{borderRadius: 8}}
+              width={32}
+              height={32}
+              src={AppIcon}
+            />
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">Media List</span>
               <span className="truncate text-xs">made by HirooHG with ❤️</span>

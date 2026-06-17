@@ -7,6 +7,7 @@ import {Result} from '@/types/result';
 import {Chapter} from '../shared/models/chapter';
 import {MediaImage} from '../shared/models/media-image';
 import {GetAllMediasResult} from '../shared/models/result/get-all-medias-result';
+import {Bookmark} from '../shared/models/bookmark';
 
 const defaultTransforms = <T>() => ({
   transformResponse: (baseQueryReturnValue: unknown) => (baseQueryReturnValue as Result<T>).data!,
@@ -76,6 +77,41 @@ export const api = createApi({
       }),
       ...defaultTransforms<Media[]>(),
     }),
+    getBookmarkByMedia: builder.query<Bookmark | null, number>({
+      query: (mediaId: number) => `/bookmark/media/${mediaId}`,
+      ...defaultTransforms<Bookmark | null>(),
+    }),
+    deleteBookmark: builder.mutation<string, string>({
+      query: (id: string) => ({
+        url: `/bookmark/${id}`,
+        method: 'DELETE',
+      }),
+      ...defaultTransforms<string | null>(),
+    }),
+    createBookmark: builder.mutation<Bookmark, {mediaId: number; chapterId: number}>({
+      query: ({mediaId, chapterId}) => ({
+        url: '/bookmark',
+        method: 'POST',
+        body: {mediaId, chapterId},
+      }),
+      ...defaultTransforms<Bookmark>(),
+    }),
+    upsertBookmarkByChapterHid: builder.query<Bookmark, {mediaId: number; chapterHid: string}>({
+      query: ({mediaId, chapterHid}) => ({
+        url: '/bookmark/hid',
+        method: 'POST',
+        body: {mediaId, chapterHid},
+      }),
+      ...defaultTransforms<Bookmark>(),
+    }),
+    updateBookmark: builder.mutation<Bookmark, {id: string; chapterId: number; mediaId: number}>({
+      query: ({id, chapterId, mediaId}) => ({
+        url: `/bookmark/${id}`,
+        method: 'PUT',
+        body: {mediaId, chapterId},
+      }),
+      ...defaultTransforms<Bookmark>(),
+    }),
   }),
 });
 
@@ -89,4 +125,9 @@ export const {
   useChapterQuery,
   useTicketQuery,
   useSearchMutation,
+  useGetBookmarkByMediaQuery,
+  useCreateBookmarkMutation,
+  useUpsertBookmarkByChapterHidQuery,
+  useUpdateBookmarkMutation,
+  useDeleteBookmarkMutation,
 } = api;
