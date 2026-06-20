@@ -33,7 +33,7 @@ export const api = createApi({
       ...defaultTransforms<GetAllMediasResult>(),
     }),
     mediaImage: builder.mutation<MediaImage, number>({
-      query: (media_id: number) => `/media/comic/image/${media_id}`,
+      query: (media_id: number) => `/media/image/${media_id}`,
       ...defaultTransforms<MediaImage>(),
     }),
     refresh: builder.mutation<GetAllMediasResult, Pagination & {status: MediaStatus | null}>({
@@ -44,22 +44,22 @@ export const api = createApi({
       ...defaultTransforms<GetAllMediasResult>(),
     }),
     media: builder.query<Media, number>({
-      query: (media_id: number) => `/media/comic/${media_id}`,
+      query: (media_id: number) => `/media/${media_id}`,
       ...defaultTransforms<Media>(),
     }),
     chapters: builder.query<Chapter[], number>({
-      query: (media_id: number) => `/media/comic/${media_id}/chapters`,
+      query: (media_id: number) => `/chapter/media/${media_id}`,
       ...defaultTransforms<Chapter[]>(),
     }),
     refreshChapters: builder.mutation<Chapter[], number>({
       query: (media_id: number) => ({
-        url: `/media/refresh/comic/${media_id}/chapters`,
+        url: `/chapter/refresh/media/${media_id}`,
         method: 'POST',
       }),
       ...defaultTransforms<Chapter[]>(),
     }),
     chapter: builder.query<Chapter, {media_id: number; chapter_hid: string}>({
-      query: ({media_id, chapter_hid}) => `/media/comic/${media_id}/chapter/${chapter_hid}`,
+      query: ({media_id, chapter_hid}) => `/chapter/media/${media_id}/${chapter_hid}`,
       ...defaultTransforms<Chapter>(),
     }),
     ticket: builder.query<string, void>({
