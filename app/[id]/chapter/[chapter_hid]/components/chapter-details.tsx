@@ -41,8 +41,13 @@ export const ChapterDetails = (props: {id: string; chapterHid: string}) => {
       {skip: !parsedProps.success, refetchOnMountOrArgChange: true},
     );
 
-  console.log('loading', isLoadingBookmark);
-  console.log('error', isErrorBookmark);
+  if (isLoading || !chapter || isLoadingBookmark) {
+    return (
+      <div className=" w-full h-screen flex items-center justify-center">
+        <Pending />
+      </div>
+    );
+  }
 
   if (isError || parsedProps.error || isErrorBookmark) {
     return (
@@ -59,14 +64,6 @@ export const ChapterDetails = (props: {id: string; chapterHid: string}) => {
   }
 
   const {id, chapterHid} = parsedProps.data;
-
-  if (isLoading || !chapter || isLoadingBookmark) {
-    return (
-      <div className=" w-full h-screen flex items-center justify-center">
-        <Pending />
-      </div>
-    );
-  }
 
   const version = chapter.versions.find((v) => v.hid === chapterHid);
   if (!version) {
