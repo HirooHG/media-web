@@ -5,17 +5,15 @@ import {
   useGetBookmarkByMediaQuery,
   useUpdateBookmarkMutation,
 } from '@/lib/redux/api';
+import {useAppSelector} from '@/lib/redux/hooks';
 import {setChaptersError} from '@/lib/redux/slices/media-slice';
 import {useDispatch} from 'react-redux';
 
 export const useBookmarks = (mediaId: number) => {
   const dispatch = useDispatch();
-  const {
-    data: bookmark,
-    isLoading: isBookmarkLoading,
-    isError: isBookmarkError,
-    refetch,
-  } = useGetBookmarkByMediaQuery(mediaId, {refetchOnMountOrArgChange: true});
+  const bookmark = useAppSelector((state) => state.media.bookmark);
+  const {refetch} = useGetBookmarkByMediaQuery(mediaId, {refetchOnMountOrArgChange: true});
+
   const [createBookmark] = useCreateBookmarkMutation();
   const [updateBookmark] = useUpdateBookmarkMutation();
   const [deleteBookmark] = useDeleteBookmarkMutation();
@@ -36,7 +34,6 @@ export const useBookmarks = (mediaId: number) => {
         return;
       }
     } else {
-      console.log(mediaId);
       const updated = await updateBookmark({id: bookmark.id, mediaId, chapterId});
 
       if (updated.error) {
@@ -51,8 +48,6 @@ export const useBookmarks = (mediaId: number) => {
 
   return {
     bookmark,
-    isBookmarkLoading,
-    isBookmarkError,
     onBookmarkChapter,
   };
 };

@@ -5,7 +5,7 @@ import {MediaImage} from '@/app/components/media-image';
 import {MediaImagePlaceholder} from '@/app/components/media-image-placeholder';
 import {Pending} from '@/app/components/pending';
 import {Button} from '@/components/ui/button';
-import {ChevronLeft, FileImage, ImagePlus, RefreshCcw} from 'lucide-react';
+import {ChevronLeft, FileImage, ImagePlus, RefreshCcw, StepForward} from 'lucide-react';
 import {Chapters} from './chapters';
 import {ButtonGroup} from '@/components/ui/button-group';
 import {Badge} from '@/components/ui/badge';
@@ -19,6 +19,7 @@ import {useRouter} from 'next/navigation';
 import {paramsMediaSchema} from '@/types/schemas/params-schema';
 import {useSocket} from '@/hooks/use-ws';
 import {appToast} from '@/components/shared/app-toast';
+import {VersionsDropdown} from './versions-dropdown';
 
 export const MediaPage = (props: {id: string}) => {
   const {status: session, data} = useSession();
@@ -29,11 +30,14 @@ export const MediaPage = (props: {id: string}) => {
 
   const dispatch = useAppDispatch();
   const {push} = useRouter();
-  const {media, error, status} = useAppSelector((state) => state.media);
+
+  const {media, error, status, chapters} = useAppSelector((state) => state.media);
   const {imageStatus, imageError, media_id} = useAppSelector((state) => state.mediaImage);
+  const {triggerAction} = useSocket();
+  const bookmark = useAppSelector((state) => state.media.bookmark);
+
   const [getImageMedia] = useMediaImageMutation();
   const [refreshChapters] = useRefreshChaptersMutation();
-  const {triggerAction} = useSocket();
 
   const parsedId = paramsMediaSchema.safeParse(props);
   useMediaQuery(parsedId.data?.id ?? 0, {skip: !parsedId.success, refetchOnMountOrArgChange: true});
@@ -98,6 +102,16 @@ export const MediaPage = (props: {id: string}) => {
                   >
                     <FileImage /> Get Image
                   </Button>
+                )}
+                {bookmark && chapters && (
+                  <VersionsDropdown
+                    versions={chapters.find((c) => c.id === bookmark.chapterId)?.versions ?? []}
+                    action={(version) => push('/' + parsedId.data.id + '/chapter/' + version.hid)}
+                  >
+                    <Button className="flex-1" variant="outline">
+                      <StepForward /> {bookmark ? 'Continue to read' : 'Start to read'}
+                    </Button>
+                  </VersionsDropdown>
                 )}
                 <Button
                   onClick={() => {

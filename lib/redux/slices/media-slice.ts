@@ -9,6 +9,7 @@ const initialState: MediaState = {
   chapters: null,
   chaptersError: null,
   chaptersStatus: 'idle',
+  bookmark: null,
 };
 
 const mediaSlice = createSlice({
@@ -79,6 +80,9 @@ const mediaSlice = createSlice({
         state.chaptersStatus = 'error';
         state.chaptersError = action.payload?.data as string;
       });
+    builder.addMatcher(api.endpoints.getBookmarkByMedia.matchFulfilled, (state, action) => {
+      state.bookmark = action.payload;
+    });
   },
 });
 

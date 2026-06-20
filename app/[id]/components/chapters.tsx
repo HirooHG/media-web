@@ -22,13 +22,13 @@ export const Chapters = ({media_id}: {media_id: number}) => {
   const isDark = useAppSelector((state) => state.settings.theme) === 'dark';
 
   useChaptersQuery(media_id, {refetchOnMountOrArgChange: true});
-  const {bookmark, onBookmarkChapter, isBookmarkError, isBookmarkLoading} = useBookmarks(media_id);
+  const {bookmark, onBookmarkChapter} = useBookmarks(media_id);
 
-  if (status === 'pending' || isBookmarkLoading) {
+  if (status === 'pending') {
     return <Pending />;
   }
 
-  if (status === 'error' || error || isBookmarkError || bookmark === undefined) {
+  if (status === 'error' || error) {
     return (
       <div className="h-6/12 w-full flex items-center justify-center">
         <ErrorComponent error={error as string} />

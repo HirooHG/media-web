@@ -38,17 +38,20 @@ export const ChapterDetails = (props: {id: string; chapterHid: string}) => {
   const {isLoading: isLoadingBookmark, isError: isErrorBookmark} =
     useUpsertBookmarkByChapterHidQuery(
       {mediaId: parsedProps.data?.id ?? 0, chapterHid: parsedProps.data?.chapterHid ?? ''},
-      {skip: !parsedProps.success},
+      {skip: !parsedProps.success, refetchOnMountOrArgChange: true},
     );
+
+  console.log('loading', isLoadingBookmark);
+  console.log('error', isErrorBookmark);
 
   if (isError || parsedProps.error || isErrorBookmark) {
     return (
       <div className="w-full h-screen flex items-center justify-center">
         <ErrorComponent
           error={
-            (parsedProps.error?.message ?? (error as string) ?? isErrorBookmark)
-              ? 'Could not create bookmark'
-              : ''
+            parsedProps.error?.message ??
+            (error as string) ??
+            (isErrorBookmark ? 'Could not create bookmark' : '')
           }
         />
       </div>
@@ -78,8 +81,6 @@ export const ChapterDetails = (props: {id: string; chapterHid: string}) => {
     const prop = action === 'prev' ? 'prev_chap' : 'next_chap';
     if (chapter) push('/' + parsedProps.data.id + '/chapter/' + version[prop]);
   };
-
-  console.log(chapter);
 
   return (
     <div className="flex flex-col gap-2 w-full h-full relative">
