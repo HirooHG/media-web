@@ -13,13 +13,19 @@ import {MediaStatus} from '@/lib/shared/models/media-status';
 import {useSession} from 'next-auth/react';
 import {redirect} from 'next/navigation';
 import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
-import {useMediaImageMutation, useMediaQuery, useRefreshChaptersMutation} from '@/lib/redux/api';
+import {
+  useGetReadingStatusesQuery,
+  useMediaImageMutation,
+  useMediaQuery,
+  useRefreshChaptersMutation,
+} from '@/lib/redux/api';
 import {setMediaImage} from '@/lib/redux/slices/media-slice';
 import {useRouter} from 'next/navigation';
 import {paramsMediaSchema} from '@/types/schemas/params-schema';
 import {useSocket} from '@/hooks/use-ws';
 import {appToast} from '@/components/shared/app-toast';
 import {VersionsDropdown} from './versions-dropdown';
+import {MediaReadingStatus} from './media-reading-status';
 
 export const MediaPage = (props: {id: string}) => {
   const {status: session, data} = useSession();
@@ -41,6 +47,7 @@ export const MediaPage = (props: {id: string}) => {
 
   const parsedId = paramsMediaSchema.safeParse(props);
   useMediaQuery(parsedId.data?.id ?? 0, {skip: !parsedId.success, refetchOnMountOrArgChange: true});
+  useGetReadingStatusesQuery();
 
   if (status === 'error' || (!parsedId.success && parsedId.error)) {
     return (
@@ -88,10 +95,14 @@ export const MediaPage = (props: {id: string}) => {
                   {media.description ?? <span className="italic">No description here...</span>}
                 </span>
               </div>
-              <Badge variant={getBadgeStatusSeverity()}>{MediaStatus[media.status]}</Badge>
+              <div className="flex gap-4 items-center">
+                <Badge variant={getBadgeStatusSeverity()}>{MediaStatus[media.status]}</Badge>
+                <MediaReadingStatus media={media} />
+              </div>
               <ButtonGroup className="w-full">
                 {!media.image && (
                   <Button
+                    variant="outline"
                     onClick={async () => {
                       const image = await getImageMedia(media.id);
                       if (!image.data) return;
@@ -108,12 +119,20 @@ export const MediaPage = (props: {id: string}) => {
                     versions={chapters.find((c) => c.id === bookmark.chapterId)?.versions ?? []}
                     action={(version) => push('/' + parsedId.data.id + '/chapter/' + version.hid)}
                   >
-                    <Button className="flex-1" variant="outline">
+                    <Button className="flex-1">
                       <StepForward /> {bookmark ? 'Continue to read' : 'Start to read'}
                     </Button>
                   </VersionsDropdown>
                 )}
                 <Button
+                  onClick={() => refreshChapters(media.id)}
+                  className="flex-1"
+                  disabled={imageStatus === 'pending'}
+                >
+                  <RefreshCcw /> Refresh chapters
+                </Button>
+                <Button
+                  variant="outline"
                   onClick={() => {
                     triggerAction('images', 'mediaId', parsedId.data.id);
                     appToast('Images', 'Loading this media chapters...');
@@ -121,14 +140,6 @@ export const MediaPage = (props: {id: string}) => {
                   className="flex-1"
                 >
                   <ImagePlus /> Load all chapters images
-                </Button>
-                <Button
-                  onClick={() => refreshChapters(media.id)}
-                  variant="outline"
-                  className="flex-1"
-                  disabled={imageStatus === 'pending'}
-                >
-                  <RefreshCcw /> Refresh chapters
                 </Button>
               </ButtonGroup>
               {imageError && media_id === media.id && (

@@ -8,6 +8,8 @@ import {Chapter} from '../shared/models/chapter';
 import {MediaImage} from '../shared/models/media-image';
 import {GetAllMediasResult} from '../shared/models/result/get-all-medias-result';
 import {Bookmark} from '../shared/models/bookmark';
+import {ReadingStatus} from '../shared/models/reading-status';
+import {ReadingStatusDto} from '../shared/schemas/reading-status-schema';
 
 const defaultTransforms = <T>() => ({
   transformResponse: (baseQueryReturnValue: unknown) => (baseQueryReturnValue as Result<T>).data!,
@@ -112,6 +114,33 @@ export const api = createApi({
       }),
       ...defaultTransforms<Bookmark>(),
     }),
+    getReadingStatuses: builder.query<ReadingStatus[], void>({
+      query: () => '/readingStatus',
+      ...defaultTransforms<ReadingStatus[]>(),
+    }),
+    postReadingStatus: builder.mutation<ReadingStatus, ReadingStatusDto>({
+      query: (dto) => ({
+        url: '/readingStatus',
+        method: 'POST',
+        body: dto,
+      }),
+      ...defaultTransforms<ReadingStatus>(),
+    }),
+    deleteReadingStatus: builder.mutation<string, string>({
+      query: (id) => ({
+        url: `/readingStatus/${id}`,
+        method: 'DELETE',
+      }),
+      ...defaultTransforms<string>(),
+    }),
+    patchMediaReadingStatus: builder.mutation<Media, {mediaId: number; readingStatusId: string}>({
+      query: ({mediaId, readingStatusId}) => ({
+        url: `/media/${mediaId}/readingStatus`,
+        method: 'PATCH',
+        body: {readingStatusId},
+      }),
+      ...defaultTransforms<Media>(),
+    }),
   }),
 });
 
@@ -130,4 +159,8 @@ export const {
   useUpsertBookmarkByChapterHidQuery,
   useUpdateBookmarkMutation,
   useDeleteBookmarkMutation,
+  useGetReadingStatusesQuery,
+  usePostReadingStatusMutation,
+  useDeleteReadingStatusMutation,
+  usePatchMediaReadingStatusMutation,
 } = api;
