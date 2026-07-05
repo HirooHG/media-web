@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show the sidebar on the global layou, in every page, even if the user is not logged in but no feature is showed
 - Refactor heavy components with child components
 
+## [1.11.1] - 2026-06-20
+
+### Changed
+
+- Updated newly modified routes
+
 ## [1.11.0] - 2026-06-20
 
 ### Added
