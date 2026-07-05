@@ -10,6 +10,7 @@ const initialState: MediaState = {
   chaptersError: null,
   chaptersStatus: 'idle',
   bookmark: null,
+  readingStatus: null,
 };
 
 const mediaSlice = createSlice({
@@ -39,6 +40,9 @@ const mediaSlice = createSlice({
       }
     },
   },
+  selectors: {
+    hasChapters: (state) => state.chapters?.length !== 0,
+  },
   extraReducers: (builder) => {
     builder
       .addMatcher(api.endpoints.media.matchPending, (state) => {
@@ -53,7 +57,6 @@ const mediaSlice = createSlice({
         state.status = 'error';
         state.error = action.payload?.data as string;
       });
-
     builder
       .addMatcher(api.endpoints.chapters.matchPending, (state) => {
         state.chaptersStatus = 'pending';
@@ -83,9 +86,13 @@ const mediaSlice = createSlice({
     builder.addMatcher(api.endpoints.getBookmarkByMedia.matchFulfilled, (state, action) => {
       state.bookmark = action.payload;
     });
+    builder.addMatcher(api.endpoints.getMediaReadingStatus.matchFulfilled, (state, action) => {
+      state.readingStatus = action.payload;
+    });
   },
 });
 
 export const {clearMediaError, setMediaError, setChaptersError, resetMediaState, setMediaImage} =
   mediaSlice.actions;
+export const {hasChapters} = mediaSlice.selectors;
 export default mediaSlice.reducer;

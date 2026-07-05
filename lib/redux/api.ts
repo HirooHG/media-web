@@ -133,7 +133,14 @@ export const api = createApi({
       }),
       ...defaultTransforms<string>(),
     }),
-    patchMediaReadingStatus: builder.mutation<Media, {mediaId: number; readingStatusId: string}>({
+    getMediaReadingStatus: builder.query<ReadingStatus | null, number>({
+      query: (mediaId: number) => `/media/${mediaId}/readingStatus`,
+      ...defaultTransforms<ReadingStatus | null>(),
+    }),
+    patchMediaReadingStatus: builder.mutation<
+      Media,
+      {mediaId: number; readingStatusId: string | null}
+    >({
       query: ({mediaId, readingStatusId}) => ({
         url: `/media/${mediaId}/readingStatus`,
         method: 'PATCH',
@@ -163,4 +170,5 @@ export const {
   usePostReadingStatusMutation,
   useDeleteReadingStatusMutation,
   usePatchMediaReadingStatusMutation,
+  useGetMediaReadingStatusQuery,
 } = api;

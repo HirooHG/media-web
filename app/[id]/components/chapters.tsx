@@ -12,7 +12,7 @@ import {useRouter} from 'next/navigation';
 import {VersionsDropdown} from './versions-dropdown';
 import {useBookmarks} from '@/hooks/useBookmarks';
 
-export const Chapters = ({media_id}: {media_id: number}) => {
+export const Chapters = ({mediaId}: {mediaId: number}) => {
   const router = useRouter();
   const {
     chapters,
@@ -21,8 +21,8 @@ export const Chapters = ({media_id}: {media_id: number}) => {
   } = useAppSelector((state) => state.media);
   const isDark = useAppSelector((state) => state.settings.theme) === 'dark';
 
-  useChaptersQuery(media_id, {refetchOnMountOrArgChange: true});
-  const {bookmark, onBookmarkChapter} = useBookmarks(media_id);
+  useChaptersQuery(mediaId, {refetchOnMountOrArgChange: true});
+  const {bookmark, onBookmarkChapter} = useBookmarks(mediaId);
 
   if (status === 'pending') {
     return <Pending />;
@@ -39,7 +39,7 @@ export const Chapters = ({media_id}: {media_id: number}) => {
   return (
     <>
       {!chapters || chapters.length === 0 ? (
-        <div className="flex items-center justify-center">
+        <div className="h-full w-full flex items-center justify-center">
           <div className="w-6/12">
             <EmptyList
               title="No chapters found"
@@ -48,7 +48,7 @@ export const Chapters = ({media_id}: {media_id: number}) => {
           </div>
         </div>
       ) : (
-        <ul className="space-y-4 w-full flex-1 overflow-auto">
+        <ul className="space-y-4 w-full">
           {chapters.map((ch) => {
             const isBookmarked = ch.id === bookmark?.chapterId;
             return (
@@ -73,7 +73,7 @@ export const Chapters = ({media_id}: {media_id: number}) => {
                     />
                     <VersionsDropdown
                       versions={ch.versions}
-                      action={(version) => router.push('/' + media_id + '/chapter/' + version.hid)}
+                      action={(version) => router.push('/' + mediaId + '/chapter/' + version.hid)}
                     >
                       <Button variant="ghost" className="hover:bg-tertiary dark:hover:bg-tertiary">
                         <ArrowRight />

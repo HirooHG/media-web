@@ -103,25 +103,22 @@ export default function ThemeToggle() {
   const selectedSize = toggleSizeMap[toggleSize];
 
   return (
-    <div className="flex items-center justify-center size-8 bg-sidebar-accent rounded-lg">
+    <div className="flex items-center justify-center size-8 rounded-lg">
       <button
         type="button"
         aria-pressed={isDark}
         aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
         className={cn(
-          'relative inline-flex shrink-0 items-center justify-start overflow-hidden rounded-full border-0 p-0 align-middle leading-none appearance-none cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+          'bg-background relative inline-flex shrink-0 items-center justify-start overflow-hidden rounded-full border-0 p-0 align-middle leading-none appearance-none cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
           selectedSize.container,
-          isDark ? 'bg-(--background2)' : 'bg-gray-200',
         )}
         onClick={handleToggle}
       >
         <motion.div
           className={cn(
             selectedSize.checkbox,
-            'absolute top-0 rounded-full flex items-center justify-center overflow-hidden',
-            isDark
-              ? 'bg-black right-0 shadow-lg shadow-black/50'
-              : 'bg-white left-0 shadow-lg shadow-white/50',
+            'bg-background absolute top-0 rounded-full flex items-center justify-center overflow-hidden',
+            isDark ? 'right-0 shadow-lg shadow-black/50' : 'left-0 shadow-lg shadow-white/50',
           )}
           animate={isDark ? 'dark' : 'light'}
           variants={toggleVariants}

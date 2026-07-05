@@ -6,6 +6,7 @@ import {AuthProvider} from '@/app/providers/auth-provider';
 import {Toaster} from 'sonner';
 import {DarkModeProvider} from './providers/dark-mode-provider';
 import {WebsocketProvider} from './providers/ws-provider';
+import {AppSidebarProvider} from '@/components/shared/app-sidebar-provider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -34,7 +35,9 @@ export default function RootLayout({
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <div className="bg-zinc-50 font-sans dark:bg-background">
             <AuthProvider>
-              <WebsocketProvider>{children}</WebsocketProvider>
+              <WebsocketProvider>
+                <AppSidebarProvider>{children}</AppSidebarProvider>
+              </WebsocketProvider>
             </AuthProvider>
           </div>
           <Toaster />

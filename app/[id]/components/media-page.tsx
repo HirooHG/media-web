@@ -5,27 +5,20 @@ import {MediaImage} from '@/app/components/media-image';
 import {MediaImagePlaceholder} from '@/app/components/media-image-placeholder';
 import {Pending} from '@/app/components/pending';
 import {Button} from '@/components/ui/button';
-import {ChevronLeft, FileImage, ImagePlus, RefreshCcw, StepForward} from 'lucide-react';
+import {ChevronLeft} from 'lucide-react';
 import {Chapters} from './chapters';
 import {ButtonGroup} from '@/components/ui/button-group';
 import {Badge} from '@/components/ui/badge';
 import {MediaStatus} from '@/lib/shared/models/media-status';
 import {useSession} from 'next-auth/react';
 import {redirect} from 'next/navigation';
-import {useAppDispatch, useAppSelector} from '@/lib/redux/hooks';
-import {
-  useGetReadingStatusesQuery,
-  useMediaImageMutation,
-  useMediaQuery,
-  useRefreshChaptersMutation,
-} from '@/lib/redux/api';
-import {setMediaImage} from '@/lib/redux/slices/media-slice';
+import {useAppSelector} from '@/lib/redux/hooks';
+import {useMediaQuery} from '@/lib/redux/api';
 import {useRouter} from 'next/navigation';
 import {paramsMediaSchema} from '@/types/schemas/params-schema';
-import {useSocket} from '@/hooks/use-ws';
-import {appToast} from '@/components/shared/app-toast';
-import {VersionsDropdown} from './versions-dropdown';
 import {MediaReadingStatus} from './media-reading-status';
+import {ActionButtons} from './action-buttons';
+import {useCallback} from 'react';
 
 export const MediaPage = (props: {id: string}) => {
   const {status: session, data} = useSession();
@@ -34,30 +27,15 @@ export const MediaPage = (props: {id: string}) => {
     redirect('/');
   }
 
-  const dispatch = useAppDispatch();
   const {push} = useRouter();
 
-  const {media, error, status, chapters} = useAppSelector((state) => state.media);
+  const {media, error, status} = useAppSelector((state) => state.media);
   const {imageStatus, imageError, media_id} = useAppSelector((state) => state.mediaImage);
-  const {triggerAction} = useSocket();
-  const bookmark = useAppSelector((state) => state.media.bookmark);
-
-  const [getImageMedia] = useMediaImageMutation();
-  const [refreshChapters] = useRefreshChaptersMutation();
 
   const parsedId = paramsMediaSchema.safeParse(props);
   useMediaQuery(parsedId.data?.id ?? 0, {skip: !parsedId.success, refetchOnMountOrArgChange: true});
-  useGetReadingStatusesQuery();
 
-  if (status === 'error' || (!parsedId.success && parsedId.error)) {
-    return (
-      <div className="w-full h-screen flex items-center justify-center">
-        <ErrorComponent error={error ?? parsedId.error?.message ?? ''} />
-      </div>
-    );
-  }
-
-  const getBadgeStatusSeverity = () => {
+  const getBadgeStatusSeverity = useCallback(() => {
     switch (media?.status) {
       case 1:
       case 2:
@@ -67,7 +45,15 @@ export const MediaPage = (props: {id: string}) => {
       default:
         return 'secondary';
     }
-  };
+  }, [media]);
+
+  if (status === 'error' || (!parsedId.success && parsedId.error)) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <ErrorComponent error={error ?? parsedId.error?.message ?? ''} />
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen pt-16">
@@ -99,55 +85,16 @@ export const MediaPage = (props: {id: string}) => {
                 <Badge variant={getBadgeStatusSeverity()}>{MediaStatus[media.status]}</Badge>
                 <MediaReadingStatus media={media} />
               </div>
-              <ButtonGroup className="w-full">
-                {!media.image && (
-                  <Button
-                    variant="outline"
-                    onClick={async () => {
-                      const image = await getImageMedia(media.id);
-                      if (!image.data) return;
-                      dispatch(setMediaImage(image.data.uri));
-                    }}
-                    className="flex-1"
-                    disabled={imageStatus === 'pending'}
-                  >
-                    <FileImage /> Get Image
-                  </Button>
-                )}
-                {bookmark && chapters && (
-                  <VersionsDropdown
-                    versions={chapters.find((c) => c.id === bookmark.chapterId)?.versions ?? []}
-                    action={(version) => push('/' + parsedId.data.id + '/chapter/' + version.hid)}
-                  >
-                    <Button className="flex-1">
-                      <StepForward /> {bookmark ? 'Continue to read' : 'Start to read'}
-                    </Button>
-                  </VersionsDropdown>
-                )}
-                <Button
-                  onClick={() => refreshChapters(media.id)}
-                  className="flex-1"
-                  disabled={imageStatus === 'pending'}
-                >
-                  <RefreshCcw /> Refresh chapters
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    triggerAction('images', 'mediaId', parsedId.data.id);
-                    appToast('Images', 'Loading this media chapters...');
-                  }}
-                  className="flex-1"
-                >
-                  <ImagePlus /> Load all chapters images
-                </Button>
-              </ButtonGroup>
+              <ButtonGroup className="w-full"></ButtonGroup>
               {imageError && media_id === media.id && (
                 <span className="text-red-700 dark:text-red-400">{imageError}</span>
               )}
             </div>
           </div>
-          <Chapters media_id={media.id} />
+          <div className="flex-1 flex gap-4 overflow-auto">
+            <ActionButtons media={media} />
+            <Chapters mediaId={media.id} />
+          </div>
         </div>
       )}
     </div>

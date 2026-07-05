@@ -6,7 +6,6 @@ import {BookOpen} from 'lucide-react';
 import {Button} from '@/components/ui/button';
 import {appToast} from '@/components/shared/app-toast';
 import {useEffect, useRef} from 'react';
-import {AppSidebarProvider} from '@/components/shared/app-sidebar-provider';
 import {SearchDialog} from '@/components/shared/search-dialog';
 
 export default function Home() {
@@ -32,10 +31,10 @@ export default function Home() {
   return (
     <div className="h-screen w-full flex flex-col items-center justify-center space-y-2">
       {status === 'authenticated' && !data.tokensExpired ? (
-        <AppSidebarProvider className="flex items-center justify-center">
+        <>
           <SearchDialog />
           <MediaList />
-        </AppSidebarProvider>
+        </>
       ) : (
         <div className="flex flex-col items-center justify-center h-8/12 gap-2 max-w-3xl">
           <span className="text-5xl font-bold w-fit flex gap-2 items-center">Welcome</span>

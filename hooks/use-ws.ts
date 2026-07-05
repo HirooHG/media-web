@@ -45,5 +45,9 @@ export const useSocket = () => {
     );
   };
 
-  return {triggerAction, isConnected};
+  const loadMediaChaptersImages = (mediaId: number) => {
+    triggerAction('images', 'mediaId', mediaId);
+  };
+
+  return {isConnected, loadMediaChaptersImages};
 };

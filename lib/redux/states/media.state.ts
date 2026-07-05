@@ -1,6 +1,7 @@
 import {Bookmark} from '@/lib/shared/models/bookmark';
 import {Chapter} from '@/lib/shared/models/chapter';
 import {Media} from '@/lib/shared/models/media';
+import {ReadingStatus} from '@/lib/shared/models/reading-status';
 import {LoadingState} from '@/types/loadingState';
 
 export interface MediaState {
@@ -11,4 +12,5 @@ export interface MediaState {
   chaptersError: string | null;
   chaptersStatus: LoadingState;
   bookmark: Bookmark | null;
+  readingStatus: ReadingStatus | null;
 }

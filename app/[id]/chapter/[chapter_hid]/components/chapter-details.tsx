@@ -24,7 +24,7 @@ export const ChapterDetails = (props: {id: string; chapterHid: string}) => {
   }
 
   const {push} = useRouter();
-  const [imageWidth, setImageWidth] = useState(800);
+  const [imageWidth, setImageWidth] = useState(768);
   const parsedProps = paramsChapterSchema.safeParse(props);
   const {
     data: chapter,
@@ -80,47 +80,49 @@ export const ChapterDetails = (props: {id: string; chapterHid: string}) => {
   };
 
   return (
-    <div className="flex flex-col gap-2 w-full h-full relative">
-      <div className="xl:fixed xl:p-0 p-4 right-10 top-4 w-115 flex flex-col gap-2">
-        <div className="h-15 flex items-center gap-4">
-          <Button className="h-full" onClick={() => push('/' + id)}>
-            <ChevronLeft className="dark:text-gray-100" />
-          </Button>
-          <div>
-            <h1 className="text-2xl font-bold">Chapter - {chapter.chap}</h1>
-            <span>
-              {version.translator}{' '}
-              {version.title ?? <span className="italic">No title in there</span>}
-            </span>
+    <div className="flex xl:flex-row flex-col gap-2 w-full h-full">
+      <div className="flex-1 relative">
+        <div className="xl:fixed xl:top-15 xl:left-18 xl:p-0 p-4 w-fit flex flex-col gap-2">
+          <div className="h-15 flex items-center gap-4">
+            <Button className="h-full" onClick={() => push('/' + id)}>
+              <ChevronLeft className="dark:text-gray-100" />
+            </Button>
+            <div>
+              <h1 className="text-2xl font-bold">Chapter - {chapter.chap}</h1>
+              <span>
+                {version.translator}{' '}
+                {version.title ?? <span className="italic">No title in there</span>}
+              </span>
+            </div>
           </div>
-        </div>
-        <ButtonGroup className="w-full">
-          {version.prev_chap && (
-            <Button className="w-30" variant="outline" onClick={() => navigate('prev')}>
-              <ChevronLeft />
-            </Button>
-          )}
-          <SelectMediaChapters mediaId={id} version={version} chap={chapter} />
-          {version.next_chap && (
-            <Button className="w-30" variant="outline" onClick={() => navigate('next')}>
-              <ChevronRight />
-            </Button>
-          )}
-        </ButtonGroup>
-        <div className="flex gap-2">
-          <span className="flex gap-2 text-nowrap">Images width</span>
-          <Slider
-            defaultValue={[800]}
-            min={400}
-            max={800}
-            onValueChange={(v) => setImageWidth(v[0])}
-            step={50}
-          />
+          <ButtonGroup className="w-full">
+            {version.prev_chap && (
+              <Button className="w-30" variant="outline" onClick={() => navigate('prev')}>
+                <ChevronLeft />
+              </Button>
+            )}
+            <SelectMediaChapters mediaId={id} version={version} chap={chapter} />
+            {version.next_chap && (
+              <Button className="w-30" variant="outline" onClick={() => navigate('next')}>
+                <ChevronRight />
+              </Button>
+            )}
+          </ButtonGroup>
+          <div className="flex gap-2">
+            <span className="flex gap-2 text-nowrap">Images width</span>
+            <Slider
+              defaultValue={[768]}
+              min={400}
+              max={768}
+              onValueChange={(v) => setImageWidth(v[0])}
+              step={50}
+            />
+          </div>
         </div>
       </div>
       {version.images && version.images.length !== 0 ? (
-        <div className="flex flex-col items-center w-3xl">
-          <div className="fixed left-5 bottom-20">
+        <div className="min-h-screen flex flex-col items-center w-3xl bg-red-500 relative">
+          <div className="fixed right-5 bottom-20">
             <Button
               className="w-15"
               variant="outline"
@@ -129,7 +131,7 @@ export const ChapterDetails = (props: {id: string; chapterHid: string}) => {
               <ChevronUp />
             </Button>
           </div>
-          <div style={{width: imageWidth, height: '100%'}}>
+          <div className="h-full" style={{width: imageWidth}}>
             <ul>
               {version.images.map((ch, i) => {
                 return (
