@@ -91,7 +91,7 @@ export const MediaPage = (props: {id: string}) => {
               )}
             </div>
           </div>
-          <div className="flex-1 flex gap-4 overflow-auto">
+          <div className="flex-1 flex md:flex-row flex-col gap-4 overflow-auto">
             <ActionButtons media={media} />
             <Chapters mediaId={media.id} />
           </div>

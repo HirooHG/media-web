@@ -22,7 +22,7 @@ export const ActionButtons = ({media}: {media: Media}) => {
   const [refreshChapters] = useRefreshChaptersMutation();
 
   return (
-    <div className="h-fit flex w-75 flex-col gap-4">
+    <div className="h-fit flex md:w-75 w-full flex-col gap-4">
       <Button
         variant="secondary"
         onClick={() => refreshChapters(media.id)}

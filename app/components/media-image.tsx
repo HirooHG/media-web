@@ -6,7 +6,7 @@ import {Skeleton} from '@/components/ui/skeleton';
 const Dimensions = {
   'small': 'w-16 h-14',
   'medium': 'w-32 h-48',
-  'large': 'w-64 h-84',
+  'large': 'w-58 h-84',
 };
 
 export const MediaImage = ({

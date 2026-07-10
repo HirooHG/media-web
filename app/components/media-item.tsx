@@ -18,7 +18,7 @@ export const MediaItem = ({media}: {media: Media}) => {
   const [getImageMedia] = useMediaImageMutation();
 
   return (
-    <div className="w-full flex space-x-2 md:space-x-4 items-start justify-center">
+    <div className="w-full flex flex-col space-x-2 items-center justify-center md:flex-row md:items-start md:space-x-4">
       {media.image ? (
         <MediaImage uri={media.image.uri} slug={media.slug} />
       ) : (
@@ -29,7 +29,7 @@ export const MediaItem = ({media}: {media: Media}) => {
         />
       )}
 
-      <div className="flex-1 flex flex-col space-y-2 md:space-y-4 items-start justify-start">
+      <div className="flex-1 flex flex-col space-y-2 items-center justify-start md:space-y-4 md:items-start">
         <span className="text-sm text-gray-600 dark:text-gray-300">{media.title}</span>
         <ButtonGroup>
           {!media.image && (

@@ -49,8 +49,8 @@ export function MediaList() {
   }
 
   return (
-    <div className="h-full relative bg-white dark:bg-(--background2) w-7/12">
-      <div className="flex flex-col w-full h-full items-center pt-8">
+    <div className="h-full relative bg-white dark:bg-zinc-950 w-7/12">
+      <div className="flex flex-col w-full h-full items-center py-4">
         <h1 className="text-2xl font-bold mb-4">Medias</h1>
         <div className="w-full flex gap-4 justify-between pr-14">
           <div>
@@ -86,7 +86,7 @@ export function MediaList() {
                       <Separator />
                     </div>
                   )}
-                  <div className="w-full px-15">
+                  <div className="w-full md:px-15">
                     <MediaItem media={media} />
                   </div>
                 </li>

@@ -121,7 +121,7 @@ export const ChapterDetails = (props: {id: string; chapterHid: string}) => {
         </div>
       </div>
       {version.images && version.images.length !== 0 ? (
-        <div className="min-h-screen flex flex-col items-center w-3xl bg-red-500 relative">
+        <div className="min-h-screen flex flex-col items-center w-3xl relative">
           <div className="fixed right-5 bottom-20">
             <Button
               className="w-15"
