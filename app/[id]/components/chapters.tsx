@@ -1,6 +1,6 @@
 'use client';
 
-import {Pending} from '@/app/components/pending';
+import {Pending} from '@/components/shared/pending';
 import {EmptyList} from '@/components/shared/empty-list';
 import {ErrorComponent} from '@/components/shared/error';
 import {Button} from '@/components/ui/button';

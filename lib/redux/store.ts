@@ -7,6 +7,7 @@ import listener from './effects';
 import settingsSlice from './slices/settings-slice';
 import {uiSlice} from './slices/ui-slice';
 import {coreSlice} from './slices/core-slice';
+import {mediaHistorySlice} from './slices/media-history-slice';
 
 export const store = () => {
   return configureStore({
@@ -18,6 +19,7 @@ export const store = () => {
       settings: settingsSlice,
       [uiSlice.reducerPath]: uiSlice.reducer,
       [coreSlice.reducerPath]: coreSlice.reducer,
+      [mediaHistorySlice.reducerPath]: mediaHistorySlice.reducer,
       // api
       [api.reducerPath]: api.reducer,
     },

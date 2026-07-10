@@ -43,9 +43,14 @@ export const ActionButtons = ({media}: {media: Media}) => {
           <FileImage /> Get Image
         </Button>
       )}
-      {bookmark && chapters && (
+      {chapters && chapters.length !== 0 && (
         <VersionsDropdown
-          versions={chapters.find((c) => c.id === bookmark.chapterId)?.versions ?? []}
+          versions={
+            (bookmark
+              ? chapters.find((c) => c.id === bookmark.chapterId)
+              : chapters[chapters.length - 1]
+            )?.versions ?? []
+          }
           action={(version) => push('/' + media.id + '/chapter/' + version.hid)}
         >
           <Button variant="outline">

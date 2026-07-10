@@ -2,7 +2,7 @@
 
 import {useAppSelector} from '@/lib/redux/hooks';
 import {Separator} from '@/components/ui/separator';
-import {Pending} from './pending';
+import {Pending} from '@/components/shared/pending';
 import {EmptyList} from '../../components/shared/empty-list';
 import {MediaItem} from './media-item';
 import {Paginator} from './Paginator';

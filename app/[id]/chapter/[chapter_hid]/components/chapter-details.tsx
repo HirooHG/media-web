@@ -1,10 +1,14 @@
 'use client';
 
-import {Pending} from '@/app/components/pending';
+import {Pending} from '@/components/shared/pending';
 import {EmptyList} from '@/components/shared/empty-list';
 import {ErrorComponent} from '@/components/shared/error';
 import {Button} from '@/components/ui/button';
-import {useChapterQuery, useUpsertBookmarkByChapterHidQuery} from '@/lib/redux/api';
+import {
+  useChapterQuery,
+  usePutMediaHistoryQuery,
+  useUpsertBookmarkByChapterHidQuery,
+} from '@/lib/redux/api';
 import {ChevronLeft, ChevronRight, ChevronUp} from 'lucide-react';
 import {useSession} from 'next-auth/react';
 import {redirect} from 'next/navigation';
@@ -40,6 +44,10 @@ export const ChapterDetails = (props: {id: string; chapterHid: string}) => {
       {mediaId: parsedProps.data?.id ?? 0, chapterHid: parsedProps.data?.chapterHid ?? ''},
       {skip: !parsedProps.success, refetchOnMountOrArgChange: true},
     );
+  usePutMediaHistoryQuery(
+    {mediaId: parsedProps.data?.id ?? 0, chapterHid: parsedProps.data?.chapterHid ?? ''},
+    {skip: !parsedProps.success},
+  );
 
   if (isLoading || !chapter || isLoadingBookmark) {
     return (

@@ -10,6 +10,7 @@ import {GetAllMediasResult} from '../shared/models/result/get-all-medias-result'
 import {Bookmark} from '../shared/models/bookmark';
 import {ReadingStatus} from '../shared/models/reading-status';
 import {ReadingStatusDto} from '../shared/schemas/reading-status-schema';
+import {MediaHistory} from '../shared/models/media-history';
 
 const defaultTransforms = <T>() => ({
   transformResponse: (baseQueryReturnValue: unknown) => (baseQueryReturnValue as Result<T>).data!,
@@ -48,6 +49,10 @@ export const api = createApi({
     media: builder.query<Media, number>({
       query: (media_id: number) => `/media/${media_id}`,
       ...defaultTransforms<Media>(),
+    }),
+    getMediaLastChapter: builder.query<string, number>({
+      query: (media_id: number) => `/media/${media_id}/lastChapter`,
+      ...defaultTransforms<string>(),
     }),
     chapters: builder.query<Chapter[], number>({
       query: (media_id: number) => `/chapter/media/${media_id}`,
@@ -148,6 +153,25 @@ export const api = createApi({
       }),
       ...defaultTransforms<Media>(),
     }),
+    getMediaHistory: builder.query<MediaHistory[], number>({
+      query: (limit: number) => `/history?limit=${limit}`,
+      ...defaultTransforms<MediaHistory[]>(),
+    }),
+    putMediaHistory: builder.query<void, {mediaId: number; chapterHid: string}>({
+      query: ({chapterHid, mediaId}) => ({
+        url: `/history/${mediaId}`,
+        method: 'PUT',
+        body: {chapterHid},
+      }),
+      ...defaultTransforms<void>(),
+    }),
+    deleteMediaHistory: builder.mutation<void, number>({
+      query: (id: number) => ({
+        url: `/history/${id}`,
+        method: 'DELETE',
+      }),
+      ...defaultTransforms<void>(),
+    }),
   }),
 });
 
@@ -155,6 +179,7 @@ export const {
   useMediasQuery,
   useRefreshMutation,
   useMediaQuery,
+  useGetMediaLastChapterQuery,
   useMediaImageMutation,
   useChaptersQuery,
   useRefreshChaptersMutation,
@@ -171,4 +196,7 @@ export const {
   useDeleteReadingStatusMutation,
   usePatchMediaReadingStatusMutation,
   useGetMediaReadingStatusQuery,
+  useGetMediaHistoryQuery,
+  usePutMediaHistoryQuery,
+  useDeleteMediaHistoryMutation,
 } = api;
