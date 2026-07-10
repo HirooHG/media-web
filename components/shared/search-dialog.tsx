@@ -49,6 +49,7 @@ export const SearchDialog = () => {
         <Input
           className="rounded-sm border-0 focus-visible:ring-0 bg-background!"
           type="text"
+          placeholder="Search media"
           onChange={(e) => setFilter(e.target.value)}
           onKeyUp={(e) => {
             if (filter === '') {

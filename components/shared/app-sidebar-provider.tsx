@@ -26,7 +26,7 @@ export const AppSidebarProvider = ({
     >
       <AppSidebar />
       <SidebarInset className={'h-full relative ' + className}>
-        <div className="absolute top-3 left-5">
+        <div className="absolute top-3 left-3 z-10">
           <SidebarTrigger />
         </div>
         {children}

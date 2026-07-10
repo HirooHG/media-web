@@ -12,12 +12,36 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import {federatedLogout} from '@/lib/logout';
-import {Home, LogOut, Settings} from 'lucide-react';
+import {History, Home, LogOut, LucideIcon, Settings} from 'lucide-react';
 import {AppSidebarHeader} from './app-sidebar-header';
 import {usePathname, useRouter} from 'next/navigation';
 import {WebsocketsStatus} from './websockets-status';
 import ThemeToggle from '../ui/theme-toggle';
 import {useSession} from 'next-auth/react';
+
+type Link = {
+  label: string;
+  link: string;
+  icon: LucideIcon;
+};
+
+const LINKS: Link[] = [
+  {
+    label: 'Home',
+    link: '/',
+    icon: Home,
+  },
+  {
+    label: 'History',
+    link: '/history',
+    icon: History,
+  },
+  {
+    label: 'Administration',
+    link: '/administration',
+    icon: Settings,
+  },
+];
 
 export const AppSidebar = () => {
   const {status} = useSession();
@@ -35,26 +59,18 @@ export const AppSidebar = () => {
               <SidebarGroupLabel>Pages</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      className="data-[active=true]:bg-primary"
-                      onClick={() => push('/')}
-                      isActive={path === '/'}
-                    >
-                      <Home />
-                      <span>Home</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      className="data-[active=true]:bg-primary"
-                      onClick={() => push('/administration')}
-                      isActive={path === '/administration'}
-                    >
-                      <Settings className="text-white" />
-                      <span className="text-nowrap font-semibold">Administration</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
+                  {LINKS.map(({label, icon: Icon, link}) => (
+                    <SidebarMenuItem key={label}>
+                      <SidebarMenuButton
+                        className="data-[active=true]:bg-primary data-[active=true]:text-white"
+                        onClick={() => push(link)}
+                        isActive={path === link}
+                      >
+                        <Icon />
+                        <span>{label}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
@@ -85,7 +101,7 @@ export const AppSidebar = () => {
                   className="flex justify-center bg-red-500 hover:bg-red-400"
                   onClick={federatedLogout}
                 >
-                  {open && <span className="text-nowrap font-semibold">Log Out</span>}
+                  {open && <span className="text-white text-nowrap font-semibold">Log Out</span>}
                   <LogOut className="text-white" />
                 </SidebarMenuButton>
               </SidebarMenuItem>
