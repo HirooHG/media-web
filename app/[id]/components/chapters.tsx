@@ -54,7 +54,7 @@ export const Chapters = ({mediaId}: {mediaId: number}) => {
             return (
               <li id={ch.id.toString()} key={ch.id}>
                 <Item variant="outline">
-                  <ItemContent>
+                  <ItemContent className={ch.read ? 'opacity-40' : ''}>
                     <ItemTitle>{ch.chap}</ItemTitle>
                     <ItemDescription>
                       {ch.versions.map((c) => c.translator).join(' - ')}

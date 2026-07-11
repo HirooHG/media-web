@@ -6,6 +6,7 @@ import {ErrorComponent} from '@/components/shared/error';
 import {Button} from '@/components/ui/button';
 import {
   useChapterQuery,
+  usePatchReadChapterQuery,
   usePutMediaHistoryQuery,
   useUpsertBookmarkByChapterHidQuery,
 } from '@/lib/redux/api';
@@ -48,6 +49,9 @@ export const ChapterDetails = (props: {id: string; chapterHid: string}) => {
     {mediaId: parsedProps.data?.id ?? 0, chapterHid: parsedProps.data?.chapterHid ?? ''},
     {skip: !parsedProps.success},
   );
+  usePatchReadChapterQuery(parsedProps.data?.chapterHid ?? '', {
+    skip: !parsedProps.success && (!chapter || chapter.read),
+  });
 
   if (isLoading || !chapter || isLoadingBookmark) {
     return (

@@ -69,6 +69,14 @@ export const api = createApi({
       query: ({media_id, chapter_hid}) => `/chapter/media/${media_id}/${chapter_hid}`,
       ...defaultTransforms<Chapter>(),
     }),
+    patchReadChapter: builder.query<void, string>({
+      query: (hid: string) => ({
+        url: `/chapter/${hid}`,
+        method: 'PATCH',
+        body: {read: true},
+      }),
+      ...defaultTransforms<void>(),
+    }),
     ticket: builder.query<string, void>({
       query: () => ({
         url: `/wss/ticket`,
@@ -176,26 +184,33 @@ export const api = createApi({
 });
 
 export const {
+  // Media
   useMediasQuery,
   useRefreshMutation,
   useMediaQuery,
   useGetMediaLastChapterQuery,
   useMediaImageMutation,
+  usePatchReadChapterQuery,
+  // Chapters
   useChaptersQuery,
   useRefreshChaptersMutation,
   useChapterQuery,
+  // Misc
   useTicketQuery,
   useSearchMutation,
+  // Bookmark
   useGetBookmarkByMediaQuery,
   useCreateBookmarkMutation,
   useUpsertBookmarkByChapterHidQuery,
   useUpdateBookmarkMutation,
   useDeleteBookmarkMutation,
+  // Reading status
   useGetReadingStatusesQuery,
   usePostReadingStatusMutation,
   useDeleteReadingStatusMutation,
   usePatchMediaReadingStatusMutation,
   useGetMediaReadingStatusQuery,
+  // History
   useGetMediaHistoryQuery,
   usePutMediaHistoryQuery,
   useDeleteMediaHistoryMutation,

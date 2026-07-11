@@ -13,5 +13,6 @@ export interface Chapter {
   id: number;
   comic_id: number;
   chap: string;
+  read: boolean;
   versions: ChapterTranslatorVersion[];
 }
